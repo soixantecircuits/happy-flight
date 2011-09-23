@@ -13,7 +13,6 @@ float lroundf( float value )
 
 Plane::Plane()
 {
-	maxVel = (float)PrefsManager::GetInstance()->GetValue( "MOVE_SPEED" );
 	screenWidth = PrefsManager::GetInstance()->GetValue( "SCREEN_WIDTH" );
 	screenHeight = PrefsManager::GetInstance()->GetValue( "SCREEN_HEIGHT" );
 	animDelay = PrefsManager::GetInstance()->GetValue( "ANIM_DELAY" );

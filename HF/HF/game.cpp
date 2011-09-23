@@ -15,7 +15,7 @@ using namespace std;
 
 bool debug;
 bool scrollingOn;
-int scrollspeed;
+float scrollspeed, movespeed;
 float actBackgroundPos;
 
 //keys
@@ -37,7 +37,8 @@ template<typename T> std::string asString( const T& obj )
 Game::Game()
 {
 	PrefsManager::GetInstance()->LoadPrefs("prefs.ini");
-	scrollspeed = PrefsManager::GetInstance()->GetValue( "SCROLL_SPEED" );
+	scrollspeed = (float)PrefsManager::GetInstance()->GetValue( "SCROLL_SPEED" );
+	movespeed = (float)PrefsManager::GetInstance()->GetValue( "MOVE_SPEED" );
 	debug = PrefsManager::GetInstance()->GetValue("DEBUG")==0?false:true;
 
 	videoserver = new Video();
@@ -73,6 +74,7 @@ void Game::initNewGame()
 {
 	if( m_pPlane ) delete m_pPlane;
 	m_pPlane = new Plane();
+	m_pPlane->setMaxVel( movespeed );
 
 	actBackgroundPos = 0;
 	gameActRuntime = 0;
@@ -268,7 +270,7 @@ void Game::handleEventsPlayOn()
 				case SDLK_F12:
 					{
 						PrefsManager::GetInstance()->LoadPrefs("prefs.ini");
-						scrollspeed = PrefsManager::GetInstance()->GetValue( "SCROLL_SPEED" );
+						scrollspeed = (float)PrefsManager::GetInstance()->GetValue( "SCROLL_SPEED" );
 						debug = PrefsManager::GetInstance()->GetValue("DEBUG")==0?false:true;
 						m_pPlane->setMaxVel( (float)PrefsManager::GetInstance()->GetValue( "MOVE_SPEED" ) );
 						break;
@@ -314,6 +316,10 @@ void Game::updateGameState()
 
 	if ( scrollingOn ) actBackgroundPos -= (float)( scrollspeed * dT / 1000.0 );
 
+	scrollspeed += (float)dT/200;
+	movespeed += (float)dT/200;
+
+	m_pPlane->setMaxVel( movespeed );
 	m_pPlane->move( dT );
 	m_pPlane->pickUpItems();
 }
@@ -364,11 +370,11 @@ void Game::drawTime()
 
 void Game::drawDebugInfos()
 {
-	string debuginfo =  "Scroll speed : " + asString( scrollspeed );
+	string debuginfo =  "Scroll speed : " + asString( (int)scrollspeed );
 	fontTime->drawStr( screen, 10, 10, debuginfo );
 
-	//debuginfo =  "Time speed : " + asString( timeSpeed );
-	//fontTime->drawStr( screen, 10, 30, debuginfo );
+	debuginfo =  "Move speed : " + asString( (int)movespeed );
+	fontTime->drawStr( screen, 10, 30, debuginfo );
 }
 
 void Game::drawPaused()

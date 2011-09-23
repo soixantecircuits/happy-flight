@@ -3,11 +3,20 @@
 
 *.com
 *.class
-*.dll
 *.exe
 *.o
 *.so
 
+# VS2010
+
+*.suo
+*.ilk
+*.pdb
+*.obj
+*.manifest
+*.idb
+*.tlog
+*.lastbuildstate
 
 # Packages
 ############

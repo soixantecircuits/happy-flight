@@ -16,29 +16,36 @@ Video::Video()
 	m_bFullScreen = PrefsManager::GetInstance()->GetValue( "FULL_SCREEN" )==0?false:true;
 }
 
-Video::~Video(){
+Video::~Video()
+{
   // kill something
 }
 
-SDL_Surface *Video::init(){
-  // --------------------------------------------------
-  // SDL initialisation
-  // -----------------------------------------------------
-  if (SDL_InitSubSystem(SDL_INIT_VIDEO) < 0) {
-    printf("Couldn't initialize SDL video subsystem: %s\n", SDL_GetError());
-    exit(1);
-  }
-  screen = SDL_SetVideoMode( m_iWidth, m_iHeight, m_iDepth, SDL_DOUBLEBUF /* | SDL_FULLSCREEN */ );
-  if (!screen) {
-    printf("Couldn't set %dx%d, %dbit video mode: %s\n", m_iWidth, m_iHeight, m_iDepth, SDL_GetError());
-    exit(2);
-  }
+SDL_Surface *Video::init()
+{
+	// --------------------------------------------------
+	// SDL initialisation
+	// -----------------------------------------------------
+	if (SDL_InitSubSystem(SDL_INIT_VIDEO) < 0)
+	{
+		printf("Couldn't initialize SDL video subsystem: %s\n", SDL_GetError());
+		exit(1);
+	}
+	if( m_bFullScreen )
+		screen = SDL_SetVideoMode( m_iWidth, m_iHeight, m_iDepth, SDL_DOUBLEBUF | SDL_FULLSCREEN );
+	else
+		screen = SDL_SetVideoMode( m_iWidth, m_iHeight, m_iDepth, SDL_DOUBLEBUF );
+	if (!screen)
+	{
+		printf("Couldn't set %dx%d, %dbit video mode: %s\n", m_iWidth, m_iHeight, m_iDepth, SDL_GetError());
+		exit(2);
+	}
   
-  SDL_WM_SetCaption("HappyFlight", "HappyFlight");
-  //SDL_WM_SetIcon(SDL_LoadBMP( FN_ALIENBLASTER_ICON.c_str() ), NULL);
-  SDL_ShowCursor(SDL_DISABLE);
+	SDL_WM_SetCaption("HappyFlight", "HappyFlight");
+	//SDL_WM_SetIcon(SDL_LoadBMP( FN_ALIENBLASTER_ICON.c_str() ), NULL);
+	SDL_ShowCursor(SDL_DISABLE);
 
-  return screen;
+	return screen;
 }
 
 
