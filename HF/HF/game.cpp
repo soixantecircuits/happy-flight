@@ -37,8 +37,6 @@ template<typename T> std::string asString( const T& obj )
 Game::Game()
 {
 	PrefsManager::GetInstance()->LoadPrefs("prefs.ini");
-	scrollspeed = (float)PrefsManager::GetInstance()->GetValue( "SCROLL_SPEED" );
-	movespeed = (float)PrefsManager::GetInstance()->GetValue( "MOVE_SPEED" );
 	acceleration = (float)PrefsManager::GetInstance()->GetValue( "ACCELERATION" );
 	debug = PrefsManager::GetInstance()->GetValue("DEBUG")==0?false:true;
 
@@ -73,6 +71,9 @@ Game::~Game()
 
 void Game::initNewGame()
 {
+	scrollspeed = (float)PrefsManager::GetInstance()->GetValue( "SCROLL_SPEED" );
+	movespeed = (float)PrefsManager::GetInstance()->GetValue( "MOVE_SPEED" );
+
 	if( m_pPlane ) delete m_pPlane;
 	m_pPlane = new Plane();
 	m_pPlane->setMaxVel( movespeed );
