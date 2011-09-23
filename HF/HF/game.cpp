@@ -15,7 +15,7 @@ using namespace std;
 
 bool debug;
 bool scrollingOn;
-float scrollspeed, movespeed;
+float scrollspeed, movespeed, acceleration;
 float actBackgroundPos;
 
 //keys
@@ -39,6 +39,7 @@ Game::Game()
 	PrefsManager::GetInstance()->LoadPrefs("prefs.ini");
 	scrollspeed = (float)PrefsManager::GetInstance()->GetValue( "SCROLL_SPEED" );
 	movespeed = (float)PrefsManager::GetInstance()->GetValue( "MOVE_SPEED" );
+	acceleration = (float)PrefsManager::GetInstance()->GetValue( "ACCELERATION" );
 	debug = PrefsManager::GetInstance()->GetValue("DEBUG")==0?false:true;
 
 	videoserver = new Video();
@@ -316,8 +317,8 @@ void Game::updateGameState()
 
 	if ( scrollingOn ) actBackgroundPos -= (float)( scrollspeed * dT / 1000.0 );
 
-	scrollspeed += (float)dT/200;
-	movespeed += (float)dT/200;
+	scrollspeed += (float)dT/acceleration;
+	movespeed += (float)dT/acceleration;
 
 	m_pPlane->setMaxVel( movespeed );
 	m_pPlane->move( dT );
