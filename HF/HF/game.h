@@ -6,6 +6,7 @@
 
 class Font;
 class Background;
+class Plane;
 
 enum GameStates { GS_INTRO, GS_PLAYON, GS_ENDING, GS_END, GS_QUIT };
 
@@ -27,6 +28,7 @@ class Game {
 	int fontSizeTime;
 
 	Background *background;
+	Plane* m_pPlane;
 
 public:
 

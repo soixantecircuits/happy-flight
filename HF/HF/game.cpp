@@ -11,6 +11,7 @@ using namespace std;
 #include "font.h"
 #include "background.h"
 #include "PrefsManager.h"
+#include "plane.h"
 
 bool debug;
 bool scrollingOn;
@@ -59,18 +60,19 @@ Game::Game()
 	background = new Background();
 	background->generateBackground( PrefsManager::GetInstance()->GetValue("BKG_LENGTH") );
 
-	//initAllSurfaces();
+	m_pPlane = NULL;
 }
 
 Game::~Game()
 {
-	if(videoserver) delete videoserver;
+	if( m_pPlane ) delete m_pPlane;
+	if( videoserver ) delete videoserver;
 }
 
 void Game::initNewGame()
 {
-	//if (racers) delete racers;
-	//Racer *racer;
+	if( m_pPlane ) delete m_pPlane;
+	m_pPlane = new Plane();
 
 	actBackgroundPos = 0;
 	gameActRuntime = 0;
@@ -168,10 +170,20 @@ void Game::handleEventsPlayOn()
 					pause();
 				else
 					if (paused) pause();
-				//racers->handleEvent(input.translate(event), input.isPressed(event));
+					//m_pPlane->handlePlayerEvent(input.translate(event), input.isPressed(event));
 
 				switch(event.key.keysym.sym)
 				{
+				case SDLK_LEFT:
+					{
+						leftDown = true;
+						break;
+					}
+				case SDLK_RIGHT:
+					{
+						rightDown = true;
+						break;
+					}
 				case SDLK_F5:
 					{
 						F5down = true;
@@ -200,6 +212,16 @@ void Game::handleEventsPlayOn()
 			{
 				switch(event.key.keysym.sym)
 				{
+				case SDLK_LEFT:
+					{
+						leftDown = false;
+						break;
+					}
+				case SDLK_RIGHT:
+					{
+						rightDown = false;
+						break;
+					}
 				case SDLK_F5:
 					{
 						F5down = false;
@@ -248,6 +270,7 @@ void Game::handleEventsPlayOn()
 						PrefsManager::GetInstance()->LoadPrefs("prefs.ini");
 						scrollspeed = PrefsManager::GetInstance()->GetValue( "SCROLL_SPEED" );
 						debug = PrefsManager::GetInstance()->GetValue("DEBUG")==0?false:true;
+						m_pPlane->setMaxVel( (float)PrefsManager::GetInstance()->GetValue( "MOVE_SPEED" ) );
 						break;
 					}
 				case SDLK_ESCAPE:
@@ -275,6 +298,10 @@ void Game::handleEventsPlayOn()
 	}
 	if( F6down )
 		scrollspeed++;
+
+	m_pPlane->left = leftDown;
+	m_pPlane->right = rightDown;
+	
 }
 
 
@@ -287,16 +314,16 @@ void Game::updateGameState()
 
 	if ( scrollingOn ) actBackgroundPos -= (float)( scrollspeed * dT / 1000.0 );
 
-	//racers->moveAndCollide( dT );
-	//racers->pickUpItems();
+	m_pPlane->move( dT );
+	m_pPlane->pickUpItems();
 }
 
 void Game::drawPlayOn()
 {
 	drawBackground();
-	//racers->drawShadows(screen);
-	//racers->drawRacers(screen);
-	//racers->drawStats(screen);
+	//m_pPlane->drawShadows(screen);
+	m_pPlane->drawPlane(screen);
+	//m_pPlane->drawStats(screen);
 
 	if( debug )
 	{
