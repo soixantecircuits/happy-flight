@@ -14,7 +14,9 @@ class Items
 	int m_iTimeNextItemAppear;
 	int m_iItemAppearDelay;
 	int m_iItemAppearRandomDelay;
+	int m_iItemLifeTime;
 	int m_iScreenWidth;
+	int m_iAnimDelay;
 	float m_fScrollSpeed;
 
 public:

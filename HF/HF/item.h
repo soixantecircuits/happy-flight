@@ -4,6 +4,7 @@
 #include "SDL.h"
 #include "geometry.h"
 #include <string>
+#include <vector>
 
 enum ItemTypes
 { 
@@ -15,6 +16,8 @@ enum ItemTypes
 class Item
 {
 	SDL_Surface *m_pSprite;
+	std::vector< SDL_Surface* > m_oSprites;
+	int m_iCurrentSprite;
 
 	Vector2D m_vPos;
 	Vector2D m_vVel;
@@ -24,10 +27,11 @@ class Item
 	int m_iItemLifeTime;
 
 public:
-	Item( const Vector2D &position, const Vector2D &velocity, ItemTypes itemType );
+	Item( const Vector2D &position, const Vector2D &velocity, ItemTypes itemType,  int iLifeTime );
 	~Item();
 
 	void Update( int dT );
+	void UpdateAnim();
 
 	void DeleteItem();
 

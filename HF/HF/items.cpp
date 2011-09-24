@@ -25,13 +25,16 @@ int GetRandValue( const int *choicesWeights, int nrChoices )
 		}
 		idx++;
 	}
+	return 0;
 }
 
 Items::Items()
 {
-	m_iItemAppearDelay = PrefsManager::GetInstance()->GetValue( "ITEM_APPEAR_DELAY" );
-	m_iItemAppearRandomDelay = PrefsManager::GetInstance()->GetValue( "ITEM_APPEAR_RAND_DELAY" );
+	m_iItemAppearDelay = PrefsManager::GetInstance()->GetValue( "ITEM_DELAY" );
+	m_iItemAppearRandomDelay = PrefsManager::GetInstance()->GetValue( "ITEM_RAND_DELAY" );
+	m_iItemLifeTime = PrefsManager::GetInstance()->GetValue( "ITEM_LIFE_TIME" );
 	m_iScreenWidth = PrefsManager::GetInstance()->GetValue( "SCREEN_WIDTH" );
+	m_iAnimDelay = PrefsManager::GetInstance()->GetValue( "ANIM_DELAY" );
 	m_iTimeNextItemAppear = m_iItemAppearDelay + (rand() % m_iItemAppearRandomDelay);
 }
 
@@ -71,10 +74,21 @@ void Items::ExpireItems()
 
 void Items::Update( int dT )
 {
+	static int elapsedTime = 0;
+	elapsedTime += dT;
 	vector<Item *>::iterator i;
 	for (i = items.begin(); i != items.end(); ++i)
 	{
 		(*i)->Update( dT );
+	}
+
+	if( elapsedTime > m_iAnimDelay )
+	{
+		elapsedTime = 0;
+		for (i = items.begin(); i != items.end(); ++i)
+		{
+			(*i)->UpdateAnim();
+		}
 	}
 }
 
@@ -100,7 +114,7 @@ void Items::GenerateItemNow( Vector2D pos, Vector2D vel )
 	if( pos.getY() < 100 && vel.getY() < 5 ) vel.setY( 5 );
 
 	int itemType = GetRandValue( ITEM_APPEAR_CHANCES, NR_ITEM_TYPES );
-	Item *item = new Item( pos, vel, (ItemTypes)itemType );
+	Item *item = new Item( pos, vel, (ItemTypes)itemType, m_iItemLifeTime );
 	AddItem( item );
 }
 
@@ -111,8 +125,8 @@ void Items::Generate( int dT )
 	if ( m_iTimeNextItemAppear < 0 )
 	{
 		m_iTimeNextItemAppear = m_iItemAppearDelay + (rand() % m_iItemAppearRandomDelay);
-		GenerateItemNow( Vector2D( 150.f + (rand() % 340), -20.f ),
-		Vector2D( (rand() % (int)lroundf(m_fScrollSpeed)) - m_fScrollSpeed / 2, m_fScrollSpeed + (rand() % (int)lroundf(m_fScrollSpeed)) ) );
+		GenerateItemNow( Vector2D( 100.f + (rand() % (m_iScreenWidth-200) ), -20.f ),
+		Vector2D( (rand() % (int)lroundf(m_fScrollSpeed)) - m_fScrollSpeed / 2, m_fScrollSpeed + (rand() % (int)lroundf(m_fScrollSpeed/4)) ) );
 	}
 }
 

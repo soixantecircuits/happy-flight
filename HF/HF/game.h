@@ -12,8 +12,8 @@ class Items;
 enum GameStates { GS_INTRO, GS_PLAYON, GS_ENDING, GS_END, GS_QUIT };
 
 class Game {
-	SDL_Surface *screen;
-	SDL_Surface *pauseSprite;
+	SDL_Surface *m_pScreen;
+	SDL_Surface *m_pPauseSprite;
 
 	Uint32 m_iFrameCnt;
 	Uint32 m_iTickCnt;

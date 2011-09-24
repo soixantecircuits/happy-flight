@@ -29,8 +29,8 @@ Game::Game()
 	m_bDebug = PrefsManager::GetInstance()->GetValue("DEBUG")==0?false:true;
 
 	g_pVideoserver = new Video();
-	screen = 0;
-	screen = g_pVideoserver->Init();
+	m_pScreen = 0;
+	m_pScreen = g_pVideoserver->Init();
 
 	m_bLeftDown = false;
 	m_bRightDown = false;
@@ -43,7 +43,7 @@ Game::Game()
 	m_bPaused = true;
 	m_iSdlTicks = SDL_GetTicks();
 
-	pauseSprite = surfaceDB.LoadSurface( "../../resources/imgs/paused.png" );
+	m_pPauseSprite = surfaceDB.LoadSurface( "../../resources/imgs/paused.png" );
 	m_pDebugFont = new Font( "../../resources/imgs/font-20red.png" );
 	m_iDebugFontSize = m_pDebugFont->GetCharWidth();
 
@@ -51,6 +51,7 @@ Game::Game()
 	m_pBackground = new Background();
 	m_pBackground->GenerateBackground( PrefsManager::GetInstance()->GetValue("BKG_LENGTH") );
 
+	m_pItems = NULL;
 	m_pPlane = NULL;
 }
 
@@ -58,7 +59,7 @@ Game::~Game()
 {
 	if( m_pPlane ) delete m_pPlane;
 	if( g_pVideoserver ) delete g_pVideoserver;
-	//if( m_pItems ) delete m_pItems;
+	if( m_pItems ) delete m_pItems;
 }
 
 void Game::InitNewGame()
@@ -69,6 +70,9 @@ void Game::InitNewGame()
 	if( m_pPlane ) delete m_pPlane;
 	m_pPlane = new Plane();
 	m_pPlane->SetMaxVel( m_fMoveSpeed );
+
+	if( m_pItems ) delete m_pItems;
+	m_pItems = new Items();
 
 	m_fActBackgoundPos = 0;
 	m_iGameActRuntime = 0;
@@ -314,17 +318,22 @@ void Game::UpdateGameState()
 	else if( m_bRightDown )
 		m_pPlane->GoRight();
 
+	m_pItems->SetScrollSpeed( m_fScrollSpeed );
+	m_pItems->Generate( dT );
+	m_pItems->Update( dT );
+
 	m_pPlane->SetMaxVel( m_fMoveSpeed );
 	m_pPlane->Move( dT );
 	m_pPlane->PickUpItems();
+
+	m_pItems->ExpireItems();
 }
 
 void Game::DrawPlayOn()
 {
 	DrawBackground();
-	//m_pPlane->drawShadows(screen);
-	m_pPlane->DrawPlane(screen);
-	//m_pPlane->drawStats(screen);
+	m_pPlane->DrawPlane( m_pScreen );
+	m_pItems->Draw( m_pScreen );
 
 	if( m_bDebug )
 	{
@@ -335,14 +344,14 @@ void Game::DrawPlayOn()
 
 	if (m_bPaused) DrawPaused();
 
-	SDL_Flip( screen );
+	SDL_Flip( m_pScreen );
 
 	m_iFrameCnt++;
 }
 
 void Game::DrawBackground()
 {
-	m_pBackground->Draw(screen, (int) (m_fActBackgoundPos + 0.5) );
+	m_pBackground->Draw(m_pScreen, (int) (m_fActBackgoundPos + 0.5) );
 }
 
 
@@ -359,26 +368,26 @@ void Game::DrawTime()
 			digitCnt++;
 			i *= 10;
 		}
-		m_pDebugFont->DrawInt(screen, (screen->w / 2) - (m_iDebugFontSize * digitCnt) / 2, 5, timeToDraw, digitCnt, 0);
+		m_pDebugFont->DrawInt(m_pScreen, (m_pScreen->w / 2) - (m_iDebugFontSize * digitCnt) / 2, 5, timeToDraw, digitCnt, 0);
 	}
 }
 
 void Game::DrawDebugInfos()
 {
 	string debuginfo =  "Scroll speed : " + asString( (int)m_fScrollSpeed );
-	m_pDebugFont->DrawStr( screen, 10, 10, debuginfo );
+	m_pDebugFont->DrawStr( m_pScreen, 10, 10, debuginfo );
 
 	debuginfo =  "Move speed : " + asString( (int)m_fMoveSpeed );
-	m_pDebugFont->DrawStr( screen, 10, 30, debuginfo );
+	m_pDebugFont->DrawStr( m_pScreen, 10, 30, debuginfo );
 }
 
 void Game::DrawPaused()
 {
 	SDL_Rect r;
-	r.x = screen->w/2 - pauseSprite->w/2;
-	r.y = screen->h/2 - pauseSprite->h/2;
-	r.w = pauseSprite->w;
-	r.h = pauseSprite->h;
-	SDL_BlitSurface( pauseSprite, 0, screen, &r );
+	r.x = m_pScreen->w/2 - m_pPauseSprite->w/2;
+	r.y = m_pScreen->h/2 - m_pPauseSprite->h/2;
+	r.w = m_pPauseSprite->w;
+	r.h = m_pPauseSprite->h;
+	SDL_BlitSurface( m_pPauseSprite, 0, m_pScreen, &r );
 }
 
