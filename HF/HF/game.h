@@ -7,6 +7,7 @@
 class Font;
 class Background;
 class Plane;
+class Items;
 
 enum GameStates { GS_INTRO, GS_PLAYON, GS_ENDING, GS_END, GS_QUIT };
 
@@ -14,40 +15,55 @@ class Game {
 	SDL_Surface *screen;
 	SDL_Surface *pauseSprite;
 
-	Uint32 frameCnt;
-	Uint32 tickCnt;
-	Uint32 sdlTicks;
-	Uint32 timePauseOn;
-	Uint32 timeLastUpdate;
-	Uint32 gameActRuntime;
-	Uint32 gameLength;
-	GameStates gameState;
-	bool paused;
+	Uint32 m_iFrameCnt;
+	Uint32 m_iTickCnt;
+	Uint32 m_iSdlTicks;
+	Uint32 m_iTimePauseOn;
+	Uint32 m_iTimeLastUpdate;
+	Uint32 m_iGameActRuntime;
+	GameStates m_eGameState;
+	bool m_bPaused;
 
-	Font *fontTime;
-	int fontSizeTime;
+	Font *m_pDebugFont;
+	int m_iDebugFontSize;
 
-	Background *background;
+	Background *m_pBackground;
 	Plane* m_pPlane;
+	Items* m_pItems;
+
+	bool m_bDebug;
+	bool m_bScrolling;
+	float m_fScrollSpeed;
+	float m_fMoveSpeed;
+	float m_fAcceleration;
+	float m_fActBackgoundPos;
+
+	//keys
+	bool m_bLeftDown;
+	bool m_bRightDown;
+	bool m_bF5down;
+	bool m_bF6down;
+	bool m_bF7down;
+	bool m_bF8down;
 
 public:
 
 	Game();
 	~Game();
 
-	void run();
+	void Run();
 
 private:
-	void initNewGame();
-	void playOn();
-	void handleEventsPlayOn();
-	void pause();
-	void updateGameState();
-	void drawPlayOn();
-	void drawBackground();
-	void drawTime();
-	void drawDebugInfos();
-	void drawPaused();
+	void InitNewGame();
+	void PlayOn();
+	void HandleEventsPlayOn();
+	void Pause();
+	void UpdateGameState();
+	void DrawPlayOn();
+	void DrawBackground();
+	void DrawTime();
+	void DrawDebugInfos();
+	void DrawPaused();
 
 };
 

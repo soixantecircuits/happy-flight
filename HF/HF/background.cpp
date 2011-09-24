@@ -8,110 +8,110 @@ using namespace std;
 
 Background::Background()
 {
-	minTileWidth   = 9999999;
-	minTileHeight  = 9999999;
-	tilesPerLine   = 0;
-	tilesPerColumn = 0;
-	step           = 0;
+	m_iMinTileWidth   = 9999999;
+	m_iMinTileHeight  = 9999999;
+	m_iTilesPerLine   = 0;
+	m_iTilesPerColumn = 0;
+	m_iStep           = 0;
 }
 
 
-void Background::clearTileList()
+void Background::ClearTileList()
 {
-	tileNames.clear();
-	tilesPerLine   = 0;
-	tilesPerColumn = 0;
+	m_oTileNames.clear();
+	m_iTilesPerLine   = 0;
+	m_iTilesPerColumn = 0;
 }
 
 
-void Background::addTile( string tilename )
+void Background::AddTile( string tilename )
 {
-	tileNames.push_back( tilename );
+	m_oTileNames.push_back( tilename );
 }
 
 
-void Background::generateBackground( int length )
+void Background::GenerateBackground( int length )
 {
 	int iWidth = PrefsManager::GetInstance()->GetValue("SCREEN_WIDTH");
 	int iHeight = PrefsManager::GetInstance()->GetValue("SCREEN_HEIGHT");
 
-	tileSurfaces.clear();
-	minTileWidth   = 9999999;
-	minTileHeight  = 9999999;
+	m_oTileSurfaces.clear();
+	m_iMinTileWidth   = 9999999;
+	m_iMinTileHeight  = 9999999;
 
-	addTile( "..\\..\\resources\\imgs\\MAP\\Tile_Foret_01.png" );
-	addTile( "..\\..\\resources\\imgs\\MAP\\Tile_Foret_02.png" );
-	addTile( "..\\..\\resources\\imgs\\MAP\\Tile_Foret_03.png" );
-	addTile( "..\\..\\resources\\imgs\\MAP\\Tile_Prairie_01.png" );
-	addTile( "..\\..\\resources\\imgs\\MAP\\Tile_Prairie_02.png" );
-	addTile( "..\\..\\resources\\imgs\\MAP\\Ville_01.png" );
-	addTile( "..\\..\\resources\\imgs\\MAP\\Ville_02.png" );
+	AddTile( "..\\..\\resources\\imgs\\MAP\\Tile_Foret_01.png" );
+	AddTile( "..\\..\\resources\\imgs\\MAP\\Tile_Foret_02.png" );
+	AddTile( "..\\..\\resources\\imgs\\MAP\\Tile_Foret_03.png" );
+	AddTile( "..\\..\\resources\\imgs\\MAP\\Tile_Prairie_01.png" );
+	AddTile( "..\\..\\resources\\imgs\\MAP\\Tile_Prairie_02.png" );
+	AddTile( "..\\..\\resources\\imgs\\MAP\\Ville_01.png" );
+	AddTile( "..\\..\\resources\\imgs\\MAP\\Ville_02.png" );
 
 	// load all tiles
-	for( int i=0; i<(int)tileNames.size(); ++i )
+	for( int i=0; i<(int)m_oTileNames.size(); ++i )
 	{
-		SDL_Surface *tile = surfaceDB.loadSurface( tileNames[i] );
+		SDL_Surface *tile = surfaceDB.LoadSurface( m_oTileNames[i] );
 
 		if (tile != NULL)
 		{
-			tileSurfaces.push_back( tile );
-			if (tile->w < minTileWidth)
+			m_oTileSurfaces.push_back( tile );
+			if (tile->w < m_iMinTileWidth)
 			{
-				minTileWidth = tile->w;
+				m_iMinTileWidth = tile->w;
 			} 
-			if (tile->h < minTileHeight)
+			if (tile->h < m_iMinTileHeight)
 			{
-				minTileHeight = tile->h;
+				m_iMinTileHeight = tile->h;
 			}
 		} 
 	}
 
 	// calculate tiles per line and tiles per row
-	tilesPerLine = iWidth / minTileWidth;
-	if (iWidth % minTileWidth)
+	m_iTilesPerLine = iWidth / m_iMinTileWidth;
+	if (iWidth % m_iMinTileWidth)
 	{
-		tilesPerLine++;
+		m_iTilesPerLine++;
 	}
-	tilesPerColumn = iHeight / minTileHeight;
-	if (iHeight % minTileHeight)
+	m_iTilesPerColumn = iHeight / m_iMinTileHeight;
+	if (iHeight % m_iMinTileHeight)
 	{
-		tilesPerColumn++;
+		m_iTilesPerColumn++;
 	}
 
 	int rows = length;
-	if (length % minTileHeight)
+	if (length % m_iMinTileHeight)
 	{
 		rows++;
 	}
 
 	//   cout << "Background: minTileWidth=" << minTileWidth << "  minTileHeight=" << minTileHeight << "  rows=" << rows << endl;
 
-	int lastTile = rand() % (tileSurfaces.size()-2);
+	int lastTile = rand() % (m_oTileSurfaces.size()-2);
 
 	// generate random background
 	for(int i= 0; i< rows; ++i )
 	{
 		if( lastTile == 0 )
-			tileNumbers.push_back( 1 );
+			m_oTileNumbers.push_back( 1 );
 		else if( lastTile == 1 )
-			tileNumbers.push_back( 1 + rand() % 2 );
+			m_oTileNumbers.push_back( 1 + rand() % 2 );
 		else if( lastTile == 2 )
-			tileNumbers.push_back( 3 + rand() % 2 );
+			m_oTileNumbers.push_back( 3 + rand() % 2 );
 		else
 		{
 			int tile = rand() % 3;
 			if( tile != 0 ) tile += 2;
-			tileNumbers.push_back( tile );
+			m_oTileNumbers.push_back( tile );
 		}
 
-		lastTile = tileNumbers.back();
+		lastTile = m_oTileNumbers.back();
 
-		for( int j=1; j<tilesPerLine; ++j )
+		for( int j=1; j<m_iTilesPerLine; ++j )
 		{
 			if( lastTile < 3 )
-				tileNumbers.push_back( lastTile );
+				m_oTileNumbers.push_back( lastTile );
 			else
-				tileNumbers.push_back( 3 + rand() % 2 );
+				m_oTileNumbers.push_back( 3 + rand() % 2 );
 		}
 	}
 
@@ -119,32 +119,32 @@ void Background::generateBackground( int length )
 	for( int i=0; i<3 ; i++ )
 	{
 		if( lastTile == 0 )
-			tileNumbers.push_back( 1 );
+			m_oTileNumbers.push_back( 1 );
 		else if( lastTile == 1 )
-			tileNumbers.push_back( 2 );
+			m_oTileNumbers.push_back( 2 );
 		else
-			tileNumbers.push_back( 3 + rand() % 2 );
+			m_oTileNumbers.push_back( 3 + rand() % 2 );
 
-		lastTile = tileNumbers.back();
+		lastTile = m_oTileNumbers.back();
 
-		for( int j=1; j<tilesPerLine; ++j )
+		for( int j=1; j<m_iTilesPerLine; ++j )
 		{
 			if( lastTile < 3 )
-				tileNumbers.push_back( lastTile );
+				m_oTileNumbers.push_back( lastTile );
 			else
-				tileNumbers.push_back( 3 + rand() % 2 );
+				m_oTileNumbers.push_back( 3 + rand() % 2 );
 		}
 	}
 }
 
 
-void Background::draw( SDL_Surface* screen )
+void Background::Draw( SDL_Surface* screen )
 {
-	step = (step+1) % (tilesPerColumn*minTileHeight);
-	draw( screen, step );
+	m_iStep = (m_iStep+1) % (m_iTilesPerColumn*m_iMinTileHeight);
+	Draw( screen, m_iStep );
 }
 
-void Background::draw( SDL_Surface* screen, int step )
+void Background::Draw( SDL_Surface* screen, int step )
 {
 	int iWidth = PrefsManager::GetInstance()->GetValue("SCREEN_WIDTH");
 	int iHeight = PrefsManager::GetInstance()->GetValue("SCREEN_HEIGHT");
@@ -153,8 +153,8 @@ void Background::draw( SDL_Surface* screen, int step )
 	{
 		step *= -1;
 	}
-	int startLine = (step / minTileHeight);
-	int offset    = (step % minTileHeight);
+	int startLine = (step / m_iMinTileHeight);
+	int offset    = (step % m_iMinTileHeight);
 
 	SDL_Rect srcRect;
 	srcRect.x = 0;
@@ -162,14 +162,14 @@ void Background::draw( SDL_Surface* screen, int step )
 
 	SDL_Rect dstRect;
 
-	for(int y = 0; y < tilesPerColumn+1; y++)
+	for(int y = 0; y < m_iTilesPerColumn+1; y++)
 	{
-		for(int x = 0; x < tilesPerLine; x++)
+		for(int x = 0; x < m_iTilesPerLine; x++)
 		{
-			int diffX = iWidth - x * minTileWidth;
-			if ( diffX >= minTileWidth )
+			int diffX = iWidth - x * m_iMinTileWidth;
+			if ( diffX >= m_iMinTileWidth )
 			{
-				srcRect.w = minTileWidth;
+				srcRect.w = m_iMinTileWidth;
 			}
 			else
 			{
@@ -179,23 +179,23 @@ void Background::draw( SDL_Surface* screen, int step )
 	
 			if (y==0)
 			{
-				int diffY = -(offset - minTileHeight);
+				int diffY = -(offset - m_iMinTileHeight);
 				srcRect.h = diffY;
 			}
 			else
 			{
-				srcRect.h = minTileHeight;
+				srcRect.h = m_iMinTileHeight;
 			}
 			dstRect.h = srcRect.h;
-			dstRect.x = x * minTileWidth;
-			dstRect.y = iHeight + offset - (y+1) * minTileHeight;
-			int currentTile = ((y+startLine)*tilesPerLine+x);
+			dstRect.x = x * m_iMinTileWidth;
+			dstRect.y = iHeight + offset - (y+1) * m_iMinTileHeight;
+			int currentTile = ((y+startLine)*m_iTilesPerLine+x);
 			int tile = 0;
-			if( currentTile > (int)tileNumbers.size() - 1 )
+			if( currentTile > (int)m_oTileNumbers.size() - 1 )
 				tile = 5 + currentTile%2;
 			else
-				tile = tileNumbers[ currentTile ];
-			SDL_BlitSurface( tileSurfaces[ tile ] , &srcRect, screen, &dstRect );
+				tile = m_oTileNumbers[ currentTile ];
+			SDL_BlitSurface( m_oTileSurfaces[ tile ] , &srcRect, screen, &dstRect );
 		}
 	}
 }

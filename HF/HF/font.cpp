@@ -5,30 +5,30 @@ using namespace std;
 #include <iostream>
 
 Font::Font(string fn) {
-  sprite = surfaceDB.loadSurface( fn );
-  charset = " ABCDEFGHIJKLMNOPQRSTUVWXYZÜÄÖabcdefghijklmnopqrstuvwxyzüäöß0123456789!\"§$%&/()=?*+'#,.-;:_@°\\";
+  m_pSprite = surfaceDB.LoadSurface( fn );
+  m_sCharset = " ABCDEFGHIJKLMNOPQRSTUVWXYZÜÄÖabcdefghijklmnopqrstuvwxyzüäöß0123456789!\"§$%&/()=?*+'#,.-;:_@°\\";
   // 94 Zeichen
-  charWidth = sprite->w / 94;
-  charHeight = sprite->h;
+  m_iCharWidth = m_pSprite->w / 94;
+  m_iCharHeight = m_pSprite->h;
 }
 
 Font::~Font() {
   ;
 }
 
-void Font::setCharWidth(int width) {
-  charWidth = width;
+void Font::SetCharWidth(int width) {
+  m_iCharWidth = width;
 }
 
-int Font::getCharWidth() {
-  return charWidth;
+int Font::GetCharWidth() {
+  return m_iCharWidth;
 }
 
-int Font::getCharHeight() {
-  return sprite->h;
+int Font::GetCharHeight() {
+  return m_pSprite->h;
 }
 
-void Font::drawInt(SDL_Surface *screen, int posx, int posy, int val, int alignDigitCnt, int flags) {
+void Font::DrawInt(SDL_Surface *screen, int posx, int posy, int val, int alignDigitCnt, int flags) {
   int indent = 0;
   int digitCnt = 1;
   int i=1;
@@ -47,10 +47,10 @@ void Font::drawInt(SDL_Surface *screen, int posx, int posy, int val, int alignDi
 //   cout << "drawInt.alignDigitCnt-new=" << alignDigitCnt << endl;
   
   if (flags & FONT_ALIGN_CENTERED) {
-    indent = -(alignDigitCnt * charWidth) / 2;
+    indent = -(alignDigitCnt * m_iCharWidth) / 2;
   }
   if (flags & FONT_ALIGN_RIGHT) {
-    indent = -(alignDigitCnt * charWidth);
+    indent = -(alignDigitCnt * m_iCharWidth);
   }
 
   SDL_Rect destR;
@@ -59,23 +59,23 @@ void Font::drawInt(SDL_Surface *screen, int posx, int posy, int val, int alignDi
     if ((digitCnt > 0) ||
 	((flags & FONT_ALIGN_FILL_ZERO) != 0)) {
       
-      destR.x = indent + posx + (alignDigitCnt-1) * charWidth;
+      destR.x = indent + posx + (alignDigitCnt-1) * m_iCharWidth;
       destR.y = posy;
-      destR.w = charWidth;
-      destR.h = charHeight;
+      destR.w = m_iCharWidth;
+      destR.h = m_iCharHeight;
       
-      unsigned int charsetpos = charset.find( (char)((val % 10) + '0') );
+      unsigned int charsetpos = m_sCharset.find( (char)((val % 10) + '0') );
       if (charsetpos != string::npos ) {
-	srcR.x = charsetpos * charWidth;
+	srcR.x = charsetpos * m_iCharWidth;
       } else {
-	srcR.x = charWidth;
+	srcR.x = m_iCharWidth;
       }
       //      srcR.x = (1 + 2*26 + (val % 10)) * charWidth;
       srcR.y = 0;
-      srcR.w = charWidth;
-      srcR.h = charHeight;
+      srcR.w = m_iCharWidth;
+      srcR.h = m_iCharHeight;
       
-      SDL_BlitSurface( sprite, &srcR, screen, &destR );
+      SDL_BlitSurface( m_pSprite, &srcR, screen, &destR );
     }
     val /= 10;
     digitCnt--;
@@ -85,15 +85,15 @@ void Font::drawInt(SDL_Surface *screen, int posx, int posy, int val, int alignDi
 
 
   
-void Font::drawStr(SDL_Surface *screen, int posx, int posy, const string &text, int flags) {
+void Font::DrawStr(SDL_Surface *screen, int posx, int posy, const string &text, int flags) {
 
   int indent = 0;
   if ( flags & (FONT_ALIGN_CENTERED | FONT_ALIGN_RIGHT) ) {
     for(unsigned int i=0; i < text.size(); ++i) {
       if (!(flags & FONT_MONOSPACE) && text[i] == ' ') {
-	indent += ((charWidth * 2) / 3);
+	indent += ((m_iCharWidth * 2) / 3);
       } else {
-	indent += charWidth;
+	indent += m_iCharWidth;
       }
     }
     if (flags & FONT_ALIGN_CENTERED) {
@@ -110,27 +110,27 @@ void Font::drawStr(SDL_Surface *screen, int posx, int posy, const string &text, 
   unsigned int charsetpos;
   for(unsigned int i=0; i < text.size(); ++i) {
     x = 0;
-    charsetpos = charset.find(text[i]);
+    charsetpos = m_sCharset.find(text[i]);
     if (charsetpos != string::npos ) {
-      x = charsetpos * charWidth;
+      x = charsetpos * m_iCharWidth;
     }
     
     destR.x = posx + indent;
     destR.y = posy;
-    destR.w = charWidth;
-    destR.h = sprite->h;
+    destR.w = m_iCharWidth;
+    destR.h = m_pSprite->h;
       
     srcR.x = x;
     srcR.y = 0;
-    srcR.w = charWidth;
-    srcR.h = sprite->h;
+    srcR.w = m_iCharWidth;
+    srcR.h = m_pSprite->h;
       
-    SDL_BlitSurface( sprite, &srcR, screen, &destR );
+    SDL_BlitSurface( m_pSprite, &srcR, screen, &destR );
 
     if (!(flags & FONT_MONOSPACE) && text[i] == ' ') {
-      posx += ((charWidth * 2) / 3);
+      posx += ((m_iCharWidth * 2) / 3);
     } else {
-      posx += charWidth;
+      posx += m_iCharWidth;
     }
   }
 }

@@ -7,6 +7,11 @@ using namespace std;
 
 SurfaceDB surfaceDB;
 
+float lroundf( float value )
+{
+	return (float)floor( value + 0.5 );
+}
+
 SurfaceDB::SurfaceDB()
 {
 }
@@ -21,9 +26,9 @@ SurfaceDB::~SurfaceDB()
 	}
 }
 
-SDL_Surface *SurfaceDB::loadSurface( string fn )
+SDL_Surface *SurfaceDB::LoadSurface( string fn )
 {
-	SDL_Surface *searchResult = getSurface( fn );
+	SDL_Surface *searchResult = GetSurface( fn );
 	if ( searchResult )
 	{
 		return searchResult;
@@ -51,7 +56,7 @@ SDL_Surface *SurfaceDB::loadSurface( string fn )
 	return optimizedImage;
 }
 
-SDL_Surface *SurfaceDB::getSurface( string fn )
+SDL_Surface *SurfaceDB::GetSurface( string fn )
 {
 	if( surfaceDB.empty() )
 	{

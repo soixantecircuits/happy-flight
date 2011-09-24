@@ -37,22 +37,23 @@ const int FONT_ALIGN_CENTERED  = (1<<1);  // text centered around posx/posy
 const int FONT_ALIGN_RIGHT     = (1<<2);  // text aligned right (on the left side of posx)
 const int FONT_MONOSPACE       = (1<<3);
 
-class Font {
-  private:
-  SDL_Surface *sprite;
-  int charWidth;
-  int charHeight;
-  std::string charset;
+class Font
+{
+private:
+	SDL_Surface *m_pSprite;
+	int m_iCharWidth;
+	int m_iCharHeight;
+	std::string m_sCharset;
 
-  public:
-  Font(std::string fn);
-  ~Font();
-  
-  void setCharWidth(int width);
-  int getCharWidth();
-  int getCharHeight();
-  void drawInt(SDL_Surface *screen, int posx, int posy, int val, int alignDigitCnt, int flags = 0);
-  void drawStr(SDL_Surface *screen, int posx, int posy, const std::string &text, int flags = 0);
+public:
+	Font(std::string fn);
+	~Font();
+
+	void SetCharWidth(int width);
+	int GetCharWidth();
+	int GetCharHeight();
+	void DrawInt(SDL_Surface *screen, int posx, int posy, int val, int alignDigitCnt, int flags = 0);
+	void DrawStr(SDL_Surface *screen, int posx, int posy, const std::string &text, int flags = 0);
 };
 
 #endif

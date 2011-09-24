@@ -7,36 +7,36 @@ template <typename T>
 class Singleton
 {
 protected:
-  Singleton () { }
-  ~Singleton () { delete instance; }
+	Singleton (){}
+	~Singleton (){ delete m_pInstance; }
 
 public:
-  static T *GetInstance ()
-  {
-    if (NULL == instance)
-      {
-        std::cout << "creating singleton." << std::endl;
-        instance = new T;
-      }
+	static T *GetInstance ()
+	{
+		if (NULL == m_pInstance)
+		{
+			std::cout << "creating singleton." << std::endl;
+			m_pInstance = new T;
+		}
 
-    return (static_cast<T*> (instance));
-  }
+		return (static_cast<T*> (m_pInstance));
+	}
 
-  static void Delete ()
-  {
-    if (NULL != instance)
-      {
-        delete instance;
-        instance = NULL;
-      }
-  }
+	static void Delete ()
+	{
+	if (NULL != m_pInstance)
+		{
+		delete m_pInstance;
+		m_pInstance = NULL;
+		}
+	}
 
 private:
-  // Unique instance
-  static T *instance;
+	// Unique instance
+	static T *m_pInstance;
 };
 
 template <typename T>
-T *Singleton<T>::instance = NULL;
+T *Singleton<T>::m_pInstance = NULL;
 
 #endif //__SINGLETON_H__

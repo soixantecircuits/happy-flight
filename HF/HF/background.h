@@ -6,27 +6,28 @@
 
 struct SDL_Surface;
 
-class Background {
-	public:
+class Background
+{
+public:
 	Background();
-  
-	void clearTileList();
-	void addTile( std::string tilename );
-	void generateBackground( int length );
-	void draw( SDL_Surface* screen );
-	void draw( SDL_Surface* screen, int step );
 
-	private:
+	void ClearTileList();
+	void AddTile( std::string tilename );
+	void GenerateBackground( int length );
+	void Draw( SDL_Surface* screen );
+	void Draw( SDL_Surface* screen, int step );
 
-	int minTileWidth;
-	int minTileHeight;
-	int tilesPerLine;
-	int tilesPerColumn;
-	int step;
+private:
 
-	std::vector< std::string > tileNames;
-	std::vector< SDL_Surface* > tileSurfaces;
-	std::vector< int > tileNumbers;
+	int m_iMinTileWidth;
+	int m_iMinTileHeight;
+	int m_iTilesPerLine;
+	int m_iTilesPerColumn;
+	int m_iStep;
+
+	std::vector< std::string > m_oTileNames;
+	std::vector< SDL_Surface* > m_oTileSurfaces;
+	std::vector< int > m_oTileNumbers;
 };
 
 

@@ -5,20 +5,20 @@
 
 class Video;
 
-extern Video *videoserver;
+extern Video *g_pVideoserver;
 
 class Video {
 
 private:
-	SDL_Surface *screen;
+	SDL_Surface *m_pScreen;
 
 public:
 	Video();
 	~Video();
-	SDL_Surface *init();
+	SDL_Surface *Init();
 
-	void clearScreen();
-	void toggleFullscreen();
+	void ClearScreen();
+	void ToggleFullscreen();
 
 	int m_iHeight;
 	int m_iWidth;

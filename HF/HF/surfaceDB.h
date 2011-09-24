@@ -14,6 +14,8 @@ class SurfaceDB;
 
 extern SurfaceDB surfaceDB;
 
+float lroundf( float value );
+
 /* Framework for convenient loading and management of SDL_Surfaces.
    Every surface has a transparent color (default violet).
    If the requested surface was already loaded it is not loaded again, 
@@ -21,17 +23,18 @@ extern SurfaceDB surfaceDB;
    The clients of the surface may use the surface for blitting, but they must
    not change (especially delete) it.
 */
-class SurfaceDB {
+class SurfaceDB
+{
 public:
 	SurfaceDB();
 	~SurfaceDB();
 
-	SDL_Surface *loadSurface( std::string fn );
+	SDL_Surface *LoadSurface( std::string fn );
 
 	private:
 	StringSurfaceMap surfaceDB;
 
-	SDL_Surface *getSurface( std::string fn );
+	SDL_Surface *GetSurface( std::string fn );
 };
 
 

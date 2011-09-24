@@ -12,9 +12,8 @@ class Items;
 /* The Racer is the vehicle, that the player can steer. */
 class Plane
 {
-	SDL_Surface *spriteRacerBase;
-	SDL_Rect drawRectBase;
-	SDL_Surface *spriteShadow;
+	SDL_Surface *m_pSpriteBase;
+	SDL_Rect m_oDrawRectBase;
 
 	std::vector< SDL_Surface* > m_oSpritesUp;
 	std::vector< SDL_Surface* > m_oSpritesTurnLeft;
@@ -27,44 +26,42 @@ class Plane
 	int m_iCurrentSprite;
 
 	// Movement-System
-	Vector2D pos; // absolute position
-	Vector2D vel; // the velocity vector
-	Vector2D realSize;
+	Vector2D m_vPos; // absolute position
+	Vector2D m_vVel; // the velocity vector
+	Vector2D m_vRealSize;
 
-	Uint32 timeLastMove;
+	Uint32 m_iTimeLastMove;
+	int m_iScreenWidth;
+	int m_iScreenHeight;
+	int m_iAnimDelay;
 
-	float maxVel;
+	float m_fMaxVel;
+	bool m_bLeft;
+	bool m_bRight;
 
 public:
-
-	enum PlayerEvent { PE_UNKNOWN = 0, PE_LEFT, PE_RIGHT };
-
-	// Input-System - which keys are pressed at the moment
-	void handlePlayerEvent( PlayerEvent pEvent, bool keyDown );
-
 	Plane();
 	~Plane();
 
-	void setPos( const Vector2D &newPos );
-	inline Vector2D getPos() { return pos; }
-	inline Vector2D getVel() { return vel; }
-	void setMaxVel( float newVel ); // returns old vel
+	void SetPos( const Vector2D &newPos );
+	inline Vector2D GetPos() { return m_vPos; }
+	inline Vector2D GetVel() { return m_vVel; }
+	void SetMaxVel( float newVel ); // returns old vel
 
 	// moves the racer according to his velocity and the pressed keys. 
 	// Already collides with the boundaryRect (the border of the world)
-	Vector2D move( int dT );
-	void clipWorld();
+	Vector2D Move( int dT );
+	void ClipWorld();
 
-	void drawPlane( SDL_Surface *screen );
-	void drawShadow( SDL_Surface *screen );
-	void drawStats( SDL_Surface *screen );
+	void DrawPlane( SDL_Surface *screen );
+	void DrawStats( SDL_Surface *screen );
 
 	// picks up items, if flown over
-	void pickUpItems();
+	void PickUpItems();
 	void UpdateAnim();
 
-	bool left;
-	bool right;
+	void GoLeft(){ m_bLeft = true; }
+	void GoRight(){ m_bRight = true; }
 
 };
 

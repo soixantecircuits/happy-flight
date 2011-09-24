@@ -12,19 +12,7 @@ using namespace std;
 #include "background.h"
 #include "PrefsManager.h"
 #include "plane.h"
-
-bool debug;
-bool scrollingOn;
-float scrollspeed, movespeed, acceleration;
-float actBackgroundPos;
-
-//keys
-bool leftDown;
-bool rightDown;
-bool F5down;
-bool F6down;
-bool F7down;
-bool F8down;
+#include "items.h"
 
 template<typename T> std::string asString( const T& obj )
 {
@@ -37,28 +25,31 @@ template<typename T> std::string asString( const T& obj )
 Game::Game()
 {
 	PrefsManager::GetInstance()->LoadPrefs("prefs.ini");
-	acceleration = (float)PrefsManager::GetInstance()->GetValue( "ACCELERATION" );
-	debug = PrefsManager::GetInstance()->GetValue("DEBUG")==0?false:true;
+	m_fAcceleration = (float)PrefsManager::GetInstance()->GetValue( "ACCELERATION" );
+	m_bDebug = PrefsManager::GetInstance()->GetValue("DEBUG")==0?false:true;
 
-	videoserver = new Video();
+	g_pVideoserver = new Video();
 	screen = 0;
-	screen = videoserver->init();
+	screen = g_pVideoserver->Init();
+
+	m_bLeftDown = false;
+	m_bRightDown = false;
 
 	// needed for calculating fps
-	frameCnt = 0;
-	tickCnt = 0;
+	m_iFrameCnt = 0;
+	m_iTickCnt = 0;
 
-	gameState = GS_INTRO;
-	paused = true;
-	sdlTicks = SDL_GetTicks();
+	m_eGameState = GS_INTRO;
+	m_bPaused = true;
+	m_iSdlTicks = SDL_GetTicks();
 
-	pauseSprite = surfaceDB.loadSurface( "../../resources/imgs/paused.png" );
-	fontTime = new Font( "../../resources/imgs/font-20red.png" );
-	fontSizeTime = fontTime->getCharWidth();
+	pauseSprite = surfaceDB.LoadSurface( "../../resources/imgs/paused.png" );
+	m_pDebugFont = new Font( "../../resources/imgs/font-20red.png" );
+	m_iDebugFontSize = m_pDebugFont->GetCharWidth();
 
-	scrollingOn = true;
-	background = new Background();
-	background->generateBackground( PrefsManager::GetInstance()->GetValue("BKG_LENGTH") );
+	m_bScrolling = true;
+	m_pBackground = new Background();
+	m_pBackground->GenerateBackground( PrefsManager::GetInstance()->GetValue("BKG_LENGTH") );
 
 	m_pPlane = NULL;
 }
@@ -66,34 +57,35 @@ Game::Game()
 Game::~Game()
 {
 	if( m_pPlane ) delete m_pPlane;
-	if( videoserver ) delete videoserver;
+	if( g_pVideoserver ) delete g_pVideoserver;
+	//if( m_pItems ) delete m_pItems;
 }
 
-void Game::initNewGame()
+void Game::InitNewGame()
 {
-	scrollspeed = (float)PrefsManager::GetInstance()->GetValue( "SCROLL_SPEED" );
-	movespeed = (float)PrefsManager::GetInstance()->GetValue( "MOVE_SPEED" );
+	m_fScrollSpeed = (float)PrefsManager::GetInstance()->GetValue( "SCROLL_SPEED" );
+	m_fMoveSpeed = (float)PrefsManager::GetInstance()->GetValue( "MOVE_SPEED" );
 
 	if( m_pPlane ) delete m_pPlane;
 	m_pPlane = new Plane();
-	m_pPlane->setMaxVel( movespeed );
+	m_pPlane->SetMaxVel( m_fMoveSpeed );
 
-	actBackgroundPos = 0;
-	gameActRuntime = 0;
-	paused = true;
+	m_fActBackgoundPos = 0;
+	m_iGameActRuntime = 0;
+	m_bPaused = true;
 
-	timeLastUpdate = SDL_GetTicks();
-	timePauseOn = SDL_GetTicks();
+	m_iTimeLastUpdate = SDL_GetTicks();
+	m_iTimePauseOn = SDL_GetTicks();
 }
 
-void Game::run(){
-	while( gameState != GS_QUIT )
+void Game::Run(){
+	while( m_eGameState != GS_QUIT )
 	{
-		switch (gameState)
+		switch (m_eGameState)
 		{
 			case GS_INTRO: 
 			{
-				gameState = GS_PLAYON;
+				m_eGameState = GS_PLAYON;
 				//intro->run( gameState );
 				//break;
 			}
@@ -107,8 +99,8 @@ void Game::run(){
 			}
 			case GS_PLAYON: 
 			{
-				initNewGame();
-				playOn();
+				InitNewGame();
+				PlayOn();
 				break;
 			}
 			default: break;
@@ -121,47 +113,47 @@ void Game::run(){
 /**** PlayOn *********************/
 /*********************************/
 
-void Game::playOn()
+void Game::PlayOn()
 {
 	int A = SDL_GetTicks();
-	frameCnt = 0;
-	tickCnt = 0;
-	cout << "frameCnt: " << frameCnt << "  tickCnt: " << tickCnt << "  SDL_GetTicks()=" <<  A << endl;
+	m_iFrameCnt = 0;
+	m_iTickCnt = 0;
+	cout << "frameCnt: " << m_iFrameCnt << "  tickCnt: " << m_iTickCnt << "  SDL_GetTicks()=" <<  A << endl;
 
-	while( gameState == GS_PLAYON || gameState == GS_ENDING )
+	while( m_eGameState == GS_PLAYON || m_eGameState == GS_ENDING )
 	{
-		handleEventsPlayOn();
-		if( !paused ) 
+		HandleEventsPlayOn();
+		if( !m_bPaused ) 
 		{
-			updateGameState();
+			UpdateGameState();
 		}
-		drawPlayOn();
+		DrawPlayOn();
 	}
 
 	int B = SDL_GetTicks();
-	cout << "frameCnt: " << frameCnt << "  tickCnt: " << tickCnt << "  SDL_GetTicks()=" <<  B << endl;
+	cout << "frameCnt: " << m_iFrameCnt << "  tickCnt: " << m_iTickCnt << "  SDL_GetTicks()=" <<  B << endl;
 	cout << "Miliseconds: " << B-A << endl;
-	cout << "Frames/sec : " << (float)frameCnt / ((float)(B-A) / 1000.0) << endl;
-	cout << "ms/Frame   : " << (float)tickCnt / (float)frameCnt << endl;
+	cout << "Frames/sec : " << (float)m_iFrameCnt / ((float)(B-A) / 1000.0) << endl;
+	cout << "ms/Frame   : " << (float)m_iTickCnt / (float)m_iFrameCnt << endl;
 }
 
 
-void Game::pause()
+void Game::Pause()
 {
-	if (paused)
+	if (m_bPaused)
 	{
-		Uint32 timePaused = SDL_GetTicks() - timePauseOn;
-		timeLastUpdate += timePaused;
+		Uint32 timePaused = SDL_GetTicks() - m_iTimePauseOn;
+		m_iTimeLastUpdate += timePaused;
 	}
 	else
 	{
-		timePauseOn = SDL_GetTicks();
+		m_iTimePauseOn = SDL_GetTicks();
 	}
-	paused = !paused;
+	m_bPaused = !m_bPaused;
 }
 
 
-void Game::handleEventsPlayOn()
+void Game::HandleEventsPlayOn()
 {
 	SDL_Event event;
 	while (SDL_PollEvent(&event))
@@ -171,41 +163,41 @@ void Game::handleEventsPlayOn()
 			case SDL_KEYDOWN:
 			{
 				if( event.key.keysym.sym == SDLK_p )
-					pause();
+					Pause();
 				else
-					if (paused) pause();
+					if (m_bPaused) Pause();
 					//m_pPlane->handlePlayerEvent(input.translate(event), input.isPressed(event));
 
 				switch(event.key.keysym.sym)
 				{
 				case SDLK_LEFT:
 					{
-						leftDown = true;
+						m_bLeftDown = true;
 						break;
 					}
 				case SDLK_RIGHT:
 					{
-						rightDown = true;
+						m_bRightDown = true;
 						break;
 					}
 				case SDLK_F5:
 					{
-						F5down = true;
+						m_bF5down = true;
 						break;
 					}
 				case SDLK_F6:
 					{
-						F6down = true;
+						m_bF6down = true;
 						break;
 					}
 				case SDLK_F7:
 					{
-						F7down = true;
+						m_bF7down = true;
 						break;
 					}
 				case SDLK_F8:
 					{
-						F8down = true;
+						m_bF8down = true;
 						break;
 					}
 				default: break;
@@ -218,32 +210,32 @@ void Game::handleEventsPlayOn()
 				{
 				case SDLK_LEFT:
 					{
-						leftDown = false;
+						m_bLeftDown = false;
 						break;
 					}
 				case SDLK_RIGHT:
 					{
-						rightDown = false;
+						m_bRightDown = false;
 						break;
 					}
 				case SDLK_F5:
 					{
-						F5down = false;
+						m_bF5down = false;
 						break;
 					}
 				case SDLK_F6:
 					{
-						F6down = false;
+						m_bF6down = false;
 						break;
 					}
 				case SDLK_F7:
 					{
-						F7down = false;
+						m_bF7down = false;
 						break;
 					}
 				case SDLK_F8:
 					{
-						F8down = false;
+						m_bF8down = false;
 						break;
 					}
 				case SDLK_F9:
@@ -256,30 +248,30 @@ void Game::handleEventsPlayOn()
 					}
 				case SDLK_d:
 					{
-						debug = !debug;
+						m_bDebug = !m_bDebug;
 						break;
 					}
 				case SDLK_f:
 					{
-						videoserver->toggleFullscreen();
+						g_pVideoserver->ToggleFullscreen();
 						break;
 					}
 				case SDLK_r:
 					{
-						gameState = GS_INTRO;
+						m_eGameState = GS_INTRO;
 						break;
 					}
 				case SDLK_F12:
 					{
 						PrefsManager::GetInstance()->LoadPrefs("prefs.ini");
-						scrollspeed = (float)PrefsManager::GetInstance()->GetValue( "SCROLL_SPEED" );
-						debug = PrefsManager::GetInstance()->GetValue("DEBUG")==0?false:true;
-						m_pPlane->setMaxVel( (float)PrefsManager::GetInstance()->GetValue( "MOVE_SPEED" ) );
+						m_fScrollSpeed = (float)PrefsManager::GetInstance()->GetValue( "SCROLL_SPEED" );
+						m_bDebug = PrefsManager::GetInstance()->GetValue("DEBUG")==0?false:true;
+						m_pPlane->SetMaxVel( (float)PrefsManager::GetInstance()->GetValue( "MOVE_SPEED" ) );
 						break;
 					}
 				case SDLK_ESCAPE:
 					{
-						gameState = GS_QUIT;
+						m_eGameState = GS_QUIT;
 						break;
 					}
 				default: break;
@@ -288,75 +280,76 @@ void Game::handleEventsPlayOn()
 			}
 			case SDL_QUIT:
 				{
-					gameState = GS_QUIT;
+					m_eGameState = GS_QUIT;
 					break;
 				}
 			default: break;
 		}
 	}
-	if( F5down )
+	if( m_bF5down )
 	{
-		scrollspeed--;
-		if( scrollspeed < 0 )
-			scrollspeed = 0;
+		m_fScrollSpeed--;
+		if( m_fScrollSpeed < 0 )
+			m_fScrollSpeed = 0;
 	}
-	if( F6down )
-		scrollspeed++;
-
-	m_pPlane->left = leftDown;
-	m_pPlane->right = rightDown;
-	
+	if( m_bF6down )
+		m_fScrollSpeed++;
 }
 
 
 // what to do in one tick
-void Game::updateGameState()
+void Game::UpdateGameState()
 {
-	int dT = (SDL_GetTicks() - timeLastUpdate);
-	timeLastUpdate += dT;
-	gameActRuntime += dT;
+	int dT = (SDL_GetTicks() - m_iTimeLastUpdate);
+	m_iTimeLastUpdate += dT;
+	m_iGameActRuntime += dT;
 
-	if ( scrollingOn ) actBackgroundPos -= (float)( scrollspeed * dT / 1000.0 );
+	if ( m_bScrolling ) m_fActBackgoundPos -= (float)( m_fScrollSpeed * dT / 1000.0 );
 
-	scrollspeed += (float)dT/acceleration;
-	movespeed += (float)dT/acceleration;
+	m_fScrollSpeed += (float)dT/m_fAcceleration;
+	m_fMoveSpeed += (float)dT/m_fAcceleration;
 
-	m_pPlane->setMaxVel( movespeed );
-	m_pPlane->move( dT );
-	m_pPlane->pickUpItems();
+	if( m_bLeftDown )
+		m_pPlane->GoLeft();
+	else if( m_bRightDown )
+		m_pPlane->GoRight();
+
+	m_pPlane->SetMaxVel( m_fMoveSpeed );
+	m_pPlane->Move( dT );
+	m_pPlane->PickUpItems();
 }
 
-void Game::drawPlayOn()
+void Game::DrawPlayOn()
 {
-	drawBackground();
+	DrawBackground();
 	//m_pPlane->drawShadows(screen);
-	m_pPlane->drawPlane(screen);
+	m_pPlane->DrawPlane(screen);
 	//m_pPlane->drawStats(screen);
 
-	if( debug )
+	if( m_bDebug )
 	{
-		if( gameState == GS_PLAYON )
-			drawTime();
-		drawDebugInfos();
+		if( m_eGameState == GS_PLAYON )
+			DrawTime();
+		DrawDebugInfos();
 	}
 
-	if (paused) drawPaused();
+	if (m_bPaused) DrawPaused();
 
 	SDL_Flip( screen );
 
-	frameCnt++;
+	m_iFrameCnt++;
 }
 
-void Game::drawBackground()
+void Game::DrawBackground()
 {
-	background->draw(screen, (int) (actBackgroundPos + 0.5) );
+	m_pBackground->Draw(screen, (int) (m_fActBackgoundPos + 0.5) );
 }
 
 
-void Game::drawTime()
+void Game::DrawTime()
 {
 	int timeToDraw;
-	timeToDraw = gameActRuntime / 1000;
+	timeToDraw = m_iGameActRuntime / 1000;
 	if ( timeToDraw > 0 )
 	{
 		int digitCnt = 1;
@@ -366,20 +359,20 @@ void Game::drawTime()
 			digitCnt++;
 			i *= 10;
 		}
-		fontTime->drawInt(screen, (screen->w / 2) - (fontSizeTime * digitCnt) / 2, 5, timeToDraw, digitCnt, 0);
+		m_pDebugFont->DrawInt(screen, (screen->w / 2) - (m_iDebugFontSize * digitCnt) / 2, 5, timeToDraw, digitCnt, 0);
 	}
 }
 
-void Game::drawDebugInfos()
+void Game::DrawDebugInfos()
 {
-	string debuginfo =  "Scroll speed : " + asString( (int)scrollspeed );
-	fontTime->drawStr( screen, 10, 10, debuginfo );
+	string debuginfo =  "Scroll speed : " + asString( (int)m_fScrollSpeed );
+	m_pDebugFont->DrawStr( screen, 10, 10, debuginfo );
 
-	debuginfo =  "Move speed : " + asString( (int)movespeed );
-	fontTime->drawStr( screen, 10, 30, debuginfo );
+	debuginfo =  "Move speed : " + asString( (int)m_fMoveSpeed );
+	m_pDebugFont->DrawStr( screen, 10, 30, debuginfo );
 }
 
-void Game::drawPaused()
+void Game::DrawPaused()
 {
 	SDL_Rect r;
 	r.x = screen->w/2 - pauseSprite->w/2;
