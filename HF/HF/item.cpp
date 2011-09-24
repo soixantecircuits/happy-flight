@@ -2,11 +2,13 @@
 #include "item.h"
 #include "surfaceDB.h"
 
-Item::Item( const Vector2D &position, const Vector2D &velocity, ItemTypes itemType, int iLifeTime )
+Item::Item( const Vector2D &position, const Vector2D &velocity, ItemTypes itemType, int iLifeTime, int iScreenWidth )
 {
 	m_iItemLifeTime = iLifeTime;
 	m_eItemType = itemType;
+	m_iScreenWidth = iScreenWidth;
 
+	m_bPickedUp = false;
 	m_vPos = position;
 	m_vVel = velocity;
 	m_iTimeLived = 0;
@@ -56,6 +58,8 @@ Item::Item( const Vector2D &position, const Vector2D &velocity, ItemTypes itemTy
 	}
 	m_iCurrentSprite = 0;
 	m_pSprite = m_oSprites.front();
+
+	m_vSize = Vector2D( (float)m_pSprite->w, (float)m_pSprite->h );
 }
 
 Item::~Item()
@@ -66,6 +70,8 @@ Item::~Item()
 void Item::Update( int dT )
 {
 	m_vPos += m_vVel * (float)dT / 1000.0;
+	if( m_vPos.getX() < 100 || m_vPos.getX() > ( m_iScreenWidth - 100) )
+		m_vVel.setX( -m_vVel.getX() );
 	m_iTimeLived += dT;
 }
 
@@ -93,5 +99,12 @@ void Item::Draw(SDL_Surface *screen)
 	r.w = m_pSprite->w;
 	r.h = m_pSprite->h;
 	SDL_BlitSurface( m_pSprite, 0, screen, &r );
+}
+
+void Item::PickedUp()
+{
+	if( m_eItemType == ITEM_COIN )
+		m_iTimeLived = m_iItemLifeTime;
+	m_bPickedUp = true;
 }
 

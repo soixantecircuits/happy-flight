@@ -15,7 +15,7 @@ public:
 	void AddTile( std::string tilename );
 	void GenerateBackground( int length );
 	void Draw( SDL_Surface* screen );
-	void Draw( SDL_Surface* screen, int step );
+	bool Draw( SDL_Surface* screen, int step );
 
 private:
 

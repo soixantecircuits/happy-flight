@@ -30,6 +30,7 @@ class Game {
 	Background *m_pBackground;
 	Plane* m_pPlane;
 	Items* m_pItems;
+	int m_iScore;
 
 	bool m_bDebug;
 	bool m_bScrolling;
@@ -53,6 +54,10 @@ public:
 
 	void Run();
 
+	void PickUpCoin();
+	void EnterCloud();
+	void EnterThunder();
+
 private:
 	void InitNewGame();
 	void PlayOn();
@@ -64,7 +69,6 @@ private:
 	void DrawTime();
 	void DrawDebugInfos();
 	void DrawPaused();
-
 };
 
 #endif //#ifndef GAME_HH
