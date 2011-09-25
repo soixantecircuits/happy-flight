@@ -31,7 +31,7 @@ Plane::Plane()
 	m_oSpritesTurnLeft.push_back( surfaceDB.LoadSurface( "../../resources/imgs/AVION/TURN_LEFT/Avion_Turn_L_002.png" ) );
 	m_oSpritesTurnLeft.push_back( surfaceDB.LoadSurface( "../../resources/imgs/AVION/TURN_LEFT/Avion_Turn_L_003.png" ) );
 	m_oSpritesTurnLeft.push_back( surfaceDB.LoadSurface( "../../resources/imgs/AVION/TURN_LEFT/Avion_Turn_L_004.png" ) );
-
+ 
 	m_oSpritesLeft.push_back( surfaceDB.LoadSurface( "../../resources/imgs/AVION/VOLE_LEFT/Avion_Left_000.png" ) );
 	m_oSpritesLeft.push_back( surfaceDB.LoadSurface( "../../resources/imgs/AVION/VOLE_LEFT/Avion_Left_001.png" ) );
 	m_oSpritesLeft.push_back( surfaceDB.LoadSurface( "../../resources/imgs/AVION/VOLE_LEFT/Avion_Left_002.png" ) );
