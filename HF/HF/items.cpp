@@ -126,7 +126,7 @@ void Items::Generate( int dT )
 	{
 		m_iTimeNextItemAppear = m_iItemAppearDelay + (rand() % m_iItemAppearRandomDelay);
 		GenerateItemNow( Vector2D( 100.f + (rand() % (m_iScreenWidth-200) ), -20.f ),
-		Vector2D( (rand() % (int)lroundf(m_fScrollSpeed)) - m_fScrollSpeed / 2, m_fScrollSpeed + (rand() % (int)lroundf(m_fScrollSpeed/4)) ) );
+		Vector2D( (rand() % (int)ROUND(m_fScrollSpeed)) - m_fScrollSpeed / 2, m_fScrollSpeed + (rand() % (int)ROUND(m_fScrollSpeed/4)) ) );
 	}
 }
 

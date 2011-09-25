@@ -14,6 +14,7 @@ class SurfaceDB;
 
 extern SurfaceDB surfaceDB;
 
+#define ROUND(x) ((float)floor( x + 0.5 ))
 
 /* Framework for convenient loading and management of SDL_Surfaces.
    Every surface has a transparent color (default violet).

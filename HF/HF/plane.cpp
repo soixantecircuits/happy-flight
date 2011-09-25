@@ -222,8 +222,8 @@ void Plane::UpdateAnim()
 
 void Plane::ClipWorld()
 {
-	int left = (int)( lroundf(m_vPos.getX()) - (m_vRealSize.getX() / 2) );
-	int right = (int)( lroundf(m_vPos.getX()) + (m_vRealSize.getX() / 2) );
+	int left = (int)( ROUND(m_vPos.getX()) - (m_vRealSize.getX() / 2) );
+	int right = (int)( ROUND(m_vPos.getX()) + (m_vRealSize.getX() / 2) );
 	if ( left <= 1 )
 	{
 		m_vPos.setX( (float)( 1 + m_vRealSize.getX() / 2 ) );
@@ -244,8 +244,8 @@ void Plane::DrawPlane( SDL_Surface *screen )
 	SDL_Rect srcR;
 	SDL_Rect destR;
 
-	destR.x = Sint16( lroundf(m_vPos.getX()) - (m_pSpriteBase->w / 2) );
-	destR.y = Sint16( lroundf(m_vPos.getY()) - (m_pSpriteBase->h / 2) );
+	destR.x = Sint16( ROUND(m_vPos.getX()) - (m_pSpriteBase->w / 2) );
+	destR.y = Sint16( ROUND(m_vPos.getY()) - (m_pSpriteBase->h / 2) );
 	destR.w = m_pSpriteBase->w;
 	destR.h = m_pSpriteBase->h;
 

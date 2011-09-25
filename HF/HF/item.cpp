@@ -94,8 +94,8 @@ void Item::DeleteItem()
 void Item::Draw(SDL_Surface *screen)
 {
 	SDL_Rect r;
-	r.x = (Sint16)lroundf(m_vPos.getX()) - m_pSprite->w / 2;
-	r.y = (Sint16)lroundf(m_vPos.getY()) - m_pSprite->h / 2;
+	r.x = (Sint16)ROUND(m_vPos.getX()) - m_pSprite->w / 2;
+	r.y = (Sint16)ROUND(m_vPos.getY()) - m_pSprite->h / 2;
 	r.w = m_pSprite->w;
 	r.h = m_pSprite->h;
 	SDL_BlitSurface( m_pSprite, 0, screen, &r );
