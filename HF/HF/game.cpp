@@ -35,6 +35,8 @@ Game::Game()
 	m_bLeftDown = false;
 	m_bRightDown = false;
 
+	m_iScore = 0;
+
 	// needed for calculating fps
 	m_iFrameCnt = 0;
 	m_iTickCnt = 0;
@@ -64,15 +66,16 @@ Game::~Game()
 
 void Game::InitNewGame()
 {
+	m_iScore = 0;
 	m_fScrollSpeed = (float)PrefsManager::GetInstance()->GetValue( "SCROLL_SPEED" );
 	m_fMoveSpeed = (float)PrefsManager::GetInstance()->GetValue( "MOVE_SPEED" );
 
-	if( m_pPlane ) delete m_pPlane;
-	m_pPlane = new Plane();
-	m_pPlane->SetMaxVel( m_fMoveSpeed );
-
 	if( m_pItems ) delete m_pItems;
 	m_pItems = new Items();
+
+	if( m_pPlane ) delete m_pPlane;
+	m_pPlane = new Plane( m_pItems, this );
+	m_pPlane->SetMaxVel( m_fMoveSpeed );
 
 	m_fActBackgoundPos = 0;
 	m_iGameActRuntime = 0;
@@ -351,7 +354,7 @@ void Game::DrawPlayOn()
 
 void Game::DrawBackground()
 {
-	m_pBackground->Draw(m_pScreen, (int) (m_fActBackgoundPos + 0.5) );
+	bool bEnd = m_pBackground->Draw(m_pScreen, (int) (m_fActBackgoundPos + 0.5) );
 }
 
 
@@ -379,6 +382,9 @@ void Game::DrawDebugInfos()
 
 	debuginfo =  "Move speed : " + asString( (int)m_fMoveSpeed );
 	m_pDebugFont->DrawStr( m_pScreen, 10, 30, debuginfo );
+
+	debuginfo =  "Score : " + asString( m_iScore );
+	m_pDebugFont->DrawStr( m_pScreen, 10, 50, debuginfo );
 }
 
 void Game::DrawPaused()
@@ -389,5 +395,24 @@ void Game::DrawPaused()
 	r.w = m_pPauseSprite->w;
 	r.h = m_pPauseSprite->h;
 	SDL_BlitSurface( m_pPauseSprite, 0, m_pScreen, &r );
+}
+
+void Game::PickUpCoin()
+{
+	m_iScore++;
+}
+
+void Game::EnterCloud()
+{
+	m_iScore--;
+	if( m_iScore < 0 )
+		m_iScore = 0;
+}
+
+void Game::EnterThunder()
+{
+	m_iScore-=2;
+	if( m_iScore < 0 )
+		m_iScore = 0;
 }
 

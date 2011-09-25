@@ -144,8 +144,9 @@ void Background::Draw( SDL_Surface* screen )
 	Draw( screen, m_iStep );
 }
 
-void Background::Draw( SDL_Surface* screen, int step )
+bool Background::Draw( SDL_Surface* screen, int step )
 {
+	bool bEnd = true;
 	int iWidth = PrefsManager::GetInstance()->GetValue("SCREEN_WIDTH");
 	int iHeight = PrefsManager::GetInstance()->GetValue("SCREEN_HEIGHT");
 
@@ -194,9 +195,13 @@ void Background::Draw( SDL_Surface* screen, int step )
 			if( currentTile > (int)m_oTileNumbers.size() - 1 )
 				tile = 5 + currentTile%2;
 			else
+			{
+				bEnd = false;
 				tile = m_oTileNumbers[ currentTile ];
+			}
 			SDL_BlitSurface( m_oTileSurfaces[ tile ] , &srcRect, screen, &dstRect );
 		}
 	}
+	return bEnd;
 }
 

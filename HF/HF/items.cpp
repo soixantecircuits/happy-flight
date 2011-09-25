@@ -114,7 +114,7 @@ void Items::GenerateItemNow( Vector2D pos, Vector2D vel )
 	if( pos.getY() < 100 && vel.getY() < 5 ) vel.setY( 5 );
 
 	int itemType = GetRandValue( ITEM_APPEAR_CHANCES, NR_ITEM_TYPES );
-	Item *item = new Item( pos, vel, (ItemTypes)itemType, m_iItemLifeTime );
+	Item *item = new Item( pos, vel, (ItemTypes)itemType, m_iItemLifeTime, m_iScreenWidth );
 	AddItem( item );
 }
 

@@ -3,14 +3,19 @@ using namespace std;
 #include "plane.h"
 #include "surfaceDB.h"
 #include "PrefsManager.h"
+#include "game.h"
+#include "items.h"
+#include "item.h"
 
-Plane::Plane()
+Plane::Plane( Items* pItems, Game* pGame )
+: m_pItems( pItems )
+, m_pGame( pGame )
 {
 	m_iScreenWidth = PrefsManager::GetInstance()->GetValue( "SCREEN_WIDTH" );
 	m_iScreenHeight = PrefsManager::GetInstance()->GetValue( "SCREEN_HEIGHT" );
 	m_iAnimDelay = PrefsManager::GetInstance()->GetValue( "ANIM_DELAY" );
+	m_iPickDistance = PrefsManager::GetInstance()->GetValue( "PICK_DISTANCE" );
 	m_pSpriteBase = surfaceDB.LoadSurface( "../../resources/imgs/AVION/UP/Avion_000.png" );
-
 	m_pCurrentAnim = &m_oSpritesUp;
 
 	m_oSpritesUp.push_back( surfaceDB.LoadSurface( "../../resources/imgs/AVION/UP/Avion_000.png" ) );
@@ -264,14 +269,31 @@ void Plane::SetPos( const Vector2D &newPos )
 
 void Plane::PickUpItems()
 {
-	//for ( unsigned int i = 0; i < items->getNrItems(); i++ )
-	//{
-	//	Item *item = items->getItem(i);
-	//	if ( boundingBox->overlaps( item->getBoundingBox() ) )
-	//	{
-	//		item->pickedUp();
-	//	}
-	//}
+	for ( unsigned int i = 0; i < m_pItems->GetNrItems(); i++ )
+	{
+		Item* pItem = m_pItems->GetItem(i);
+		if( pItem->IsPickedUp() )
+			continue;
+
+		Vector2D oPos = pItem->GetPos();
+
+		if( fabs( oPos.getX() - m_vPos.getX() ) < m_iPickDistance && fabs( oPos.getY() - m_vPos.getY() ) < m_iPickDistance )
+		{
+			pItem->PickedUp();
+			if( pItem->GetType() == ITEM_COIN )
+			{
+				m_pGame->PickUpCoin();
+			}
+			else if( pItem->GetType() == ITEM_CLOUD )
+			{
+				m_pGame->EnterCloud();
+			}
+			else if( pItem->GetType() == ITEM_THUNDER )
+			{
+				m_pGame->EnterThunder();
+			}
+		}
+	}
 }
 
 

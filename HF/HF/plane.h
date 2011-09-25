@@ -8,6 +8,7 @@
 
 class SurfaceDB;
 class Items;
+class Game;
 
 /* The Racer is the vehicle, that the player can steer. */
 class Plane
@@ -34,13 +35,17 @@ class Plane
 	int m_iScreenWidth;
 	int m_iScreenHeight;
 	int m_iAnimDelay;
+	int m_iPickDistance;
 
 	float m_fMaxVel;
 	bool m_bLeft;
 	bool m_bRight;
 
+	Items* m_pItems;
+	Game* m_pGame;
+
 public:
-	Plane();
+	Plane( Items* pItems, Game* pGame );
 	~Plane();
 
 	void SetPos( const Vector2D &newPos );
