@@ -7,10 +7,6 @@ using namespace std;
 
 SurfaceDB surfaceDB;
 
-float lroundf( float value )
-{
-	return (float)floor( value + 0.5 );
-}
 
 SurfaceDB::SurfaceDB()
 {

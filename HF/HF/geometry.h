@@ -3,6 +3,7 @@
 
 #define M_PI	3.14159265358979323846
 #include <iostream>
+#include <cmath>
 using namespace std;
 
 const float EPSILON  = 0.001f;

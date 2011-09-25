@@ -39,13 +39,13 @@ void Background::GenerateBackground( int length )
 	m_iMinTileWidth   = 9999999;
 	m_iMinTileHeight  = 9999999;
 
-	AddTile( "..\\..\\resources\\imgs\\MAP\\Tile_Foret_01.png" );
-	AddTile( "..\\..\\resources\\imgs\\MAP\\Tile_Foret_02.png" );
-	AddTile( "..\\..\\resources\\imgs\\MAP\\Tile_Foret_03.png" );
-	AddTile( "..\\..\\resources\\imgs\\MAP\\Tile_Prairie_01.png" );
-	AddTile( "..\\..\\resources\\imgs\\MAP\\Tile_Prairie_02.png" );
-	AddTile( "..\\..\\resources\\imgs\\MAP\\Ville_01.png" );
-	AddTile( "..\\..\\resources\\imgs\\MAP\\Ville_02.png" );
+	AddTile( "../../resources/imgs/MAP/Tile_Foret_01.png" );
+	AddTile( "../../resources/imgs/MAP/Tile_Foret_02.png" );
+	AddTile( "../../resources/imgs/MAP/Tile_Foret_03.png" );
+	AddTile( "../../resources/imgs/MAP/Tile_Prairie_01.png" );
+	AddTile( "../../resources/imgs/MAP/Tile_Prairie_02.png" );
+	AddTile( "../../resources/imgs/MAP/Ville_01.png" );
+	AddTile( "../../resources/imgs/MAP/Ville_02.png" );
 
 	// load all tiles
 	for( int i=0; i<(int)m_oTileNames.size(); ++i )

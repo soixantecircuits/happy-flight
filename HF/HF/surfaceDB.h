@@ -14,7 +14,6 @@ class SurfaceDB;
 
 extern SurfaceDB surfaceDB;
 
-float lroundf( float value );
 
 /* Framework for convenient loading and management of SDL_Surfaces.
    Every surface has a transparent color (default violet).

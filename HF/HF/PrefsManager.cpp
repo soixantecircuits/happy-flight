@@ -9,7 +9,7 @@ bool PrefsManager::LoadPrefs( const string& sFileName )
 {
 	m_oValues.clear();
 	string line;
-	ifstream myfile( sFileName );
+	ifstream myfile( sFileName.c_str() );
 	if( myfile.is_open() )
 	{
 		while( myfile.good() )
@@ -33,7 +33,7 @@ bool PrefsManager::LoadPrefs( const string& sFileName )
 
 bool PrefsManager::SavePrefs( const string& sFileName )
 {
-	ofstream myfile( sFileName );
+	ofstream myfile( sFileName.c_str() );
 	if( myfile.is_open() )
 	{
 		for( map< string, int >::iterator it = m_oValues.begin(); it != m_oValues.end(); ++it )

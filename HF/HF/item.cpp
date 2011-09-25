@@ -15,42 +15,42 @@ Item::Item( const Vector2D &position, const Vector2D &velocity, ItemTypes itemTy
 	{
 		case ITEM_COIN:
 		{
-			m_oSprites.push_back( surfaceDB.LoadSurface( "..\\..\\resources\\imgs\\COINS\\coins.png" ) );
-			m_oSprites.push_back( surfaceDB.LoadSurface( "..\\..\\resources\\imgs\\COINS\\coins2.png" ) );
+			m_oSprites.push_back( surfaceDB.LoadSurface( "../../resources/imgs/COINS/coins.png" ) );
+			m_oSprites.push_back( surfaceDB.LoadSurface( "../../resources/imgs/COINS/coins2.png" ) );
 			break;
 		}
 		case ITEM_CLOUD:
 		{
-			m_oSprites.push_back( surfaceDB.LoadSurface( "..\\..\\resources\\imgs\\ORAGE\\Orage_000.png" ) );
-			m_oSprites.push_back( surfaceDB.LoadSurface( "..\\..\\resources\\imgs\\ORAGE\\Orage_001.png" ) );
-			m_oSprites.push_back( surfaceDB.LoadSurface( "..\\..\\resources\\imgs\\ORAGE\\Orage_002.png" ) );
-			m_oSprites.push_back( surfaceDB.LoadSurface( "..\\..\\resources\\imgs\\ORAGE\\Orage_003.png" ) );
-			m_oSprites.push_back( surfaceDB.LoadSurface( "..\\..\\resources\\imgs\\ORAGE\\Orage_004.png" ) );
-			m_oSprites.push_back( surfaceDB.LoadSurface( "..\\..\\resources\\imgs\\ORAGE\\Orage_005.png" ) );
-			m_oSprites.push_back( surfaceDB.LoadSurface( "..\\..\\resources\\imgs\\ORAGE\\Orage_006.png" ) );
-			m_oSprites.push_back( surfaceDB.LoadSurface( "..\\..\\resources\\imgs\\ORAGE\\Orage_007.png" ) );
-			m_oSprites.push_back( surfaceDB.LoadSurface( "..\\..\\resources\\imgs\\ORAGE\\Orage_008.png" ) );
-			m_oSprites.push_back( surfaceDB.LoadSurface( "..\\..\\resources\\imgs\\ORAGE\\Orage_009.png" ) );
-			m_oSprites.push_back( surfaceDB.LoadSurface( "..\\..\\resources\\imgs\\ORAGE\\Orage_010.png" ) );
-			m_oSprites.push_back( surfaceDB.LoadSurface( "..\\..\\resources\\imgs\\ORAGE\\Orage_011.png" ) );
-			m_oSprites.push_back( surfaceDB.LoadSurface( "..\\..\\resources\\imgs\\ORAGE\\Orage_012.png" ) );
+			m_oSprites.push_back( surfaceDB.LoadSurface( "../../resources/imgs/ORAGE/Orage_000.png" ) );
+			m_oSprites.push_back( surfaceDB.LoadSurface( "../../resources/imgs/ORAGE/Orage_001.png" ) );
+			m_oSprites.push_back( surfaceDB.LoadSurface( "../../resources/imgs/ORAGE/Orage_002.png" ) );
+			m_oSprites.push_back( surfaceDB.LoadSurface( "../../resources/imgs/ORAGE/Orage_003.png" ) );
+			m_oSprites.push_back( surfaceDB.LoadSurface( "../../resources/imgs/ORAGE/Orage_004.png" ) );
+			m_oSprites.push_back( surfaceDB.LoadSurface( "../../resources/imgs/ORAGE/Orage_005.png" ) );
+			m_oSprites.push_back( surfaceDB.LoadSurface( "../../resources/imgs/ORAGE/Orage_006.png" ) );
+			m_oSprites.push_back( surfaceDB.LoadSurface( "../../resources/imgs/ORAGE/Orage_007.png" ) );
+			m_oSprites.push_back( surfaceDB.LoadSurface( "../../resources/imgs/ORAGE/Orage_008.png" ) );
+			m_oSprites.push_back( surfaceDB.LoadSurface( "../../resources/imgs/ORAGE/Orage_009.png" ) );
+			m_oSprites.push_back( surfaceDB.LoadSurface( "../../resources/imgs/ORAGE/Orage_010.png" ) );
+			m_oSprites.push_back( surfaceDB.LoadSurface( "../../resources/imgs/ORAGE/Orage_011.png" ) );
+			m_oSprites.push_back( surfaceDB.LoadSurface( "../../resources/imgs/ORAGE/Orage_012.png" ) );
 			break;
 		}
 		case ITEM_THUNDER:
 		{
-			m_oSprites.push_back( surfaceDB.LoadSurface( "..\\..\\resources\\imgs\\FOUDRE\\Foudre_000.png" ) );
-			m_oSprites.push_back( surfaceDB.LoadSurface( "..\\..\\resources\\imgs\\FOUDRE\\Foudre_001.png" ) );
-			m_oSprites.push_back( surfaceDB.LoadSurface( "..\\..\\resources\\imgs\\FOUDRE\\Foudre_002.png" ) );
-			m_oSprites.push_back( surfaceDB.LoadSurface( "..\\..\\resources\\imgs\\FOUDRE\\Foudre_003.png" ) );
-			m_oSprites.push_back( surfaceDB.LoadSurface( "..\\..\\resources\\imgs\\FOUDRE\\Foudre_004.png" ) );
-			m_oSprites.push_back( surfaceDB.LoadSurface( "..\\..\\resources\\imgs\\FOUDRE\\Foudre_005.png" ) );
-			m_oSprites.push_back( surfaceDB.LoadSurface( "..\\..\\resources\\imgs\\FOUDRE\\Foudre_006.png" ) );
-			m_oSprites.push_back( surfaceDB.LoadSurface( "..\\..\\resources\\imgs\\FOUDRE\\Foudre_007.png" ) );
-			m_oSprites.push_back( surfaceDB.LoadSurface( "..\\..\\resources\\imgs\\FOUDRE\\Foudre_008.png" ) );
-			m_oSprites.push_back( surfaceDB.LoadSurface( "..\\..\\resources\\imgs\\FOUDRE\\Foudre_009.png" ) );
-			m_oSprites.push_back( surfaceDB.LoadSurface( "..\\..\\resources\\imgs\\FOUDRE\\Foudre_010.png" ) );
-			m_oSprites.push_back( surfaceDB.LoadSurface( "..\\..\\resources\\imgs\\FOUDRE\\Foudre_011.png" ) );
-			m_oSprites.push_back( surfaceDB.LoadSurface( "..\\..\\resources\\imgs\\FOUDRE\\Foudre_012.png" ) );
+			m_oSprites.push_back( surfaceDB.LoadSurface( "../../resources/imgs/FOUDRE/Foudre_000.png" ) );
+			m_oSprites.push_back( surfaceDB.LoadSurface( "../../resources/imgs/FOUDRE/Foudre_001.png" ) );
+			m_oSprites.push_back( surfaceDB.LoadSurface( "../../resources/imgs/FOUDRE/Foudre_002.png" ) );
+			m_oSprites.push_back( surfaceDB.LoadSurface( "../../resources/imgs/FOUDRE/Foudre_003.png" ) );
+			m_oSprites.push_back( surfaceDB.LoadSurface( "../../resources/imgs/FOUDRE/Foudre_004.png" ) );
+			m_oSprites.push_back( surfaceDB.LoadSurface( "../../resources/imgs/FOUDRE/Foudre_005.png" ) );
+			m_oSprites.push_back( surfaceDB.LoadSurface( "../../resources/imgs/FOUDRE/Foudre_006.png" ) );
+			m_oSprites.push_back( surfaceDB.LoadSurface( "../../resources/imgs/FOUDRE/Foudre_007.png" ) );
+			m_oSprites.push_back( surfaceDB.LoadSurface( "../../resources/imgs/FOUDRE/Foudre_008.png" ) );
+			m_oSprites.push_back( surfaceDB.LoadSurface( "../../resources/imgs/FOUDRE/Foudre_009.png" ) );
+			m_oSprites.push_back( surfaceDB.LoadSurface( "../../resources/imgs/FOUDRE/Foudre_010.png" ) );
+			m_oSprites.push_back( surfaceDB.LoadSurface( "../../resources/imgs/FOUDRE/Foudre_011.png" ) );
+			m_oSprites.push_back( surfaceDB.LoadSurface( "../../resources/imgs/FOUDRE/Foudre_012.png" ) );
 			break;
 		}
 	}
