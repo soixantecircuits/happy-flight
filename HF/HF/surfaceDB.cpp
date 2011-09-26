@@ -2,6 +2,7 @@ using namespace std;
 
 #include "surfaceDB.h"
 #include "SDL_image.h"
+#include "PrefsManager.h"
 #include <fstream>
 #include <iostream>
 
@@ -10,6 +11,7 @@ SurfaceDB surfaceDB;
 
 SurfaceDB::SurfaceDB()
 {
+
 }
 
 SurfaceDB::~SurfaceDB()
@@ -44,6 +46,7 @@ SDL_Surface *SurfaceDB::LoadSurface( string fn )
 	{
 		//Create an optimized image
 		optimizedImage = SDL_DisplayFormatAlpha( loadedImage );
+		
 		//Free the old image
 		SDL_FreeSurface( loadedImage );
 	}

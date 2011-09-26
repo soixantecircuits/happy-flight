@@ -34,6 +34,10 @@ Game::Game()
 
 	m_bLeftDown = false;
 	m_bRightDown = false;
+	m_bF5down = false;
+	m_bF6down = false;
+	m_bF7down = false;
+	m_bF8down = false;
 
 	m_iScore = 0;
 
@@ -313,8 +317,11 @@ void Game::UpdateGameState()
 
 	if ( m_bScrolling ) m_fActBackgoundPos -= (float)( m_fScrollSpeed * dT / 1000.0 );
 
-	m_fScrollSpeed += (float)dT/m_fAcceleration;
-	m_fMoveSpeed += (float)dT/m_fAcceleration;
+	if( m_fAcceleration > 0 )
+	{
+		m_fScrollSpeed += (float)dT/m_fAcceleration;
+		m_fMoveSpeed += (float)dT/m_fAcceleration;
+	}
 
 	if( m_bLeftDown )
 		m_pPlane->GoLeft();
