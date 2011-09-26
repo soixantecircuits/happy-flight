@@ -17,6 +17,7 @@
 *.idb
 *.tlog
 *.lastbuildstate
+*.opensdf
 
 # Packages
 ############
