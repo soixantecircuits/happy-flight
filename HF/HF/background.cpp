@@ -3,6 +3,7 @@
 #include "SDL.h"
 #include <iostream>
 #include "PrefsManager.h"
+#include "video.h"
 
 using namespace std;
 
@@ -35,33 +36,37 @@ void Background::GenerateBackground( int length )
 	int iWidth = PrefsManager::GetInstance()->GetValue("SCREEN_WIDTH");
 	int iHeight = PrefsManager::GetInstance()->GetValue("SCREEN_HEIGHT");
 
-	m_oTileSurfaces.clear();
+	m_oTileIds.clear();
+	m_oTileNames.clear();
+	m_oTileNumbers.clear();
+
 	m_iMinTileWidth   = 9999999;
 	m_iMinTileHeight  = 9999999;
 
-	AddTile( "../../resources/imgs/MAP/Tile_Foret_01.png" );
-	AddTile( "../../resources/imgs/MAP/Tile_Foret_02.png" );
-	AddTile( "../../resources/imgs/MAP/Tile_Foret_03.png" );
-	AddTile( "../../resources/imgs/MAP/Tile_Prairie_01.png" );
-	AddTile( "../../resources/imgs/MAP/Tile_Prairie_02.png" );
-	AddTile( "../../resources/imgs/MAP/Ville_01.png" );
-	AddTile( "../../resources/imgs/MAP/Ville_02.png" );
+	AddTile( "../../resources/imgs/Tile_Foret_01.png" );
+	AddTile( "../../resources/imgs/Tile_Foret_02.png" );
+	AddTile( "../../resources/imgs/Tile_Foret_03.png" );
+	AddTile( "../../resources/imgs/Tile_Prairie_01.png" );
+	AddTile( "../../resources/imgs/Tile_Prairie_02.png" );
+	AddTile( "../../resources/imgs/Ville_01.png" );
+	AddTile( "../../resources/imgs/Ville_02.png" );
 
 	// load all tiles
 	for( int i=0; i<(int)m_oTileNames.size(); ++i )
 	{
-		SDL_Surface *tile = surfaceDB.LoadSurface( m_oTileNames[i] );
+		int iTextureId = TextureManager::GetInstance()->LoadSurface( m_oTileNames[i], false );
+		SDL_Surface* pSurface = TextureManager::GetInstance()->GetTextureById( iTextureId );
 
-		if (tile != NULL)
+		if( iTextureId >= 0 )
 		{
-			m_oTileSurfaces.push_back( tile );
-			if (tile->w < m_iMinTileWidth)
+			m_oTileIds.push_back( iTextureId );
+			if (pSurface->w < m_iMinTileWidth)
 			{
-				m_iMinTileWidth = tile->w;
+				m_iMinTileWidth = pSurface->w;
 			} 
-			if (tile->h < m_iMinTileHeight)
+			if (pSurface->h < m_iMinTileHeight)
 			{
-				m_iMinTileHeight = tile->h;
+				m_iMinTileHeight = pSurface->h;
 			}
 		} 
 	}
@@ -86,7 +91,7 @@ void Background::GenerateBackground( int length )
 
 	//   cout << "Background: minTileWidth=" << minTileWidth << "  minTileHeight=" << minTileHeight << "  rows=" << rows << endl;
 
-	int lastTile = rand() % (m_oTileSurfaces.size()-2);
+	int lastTile = rand() % (m_oTileIds.size()-2);
 
 	// generate random background
 	for(int i= 0; i< rows; ++i )
@@ -199,7 +204,8 @@ bool Background::Draw( SDL_Surface* screen, int step )
 				bEnd = false;
 				tile = m_oTileNumbers[ currentTile ];
 			}
-			SDL_BlitSurface( m_oTileSurfaces[ tile ] , &srcRect, screen, &dstRect );
+
+			Video::GetInstance()->DrawRect( m_oTileIds[ tile ], &srcRect, &dstRect );
 		}
 	}
 	return bEnd;

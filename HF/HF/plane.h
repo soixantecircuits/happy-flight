@@ -6,23 +6,24 @@
 #include <string>
 #include <vector>
 
-class SurfaceDB;
+class TextureManager;
 class Items;
 class Game;
 
 /* The Racer is the vehicle, that the player can steer. */
 class Plane
 {
-	SDL_Surface *m_pSpriteBase;
+	int m_iSpriteBase;
+	SDL_Surface* m_pSpriteBase;
 	SDL_Rect m_oDrawRectBase;
 
-	std::vector< SDL_Surface* > m_oSpritesUp;
-	std::vector< SDL_Surface* > m_oSpritesTurnLeft;
-	std::vector< SDL_Surface* > m_oSpritesLeft;
-	std::vector< SDL_Surface* > m_oSpritesTurnRight;
-	std::vector< SDL_Surface* > m_oSpritesRight;
+	std::vector< int > m_oSpritesUp;
+	std::vector< int > m_oSpritesTurnLeft;
+	std::vector< int > m_oSpritesLeft;
+	std::vector< int > m_oSpritesTurnRight;
+	std::vector< int > m_oSpritesRight;
 
-	std::vector< SDL_Surface* >* m_pCurrentAnim;
+	std::vector< int >* m_pCurrentAnim;
 
 	int m_iCurrentSprite;
 
@@ -36,6 +37,9 @@ class Plane
 	int m_iScreenHeight;
 	int m_iAnimDelay;
 	int m_iPickDistance;
+	int m_iPlaneDist;
+	int m_iPlaneWidth;
+	int m_iPlaneHeight;
 
 	float m_fMaxVel;
 	bool m_bLeft;
@@ -48,6 +52,7 @@ public:
 	Plane( Items* pItems, Game* pGame );
 	~Plane();
 
+	void ReloadConfig();
 	void SetPos( const Vector2D &newPos );
 	inline Vector2D GetPos() { return m_vPos; }
 	inline Vector2D GetVel() { return m_vVel; }
@@ -59,7 +64,6 @@ public:
 	void ClipWorld();
 
 	void DrawPlane( SDL_Surface *screen );
-	void DrawStats( SDL_Surface *screen );
 
 	// picks up items, if flown over
 	void PickUpItems();

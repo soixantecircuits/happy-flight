@@ -26,7 +26,7 @@ private:
 	int m_iStep;
 
 	std::vector< std::string > m_oTileNames;
-	std::vector< SDL_Surface* > m_oTileSurfaces;
+	std::vector< int > m_oTileIds;
 	std::vector< int > m_oTileNumbers;
 };
 

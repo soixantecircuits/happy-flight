@@ -47,6 +47,14 @@ Items::~Items()
 	}
 }
 
+void Items::ReloadConfig()
+{
+	m_iItemAppearDelay = PrefsManager::GetInstance()->GetValue( "ITEM_DELAY" );
+	m_iItemAppearRandomDelay = PrefsManager::GetInstance()->GetValue( "ITEM_RAND_DELAY" );
+	m_iItemLifeTime = PrefsManager::GetInstance()->GetValue( "ITEM_LIFE_TIME" );
+	m_iAnimDelay = PrefsManager::GetInstance()->GetValue( "ANIM_DELAY" );
+}
+
 void Items::AddItem(Item *item)
 {
 	if(item)

@@ -13,16 +13,18 @@ enum GameStates { GS_INTRO, GS_PLAYON, GS_ENDING, GS_END, GS_QUIT };
 
 class Game {
 	SDL_Surface *m_pScreen;
-	SDL_Surface *m_pPauseSprite;
+	int m_iPauseSprite;
+	SDL_Surface* m_pPauseSprite;
 
 	Uint32 m_iFrameCnt;
-	Uint32 m_iTickCnt;
 	Uint32 m_iSdlTicks;
 	Uint32 m_iTimePauseOn;
 	Uint32 m_iTimeLastUpdate;
 	Uint32 m_iGameActRuntime;
 	GameStates m_eGameState;
 	bool m_bPaused;
+
+	int iMs;
 
 	Font *m_pDebugFont;
 	int m_iDebugFontSize;

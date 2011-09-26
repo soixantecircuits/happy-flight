@@ -11,6 +11,5 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
 	srand(0);
 	Game game;
 	game.Run();
-	SDL_Quit();
 	return 0;
 }

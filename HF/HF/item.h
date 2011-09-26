@@ -15,8 +15,9 @@ enum ItemTypes
 
 class Item
 {
+	int m_iSprite;
 	SDL_Surface *m_pSprite;
-	std::vector< SDL_Surface* > m_oSprites;
+	std::vector< int > m_oSprites;
 	int m_iCurrentSprite;
 
 	Vector2D m_vPos;

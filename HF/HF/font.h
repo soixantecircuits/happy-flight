@@ -40,7 +40,8 @@ const int FONT_MONOSPACE       = (1<<3);
 class Font
 {
 private:
-	SDL_Surface *m_pSprite;
+	SDL_Surface* m_pSprite;
+	int m_iSprite;
 	int m_iCharWidth;
 	int m_iCharHeight;
 	std::string m_sCharset;

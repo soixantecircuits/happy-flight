@@ -1,11 +1,12 @@
 #include "video.h"
 #include "SDL.h"
 #include <stdlib.h>
+#include "surfaceDB.h"
 #include "PrefsManager.h"
 
 using namespace std;
 
-Video *g_pVideoserver;
+Video *Video::GetInstance();
 
 Video::Video()
 {
@@ -21,6 +22,16 @@ Video::~Video()
   // kill something
 }
 
+void Video::Flip()
+{
+	SDL_Flip( m_pScreen );
+}
+
+void Video::Close()
+{
+	SDL_Quit();
+}
+
 SDL_Surface *Video::Init()
 {
 	// --------------------------------------------------
@@ -31,19 +42,20 @@ SDL_Surface *Video::Init()
 		printf("Couldn't initialize SDL video subsystem: %s\n", SDL_GetError());
 		exit(1);
 	}
+
 	if( m_bFullScreen )
-		m_pScreen = SDL_SetVideoMode( m_iWidth, m_iHeight, m_iDepth, SDL_DOUBLEBUF | SDL_FULLSCREEN );
+		m_pScreen = SDL_SetVideoMode( m_iWidth, m_iHeight, m_iDepth, SDL_DOUBLEBUF | SDL_FULLSCREEN | SDL_HWSURFACE );
 	else
-		m_pScreen = SDL_SetVideoMode( m_iWidth, m_iHeight, m_iDepth, SDL_DOUBLEBUF );
+		m_pScreen = SDL_SetVideoMode( m_iWidth, m_iHeight, m_iDepth, SDL_DOUBLEBUF | SDL_HWSURFACE );
 	if (!m_pScreen)
 	{
 		printf("Couldn't set %dx%d, %dbit video mode: %s\n", m_iWidth, m_iHeight, m_iDepth, SDL_GetError());
 		exit(2);
 	}
-  
+
 	SDL_WM_SetCaption("HappyFlight", "HappyFlight");
 	//SDL_WM_SetIcon(SDL_LoadBMP( FN_ALIENBLASTER_ICON.c_str() ), NULL);
-	SDL_ShowCursor(SDL_DISABLE);
+	//SDL_ShowCursor(SDL_DISABLE);
 
 	return m_pScreen;
 }
@@ -64,11 +76,16 @@ void Video::ToggleFullscreen()
 {
 	if ( m_bFullScreen )
 	{
-		m_pScreen = SDL_SetVideoMode( m_iWidth, m_iHeight, m_iDepth, SDL_DOUBLEBUF );
+		m_pScreen = SDL_SetVideoMode( m_iWidth, m_iHeight, m_iDepth, SDL_DOUBLEBUF | SDL_HWSURFACE );
 	}
 	else
 	{
-		m_pScreen = SDL_SetVideoMode( m_iWidth, m_iHeight, m_iDepth, SDL_DOUBLEBUF | SDL_FULLSCREEN );
+		m_pScreen = SDL_SetVideoMode( m_iWidth, m_iHeight, m_iDepth, SDL_DOUBLEBUF | SDL_FULLSCREEN | SDL_HWSURFACE );
 	}
 	m_bFullScreen = !m_bFullScreen;
+}
+
+void Video::DrawRect( int iTextureId, SDL_Rect* src, SDL_Rect* dst )
+{
+	SDL_BlitSurface( TextureManager::GetInstance()->GetTextureById( iTextureId ), src, m_pScreen, dst );
 }

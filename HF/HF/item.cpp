@@ -1,6 +1,7 @@
 #include <iostream>
 #include "item.h"
 #include "surfaceDB.h"
+#include "video.h"
 
 Item::Item( const Vector2D &position, const Vector2D &velocity, ItemTypes itemType, int iLifeTime, int iScreenWidth )
 {
@@ -17,47 +18,48 @@ Item::Item( const Vector2D &position, const Vector2D &velocity, ItemTypes itemTy
 	{
 		case ITEM_COIN:
 		{
-			m_oSprites.push_back( surfaceDB.LoadSurface( "../../resources/imgs/COINS/coins.png" ) );
-			m_oSprites.push_back( surfaceDB.LoadSurface( "../../resources/imgs/COINS/coins2.png" ) );
+			m_oSprites.push_back( TextureManager::GetInstance()->LoadSurface( "../../resources/imgs/coins.png" ) );
+			m_oSprites.push_back( TextureManager::GetInstance()->LoadSurface( "../../resources/imgs/coins2.png" ) );
 			break;
 		}
 		case ITEM_CLOUD:
 		{
-			m_oSprites.push_back( surfaceDB.LoadSurface( "../../resources/imgs/ORAGE/Orage_000.png" ) );
-			m_oSprites.push_back( surfaceDB.LoadSurface( "../../resources/imgs/ORAGE/Orage_001.png" ) );
-			m_oSprites.push_back( surfaceDB.LoadSurface( "../../resources/imgs/ORAGE/Orage_002.png" ) );
-			m_oSprites.push_back( surfaceDB.LoadSurface( "../../resources/imgs/ORAGE/Orage_003.png" ) );
-			m_oSprites.push_back( surfaceDB.LoadSurface( "../../resources/imgs/ORAGE/Orage_004.png" ) );
-			m_oSprites.push_back( surfaceDB.LoadSurface( "../../resources/imgs/ORAGE/Orage_005.png" ) );
-			m_oSprites.push_back( surfaceDB.LoadSurface( "../../resources/imgs/ORAGE/Orage_006.png" ) );
-			m_oSprites.push_back( surfaceDB.LoadSurface( "../../resources/imgs/ORAGE/Orage_007.png" ) );
-			m_oSprites.push_back( surfaceDB.LoadSurface( "../../resources/imgs/ORAGE/Orage_008.png" ) );
-			m_oSprites.push_back( surfaceDB.LoadSurface( "../../resources/imgs/ORAGE/Orage_009.png" ) );
-			m_oSprites.push_back( surfaceDB.LoadSurface( "../../resources/imgs/ORAGE/Orage_010.png" ) );
-			m_oSprites.push_back( surfaceDB.LoadSurface( "../../resources/imgs/ORAGE/Orage_011.png" ) );
-			m_oSprites.push_back( surfaceDB.LoadSurface( "../../resources/imgs/ORAGE/Orage_012.png" ) );
+			m_oSprites.push_back( TextureManager::GetInstance()->LoadSurface( "../../resources/imgs/Orage_000.png" ) );
+			m_oSprites.push_back( TextureManager::GetInstance()->LoadSurface( "../../resources/imgs/Orage_001.png" ) );
+			m_oSprites.push_back( TextureManager::GetInstance()->LoadSurface( "../../resources/imgs/Orage_002.png" ) );
+			m_oSprites.push_back( TextureManager::GetInstance()->LoadSurface( "../../resources/imgs/Orage_003.png" ) );
+			m_oSprites.push_back( TextureManager::GetInstance()->LoadSurface( "../../resources/imgs/Orage_004.png" ) );
+			m_oSprites.push_back( TextureManager::GetInstance()->LoadSurface( "../../resources/imgs/Orage_005.png" ) );
+			m_oSprites.push_back( TextureManager::GetInstance()->LoadSurface( "../../resources/imgs/Orage_006.png" ) );
+			m_oSprites.push_back( TextureManager::GetInstance()->LoadSurface( "../../resources/imgs/Orage_007.png" ) );
+			m_oSprites.push_back( TextureManager::GetInstance()->LoadSurface( "../../resources/imgs/Orage_008.png" ) );
+			m_oSprites.push_back( TextureManager::GetInstance()->LoadSurface( "../../resources/imgs/Orage_009.png" ) );
+			m_oSprites.push_back( TextureManager::GetInstance()->LoadSurface( "../../resources/imgs/Orage_010.png" ) );
+			m_oSprites.push_back( TextureManager::GetInstance()->LoadSurface( "../../resources/imgs/Orage_011.png" ) );
+			m_oSprites.push_back( TextureManager::GetInstance()->LoadSurface( "../../resources/imgs/Orage_012.png" ) );
 			break;
 		}
 		case ITEM_THUNDER:
 		{
-			m_oSprites.push_back( surfaceDB.LoadSurface( "../../resources/imgs/FOUDRE/Foudre_000.png" ) );
-			m_oSprites.push_back( surfaceDB.LoadSurface( "../../resources/imgs/FOUDRE/Foudre_001.png" ) );
-			m_oSprites.push_back( surfaceDB.LoadSurface( "../../resources/imgs/FOUDRE/Foudre_002.png" ) );
-			m_oSprites.push_back( surfaceDB.LoadSurface( "../../resources/imgs/FOUDRE/Foudre_003.png" ) );
-			m_oSprites.push_back( surfaceDB.LoadSurface( "../../resources/imgs/FOUDRE/Foudre_004.png" ) );
-			m_oSprites.push_back( surfaceDB.LoadSurface( "../../resources/imgs/FOUDRE/Foudre_005.png" ) );
-			m_oSprites.push_back( surfaceDB.LoadSurface( "../../resources/imgs/FOUDRE/Foudre_006.png" ) );
-			m_oSprites.push_back( surfaceDB.LoadSurface( "../../resources/imgs/FOUDRE/Foudre_007.png" ) );
-			m_oSprites.push_back( surfaceDB.LoadSurface( "../../resources/imgs/FOUDRE/Foudre_008.png" ) );
-			m_oSprites.push_back( surfaceDB.LoadSurface( "../../resources/imgs/FOUDRE/Foudre_009.png" ) );
-			m_oSprites.push_back( surfaceDB.LoadSurface( "../../resources/imgs/FOUDRE/Foudre_010.png" ) );
-			m_oSprites.push_back( surfaceDB.LoadSurface( "../../resources/imgs/FOUDRE/Foudre_011.png" ) );
-			m_oSprites.push_back( surfaceDB.LoadSurface( "../../resources/imgs/FOUDRE/Foudre_012.png" ) );
+			m_oSprites.push_back( TextureManager::GetInstance()->LoadSurface( "../../resources/imgs/Foudre_000.png" ) );
+			m_oSprites.push_back( TextureManager::GetInstance()->LoadSurface( "../../resources/imgs/Foudre_001.png" ) );
+			m_oSprites.push_back( TextureManager::GetInstance()->LoadSurface( "../../resources/imgs/Foudre_002.png" ) );
+			m_oSprites.push_back( TextureManager::GetInstance()->LoadSurface( "../../resources/imgs/Foudre_003.png" ) );
+			m_oSprites.push_back( TextureManager::GetInstance()->LoadSurface( "../../resources/imgs/Foudre_004.png" ) );
+			m_oSprites.push_back( TextureManager::GetInstance()->LoadSurface( "../../resources/imgs/Foudre_005.png" ) );
+			m_oSprites.push_back( TextureManager::GetInstance()->LoadSurface( "../../resources/imgs/Foudre_006.png" ) );
+			m_oSprites.push_back( TextureManager::GetInstance()->LoadSurface( "../../resources/imgs/Foudre_007.png" ) );
+			m_oSprites.push_back( TextureManager::GetInstance()->LoadSurface( "../../resources/imgs/Foudre_008.png" ) );
+			m_oSprites.push_back( TextureManager::GetInstance()->LoadSurface( "../../resources/imgs/Foudre_009.png" ) );
+			m_oSprites.push_back( TextureManager::GetInstance()->LoadSurface( "../../resources/imgs/Foudre_010.png" ) );
+			m_oSprites.push_back( TextureManager::GetInstance()->LoadSurface( "../../resources/imgs/Foudre_011.png" ) );
+			m_oSprites.push_back( TextureManager::GetInstance()->LoadSurface( "../../resources/imgs/Foudre_012.png" ) );
 			break;
 		}
 	}
 	m_iCurrentSprite = 0;
-	m_pSprite = m_oSprites.front();
+	m_iSprite = m_oSprites.front();
+	m_pSprite = TextureManager::GetInstance()->GetTextureById( m_oSprites.front() );
 
 	m_vSize = Vector2D( (float)m_pSprite->w, (float)m_pSprite->h );
 }
@@ -82,7 +84,7 @@ void Item::UpdateAnim()
 		m_iCurrentSprite++;
 		if( m_iCurrentSprite == m_oSprites.size() )
 			m_iCurrentSprite = 0;
-		m_pSprite = m_oSprites[m_iCurrentSprite];
+		m_iSprite = m_oSprites[m_iCurrentSprite];
 	}
 }
 
@@ -98,7 +100,7 @@ void Item::Draw(SDL_Surface *screen)
 	r.y = (Sint16)ROUND(m_vPos.getY()) - m_pSprite->h / 2;
 	r.w = m_pSprite->w;
 	r.h = m_pSprite->h;
-	SDL_BlitSurface( m_pSprite, 0, screen, &r );
+	Video::GetInstance()->DrawRect( m_iSprite, 0, &r );
 }
 
 void Item::PickedUp()

@@ -8,7 +8,7 @@ class Singleton
 {
 protected:
 	Singleton (){}
-	~Singleton (){ delete m_pInstance; }
+	~Singleton (){}
 
 public:
 	static T *GetInstance ()

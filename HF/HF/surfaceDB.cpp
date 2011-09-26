@@ -6,30 +6,27 @@ using namespace std;
 #include <fstream>
 #include <iostream>
 
-SurfaceDB surfaceDB;
-
-
-SurfaceDB::SurfaceDB()
+TextureManager::TextureManager()
 {
-
+	m_iCurrent = 0;
 }
 
-SurfaceDB::~SurfaceDB()
+TextureManager::~TextureManager()
 {
-	StringSurfaceMap::iterator pos;
+	std::map<int, SDL_Surface *>::iterator pos;
 	// free all surfaces
-	for ( pos = surfaceDB.begin(); pos != surfaceDB.end(); ++pos )
+	for ( pos = m_oTextureDB.begin(); pos != m_oTextureDB.end(); ++pos )
 	{
 		SDL_FreeSurface( pos->second );
 	}
 }
 
-SDL_Surface *SurfaceDB::LoadSurface( string fn )
+int TextureManager::LoadSurface( string fn, bool bAlpha )
 {
-	SDL_Surface *searchResult = GetSurface( fn );
-	if ( searchResult )
+	int id = GetTextureId( fn );
+	if( id >= 0 )
 	{
-		return searchResult;
+		return id;
 	}
 
 	//The image that's loaded
@@ -45,26 +42,54 @@ SDL_Surface *SurfaceDB::LoadSurface( string fn )
 	if( loadedImage != NULL )
 	{
 		//Create an optimized image
-		optimizedImage = SDL_DisplayFormatAlpha( loadedImage );
+		if( bAlpha )
+			optimizedImage = SDL_DisplayFormatAlpha( loadedImage );
+		else
+			optimizedImage = SDL_DisplayFormat( loadedImage );
 		
 		//Free the old image
 		SDL_FreeSurface( loadedImage );
+
+		m_oIdDB[ fn ] = m_iCurrent;
+		m_oTextureDB[ m_iCurrent ] = optimizedImage;
+
+		return m_iCurrent++;
 	}
 
-	surfaceDB[ fn ] = optimizedImage;
-	return optimizedImage;
+	return -1;
 }
 
-SDL_Surface *SurfaceDB::GetSurface( string fn )
+int TextureManager::GetTextureId( string fn )
 {
-	if( surfaceDB.empty() )
+	if( m_oIdDB.empty() )
+	{
+		return -1;
+	}
+	else
+	{
+		std::map<std::string, int>::iterator pos = m_oIdDB.find( fn );
+		if ( pos == m_oIdDB.end() )
+		{
+			return -1;
+		}
+		else
+		{
+			return pos->second;
+		}
+	}
+}
+
+
+SDL_Surface *TextureManager::GetTextureById( int id )
+{
+	if( m_oTextureDB.empty() )
 	{
 		return 0;
 	}
 	else
 	{
-		StringSurfaceMap::iterator pos = surfaceDB.find( fn );
-		if ( pos == surfaceDB.end() )
+		std::map<int, SDL_Surface *>::iterator pos = m_oTextureDB.find( id );
+		if ( pos == m_oTextureDB.end() )
 		{
 			return 0;
 		}

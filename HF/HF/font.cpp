@@ -2,10 +2,12 @@ using namespace std;
 
 #include "font.h"
 #include "surfaceDB.h"
+#include "video.h"
 #include <iostream>
 
 Font::Font(string fn) {
-  m_pSprite = surfaceDB.LoadSurface( fn );
+  m_iSprite = TextureManager::GetInstance()->LoadSurface( fn );
+  m_pSprite = TextureManager::GetInstance()->GetTextureById( m_iSprite );
   m_sCharset = " ABCDEFGHIJKLMNOPQRSTUVWXYZÜÄÖabcdefghijklmnopqrstuvwxyzüäöß0123456789!\"§$%&/()=?*+'#,.-;:_@°\\";
   // 94 Zeichen
   m_iCharWidth = m_pSprite->w / 94;
@@ -13,7 +15,7 @@ Font::Font(string fn) {
 }
 
 Font::~Font() {
-  ;
+
 }
 
 void Font::SetCharWidth(int width) {
@@ -125,7 +127,7 @@ void Font::DrawStr(SDL_Surface *screen, int posx, int posy, const string &text, 
     srcR.w = m_iCharWidth;
     srcR.h = m_pSprite->h;
       
-    SDL_BlitSurface( m_pSprite, &srcR, screen, &destR );
+    Video::GetInstance()->DrawRect( m_iSprite, &srcR, &destR );
 
     if (!(flags & FONT_MONOSPACE) && text[i] == ' ') {
       posx += ((m_iCharWidth * 2) / 3);

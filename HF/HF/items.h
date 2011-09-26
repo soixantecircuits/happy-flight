@@ -23,6 +23,7 @@ public:
 	Items();
 	~Items();
 
+	void ReloadConfig();
 	void AddItem(Item *item);
 	void GenerateItemNow( Vector2D pos, Vector2D vel );
 	void Generate( int dT );

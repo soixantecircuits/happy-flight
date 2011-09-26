@@ -5,6 +5,7 @@ using namespace std;
 #include <stdlib.h>
 #include <iostream>
 #include <sstream>
+#include <vector>
 #include "SDL.h"
 #include "surfaceDB.h"
 #include "video.h"
@@ -28,9 +29,7 @@ Game::Game()
 	m_fAcceleration = (float)PrefsManager::GetInstance()->GetValue( "ACCELERATION" );
 	m_bDebug = PrefsManager::GetInstance()->GetValue("DEBUG")==0?false:true;
 
-	g_pVideoserver = new Video();
-	m_pScreen = 0;
-	m_pScreen = g_pVideoserver->Init();
+	m_pScreen = Video::GetInstance()->Init();
 
 	m_bLeftDown = false;
 	m_bRightDown = false;
@@ -43,13 +42,13 @@ Game::Game()
 
 	// needed for calculating fps
 	m_iFrameCnt = 0;
-	m_iTickCnt = 0;
 
 	m_eGameState = GS_INTRO;
 	m_bPaused = true;
 	m_iSdlTicks = SDL_GetTicks();
 
-	m_pPauseSprite = surfaceDB.LoadSurface( "../../resources/imgs/paused.png" );
+	m_iPauseSprite = TextureManager::GetInstance()->LoadSurface( "../../resources/imgs/paused.png" );
+	m_pPauseSprite = TextureManager::GetInstance()->GetTextureById( m_iPauseSprite );
 	m_pDebugFont = new Font( "../../resources/imgs/font-20red.png" );
 	m_iDebugFontSize = m_pDebugFont->GetCharWidth();
 
@@ -64,8 +63,9 @@ Game::Game()
 Game::~Game()
 {
 	if( m_pPlane ) delete m_pPlane;
-	if( g_pVideoserver ) delete g_pVideoserver;
 	if( m_pItems ) delete m_pItems;
+	TextureManager::GetInstance()->Delete();
+	Video::GetInstance()->Delete();
 }
 
 void Game::InitNewGame()
@@ -117,6 +117,7 @@ void Game::Run(){
 			default: break;
 		}
 	}
+	Video::GetInstance()->Close();
 }
 
 
@@ -126,26 +127,28 @@ void Game::Run(){
 
 void Game::PlayOn()
 {
-	int A = SDL_GetTicks();
 	m_iFrameCnt = 0;
-	m_iTickCnt = 0;
-	cout << "frameCnt: " << m_iFrameCnt << "  tickCnt: " << m_iTickCnt << "  SDL_GetTicks()=" <<  A << endl;
 
 	while( m_eGameState == GS_PLAYON || m_eGameState == GS_ENDING )
 	{
+		int A = SDL_GetTicks();
 		HandleEventsPlayOn();
 		if( !m_bPaused ) 
 		{
 			UpdateGameState();
 		}
 		DrawPlayOn();
-	}
+		int iTime = SDL_GetTicks() - m_iSdlTicks;
+		//if( iTime < 8 )
+		//{
+		//	SDL_Delay( 8 - iTime );
+		//}
+		m_iSdlTicks = SDL_GetTicks();
+		m_iFrameCnt++;
 
-	int B = SDL_GetTicks();
-	cout << "frameCnt: " << m_iFrameCnt << "  tickCnt: " << m_iTickCnt << "  SDL_GetTicks()=" <<  B << endl;
-	cout << "Miliseconds: " << B-A << endl;
-	cout << "Frames/sec : " << (float)m_iFrameCnt / ((float)(B-A) / 1000.0) << endl;
-	cout << "ms/Frame   : " << (float)m_iTickCnt / (float)m_iFrameCnt << endl;
+		int B = SDL_GetTicks();
+		iMs = B-A;
+	}
 }
 
 
@@ -264,7 +267,7 @@ void Game::HandleEventsPlayOn()
 					}
 				case SDLK_f:
 					{
-						g_pVideoserver->ToggleFullscreen();
+						Video::GetInstance()->ToggleFullscreen();
 						break;
 					}
 				case SDLK_r:
@@ -278,6 +281,9 @@ void Game::HandleEventsPlayOn()
 						m_fScrollSpeed = (float)PrefsManager::GetInstance()->GetValue( "SCROLL_SPEED" );
 						m_bDebug = PrefsManager::GetInstance()->GetValue("DEBUG")==0?false:true;
 						m_pPlane->SetMaxVel( (float)PrefsManager::GetInstance()->GetValue( "MOVE_SPEED" ) );
+						m_fAcceleration = (float)PrefsManager::GetInstance()->GetValue( "ACCELERATION" );
+						m_pPlane->ReloadConfig();
+						m_pItems->ReloadConfig();
 						break;
 					}
 				case SDLK_ESCAPE:
@@ -354,7 +360,7 @@ void Game::DrawPlayOn()
 
 	if (m_bPaused) DrawPaused();
 
-	SDL_Flip( m_pScreen );
+	Video::GetInstance()->Flip();
 
 	m_iFrameCnt++;
 }
@@ -384,6 +390,8 @@ void Game::DrawTime()
 
 void Game::DrawDebugInfos()
 {
+	static vector<int> oFrameTime;
+	static int iPos = 0;
 	string debuginfo =  "Scroll speed : " + asString( (int)m_fScrollSpeed );
 	m_pDebugFont->DrawStr( m_pScreen, 10, 10, debuginfo );
 
@@ -392,6 +400,12 @@ void Game::DrawDebugInfos()
 
 	debuginfo =  "Score : " + asString( m_iScore );
 	m_pDebugFont->DrawStr( m_pScreen, 10, 50, debuginfo );
+
+	debuginfo =  "Frame time : " + asString( iMs );
+	m_pDebugFont->DrawStr( m_pScreen, 10, 70, debuginfo );
+
+	debuginfo =  "FPS : " + asString( 1000 / iMs );
+	m_pDebugFont->DrawStr( m_pScreen, 10, 90, debuginfo );
 }
 
 void Game::DrawPaused()
@@ -401,7 +415,7 @@ void Game::DrawPaused()
 	r.y = m_pScreen->h/2 - m_pPauseSprite->h/2;
 	r.w = m_pPauseSprite->w;
 	r.h = m_pPauseSprite->h;
-	SDL_BlitSurface( m_pPauseSprite, 0, m_pScreen, &r );
+	Video::GetInstance()->DrawRect( m_iPauseSprite, 0, &r );
 }
 
 void Game::PickUpCoin()

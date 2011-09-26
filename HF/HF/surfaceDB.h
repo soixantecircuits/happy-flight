@@ -3,38 +3,29 @@
 
 
 #include "SDL.h"
-
+#include "Singleton.h"
 #include <string>
 #include <map>
 
-typedef std::map<std::string, SDL_Surface *, std::greater<std::string> > StringSurfaceMap;
-
-
-class SurfaceDB;
-
-extern SurfaceDB surfaceDB;
-
 #define ROUND(x) ((float)floor( x + 0.5 ))
 
-/* Framework for convenient loading and management of SDL_Surfaces.
-   Every surface has a transparent color (default violet).
-   If the requested surface was already loaded it is not loaded again, 
-   instead the old surface is returned.
-   The clients of the surface may use the surface for blitting, but they must
-   not change (especially delete) it.
-*/
-class SurfaceDB
+class TextureManager : public Singleton<TextureManager>
 {
+	friend class Singleton<TextureManager>;
+
 public:
-	SurfaceDB();
-	~SurfaceDB();
+	TextureManager();
+	~TextureManager();
 
-	SDL_Surface *LoadSurface( std::string fn );
+	int LoadSurface( std::string fn, bool bAlpha = true );
 
-	private:
-	StringSurfaceMap surfaceDB;
+	SDL_Surface *GetTextureById( int id );
+	int GetTextureId( std::string fn );
 
-	SDL_Surface *GetSurface( std::string fn );
+private:
+	std::map<std::string, int> m_oIdDB;
+	std::map<int, SDL_Surface *> m_oTextureDB;
+	int m_iCurrent;
 };
 
 
