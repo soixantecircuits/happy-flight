@@ -1,6 +1,6 @@
 #include "item.h"
 #include "items.h"
-#include "surfaceDB.h"
+#include "TextureManager.h"
 #include "geometry.h"
 #include "PrefsManager.h"
 

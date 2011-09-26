@@ -80,8 +80,8 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="plane.cpp" />
     <ClCompile Include="PrefsManager.cpp" />
-    <ClCompile Include="surfaceDB.cpp" />
-    <ClCompile Include="video.cpp" />
+    <ClCompile Include="TextureManager.cpp" />
+    <ClCompile Include="Video.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="background.h" />
@@ -93,8 +93,8 @@
     <ClInclude Include="plane.h" />
     <ClInclude Include="PrefsManager.h" />
     <ClInclude Include="Singleton.h" />
-    <ClInclude Include="surfaceDB.h" />
-    <ClInclude Include="video.h" />
+    <ClInclude Include="TextureManager.h" />
+    <ClInclude Include="Video.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -1,5 +1,5 @@
 #include "background.h"
-#include "surfaceDB.h"
+#include "TextureManager.h"
 #include "SDL.h"
 #include <iostream>
 #include "PrefsManager.h"

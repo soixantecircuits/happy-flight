@@ -1,12 +1,10 @@
-#include "video.h"
+#include "Video.h"
 #include "SDL.h"
 #include <stdlib.h>
-#include "surfaceDB.h"
+#include "TextureManager.h"
 #include "PrefsManager.h"
 
 using namespace std;
-
-Video *Video::GetInstance();
 
 Video::Video()
 {

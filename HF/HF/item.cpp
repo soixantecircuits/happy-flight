@@ -1,6 +1,6 @@
 #include <iostream>
 #include "item.h"
-#include "surfaceDB.h"
+#include "TextureManager.h"
 #include "video.h"
 
 Item::Item( const Vector2D &position, const Vector2D &velocity, ItemTypes itemType, int iLifeTime, int iScreenWidth )

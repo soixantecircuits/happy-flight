@@ -7,7 +7,7 @@ using namespace std;
 #include <sstream>
 #include <vector>
 #include "SDL.h"
-#include "surfaceDB.h"
+#include "TextureManager.h"
 #include "video.h"
 #include "font.h"
 #include "background.h"

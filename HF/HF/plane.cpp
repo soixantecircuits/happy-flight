@@ -1,12 +1,12 @@
 using namespace std;
 
 #include "plane.h"
-#include "surfaceDB.h"
+#include "TextureManager.h"
 #include "PrefsManager.h"
 #include "game.h"
 #include "items.h"
 #include "item.h"
-#include "video.h"
+#include "Video.h"
 
 Plane::Plane( Items* pItems, Game* pGame )
 : m_pItems( pItems )
