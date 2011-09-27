@@ -15,7 +15,6 @@ bool PrefsManager::LoadPrefs( const string& sFileName )
 		while( myfile.good() )
 		{
 			getline( myfile,line );
-			cout << line << endl;
 			istringstream iss( line );
 			string sKey;
 			iss >> sKey;

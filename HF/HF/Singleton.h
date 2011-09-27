@@ -15,7 +15,6 @@ public:
 	{
 		if (NULL == m_pInstance)
 		{
-			std::cout << "creating singleton." << std::endl;
 			m_pInstance = new T;
 		}
 

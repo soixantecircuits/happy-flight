@@ -57,7 +57,7 @@ void Background::GenerateBackground( int length )
 		int iTextureId = TextureManager::GetInstance()->LoadSurface( m_oTileNames[i], false );
 		SDL_Surface* pSurface = TextureManager::GetInstance()->GetTextureById( iTextureId );
 
-		if( iTextureId >= 0 )
+		if( iTextureId > 0 )
 		{
 			m_oTileIds.push_back( iTextureId );
 			if (pSurface->w < m_iMinTileWidth)
@@ -88,8 +88,6 @@ void Background::GenerateBackground( int length )
 	{
 		rows++;
 	}
-
-	//   cout << "Background: minTileWidth=" << minTileWidth << "  minTileHeight=" << minTileHeight << "  rows=" << rows << endl;
 
 	int lastTile = rand() % (m_oTileIds.size()-2);
 

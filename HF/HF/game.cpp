@@ -265,11 +265,6 @@ void Game::HandleEventsPlayOn()
 						m_bDebug = !m_bDebug;
 						break;
 					}
-				case SDLK_f:
-					{
-						Video::GetInstance()->ToggleFullscreen();
-						break;
-					}
 				case SDLK_r:
 					{
 						m_eGameState = GS_INTRO;
@@ -401,11 +396,14 @@ void Game::DrawDebugInfos()
 	debuginfo =  "Score : " + asString( m_iScore );
 	m_pDebugFont->DrawStr( m_pScreen, 10, 50, debuginfo );
 
-	debuginfo =  "Frame time : " + asString( iMs );
-	m_pDebugFont->DrawStr( m_pScreen, 10, 70, debuginfo );
+	if( iMs > 0 )
+	{
+		debuginfo =  "Frame time : " + asString( iMs );
+		m_pDebugFont->DrawStr( m_pScreen, 10, 70, debuginfo );
 
-	debuginfo =  "FPS : " + asString( 1000 / iMs );
-	m_pDebugFont->DrawStr( m_pScreen, 10, 90, debuginfo );
+		debuginfo =  "FPS : " + asString( 1000 / iMs );
+		m_pDebugFont->DrawStr( m_pScreen, 10, 90, debuginfo );
+	}
 }
 
 void Game::DrawPaused()

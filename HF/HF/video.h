@@ -18,8 +18,6 @@ public:
 
 	void Flip();
 	void DrawRect( int iTextureId, SDL_Rect* src, SDL_Rect* dst );
-	void ClearScreen();
-	void ToggleFullscreen();
 	void Close();
 
 	int m_iHeight;

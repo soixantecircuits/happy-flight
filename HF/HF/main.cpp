@@ -7,7 +7,7 @@ using namespace std;
 
 int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {
-	SDL_Init(0);
+	SDL_Init(SDL_INIT_VIDEO);
 	srand(0);
 	Game game;
 	game.Run();
