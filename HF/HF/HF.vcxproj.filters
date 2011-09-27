@@ -96,6 +96,9 @@
     <ClCompile Include="ofxOsc\libs\oscpack\include\ip\win32\UdpSocket.cpp">
       <Filter>ofxOsc\ospack\ip</Filter>
     </ClCompile>
+    <ClCompile Include="SoundManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="game.h">
@@ -193,6 +196,9 @@
     </ClInclude>
     <ClInclude Include="ofxOsc\libs\oscpack\include\ip\UdpSocket.h">
       <Filter>ofxOsc\ospack\ip</Filter>
+    </ClInclude>
+    <ClInclude Include="SoundManager.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

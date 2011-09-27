@@ -15,6 +15,7 @@ using namespace std;
 #include "plane.h"
 #include "items.h"
 #include "Score.h"
+#include "SoundManager.h"
 #include "ofxOsc.h"
 
 template<typename T> std::string asString( const T& obj )
@@ -51,6 +52,7 @@ Game::Game()
 	m_bPaused = true;
 	m_iSdlTicks = SDL_GetTicks();
 
+	SoundManager::GetInstance()->Init();
 	m_iPauseSprite = TextureManager::GetInstance()->LoadSurface( "../../resources/imgs/paused.png" );
 	m_pPauseSprite = TextureManager::GetInstance()->GetTextureById( m_iPauseSprite );
 	m_pDebugFont = new Font( "../../resources/imgs/font-20red.png" );
@@ -84,6 +86,7 @@ Game::~Game()
 
 void Game::InitNewGame()
 {
+	SoundManager::GetInstance()->Stop( "../../resources/snd/avion.wav" );
 	m_bEnd = false;
 	m_iScore = 0;
 	m_fScrollSpeed = (float)PrefsManager::GetInstance()->GetValue( "SCROLL_SPEED" );
@@ -103,6 +106,8 @@ void Game::InitNewGame()
 	m_fActBackgoundPos = 0;
 	m_iGameActRuntime = 0;
 	m_bPaused = true;
+	SoundManager::GetInstance()->Play( "../../resources/snd/avion.wav", true );
+	SoundManager::GetInstance()->Pause( "../../resources/snd/avion.wav", true );
 
 	m_iTimeLastUpdate = SDL_GetTicks();
 	m_iTimePauseOn = SDL_GetTicks();
@@ -134,7 +139,10 @@ void Game::Run(){
 					switch(event.type)
 					{
 					case SDL_KEYDOWN:
-						m_eGameState = GS_INTRO;
+						{
+							m_eGameState = GS_INTRO;
+						}
+						
 					}
 				}
 				break;
@@ -193,11 +201,13 @@ void Game::Pause()
 {
 	if (m_bPaused)
 	{
+		SoundManager::GetInstance()->Pause( "../../resources/snd/avion.wav", false );
 		Uint32 timePaused = SDL_GetTicks() - m_iTimePauseOn;
 		m_iTimeLastUpdate += timePaused;
 	}
 	else
 	{
+		SoundManager::GetInstance()->Pause( "../../resources/snd/avion.wav", true );
 		m_iTimePauseOn = SDL_GetTicks();
 	}
 	m_bPaused = !m_bPaused;
@@ -514,6 +524,7 @@ void Game::DrawPaused()
 
 void Game::PickUpCoin()
 {
+	SoundManager::GetInstance()->Play( "../../resources/snd/coin.wav" );
 	m_iScore++;
 }
 
@@ -524,6 +535,8 @@ void Game::EnterCloud()
 
 void Game::EnterThunder()
 {
+	SoundManager::GetInstance()->Play( "../../resources/snd/storm.wav" );
+
 	m_iScore--;
 	if( m_iScore < 0 )
 		m_iScore = 0;
@@ -531,6 +544,10 @@ void Game::EnterThunder()
 
 void Game::LoadResources()
 {
+	SoundManager* pSoundManager = SoundManager::GetInstance();
+	pSoundManager->LoadWav( "../../resources/snd/coin.wav" );
+	pSoundManager->LoadWav( "../../resources/snd/storm.wav" );
+
 	TextureManager* pTextureManager = TextureManager::GetInstance();
 
 	pTextureManager->LoadSurface( "../../resources/imgs/coins.png" );
