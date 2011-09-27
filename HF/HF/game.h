@@ -9,7 +9,7 @@ class Background;
 class Plane;
 class Items;
 
-enum GameStates { GS_INTRO, GS_PLAYON, GS_ENDING, GS_END, GS_QUIT };
+enum GameStates { GS_INTRO, GS_PLAYON, GS_QUIT };
 
 class Game {
 	SDL_Surface *m_pScreen;
@@ -49,6 +49,8 @@ class Game {
 	bool m_bF7down;
 	bool m_bF8down;
 
+	int m_iEnding;
+
 public:
 
 	Game();
@@ -71,6 +73,7 @@ private:
 	void DrawTime();
 	void DrawDebugInfos();
 	void DrawPaused();
+	void LoadResources();
 };
 
 #endif //#ifndef GAME_HH

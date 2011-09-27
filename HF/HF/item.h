@@ -10,7 +10,8 @@ enum ItemTypes
 { 
 	ITEM_COIN=0,
 	ITEM_CLOUD,
-	ITEM_THUNDER
+	ITEM_THUNDER,
+	ITEM_END
 };
 
 class Item
@@ -44,7 +45,7 @@ public:
 	void PickedUp();
 	bool IsPickedUp(){ return m_bPickedUp; }
 
-	inline bool IsExpired() { return (m_iTimeLived >= m_iItemLifeTime); }
+	inline bool IsExpired() { return ( m_eItemType != ITEM_END && m_iTimeLived >= m_iItemLifeTime); }
 	inline Vector2D GetPos() { return m_vPos; }
 	inline Vector2D GetVel() { return m_vVel; }
 	inline Vector2D GetSize() { return m_vSize; }

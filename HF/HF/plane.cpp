@@ -12,6 +12,7 @@ Plane::Plane( Items* pItems, Game* pGame )
 : m_pItems( pItems )
 , m_pGame( pGame )
 {
+	m_bGoCenter = false;
 	m_iScreenWidth = PrefsManager::GetInstance()->GetValue( "GAME_WIDTH" );
 	m_iScreenHeight = PrefsManager::GetInstance()->GetValue( "GAME_HEIGHT" );
 	m_iAnimDelay = PrefsManager::GetInstance()->GetValue( "ANIM_DELAY" );
@@ -20,61 +21,63 @@ Plane::Plane( Items* pItems, Game* pGame )
 	m_iPlaneWidth = PrefsManager::GetInstance()->GetValue( "PLANE_WIDTH" );
 	m_iPlaneHeight = PrefsManager::GetInstance()->GetValue( "PLANE_HEIGHT" );
 
-	m_iSpriteBase = TextureManager::GetInstance()->LoadSurface( "../../resources/imgs/Avion_000.png" );
+	TextureManager* pTextureManager = TextureManager::GetInstance();
+
+	m_iSpriteBase = pTextureManager->LoadSurface( "../../resources/imgs/Avion_000.png" );
 	m_pCurrentAnim = &m_oSpritesUp;
 
-	m_oSpritesUp.push_back( TextureManager::GetInstance()->LoadSurface( "../../resources/imgs/Avion_000.png" ) );
-	m_oSpritesUp.push_back( TextureManager::GetInstance()->LoadSurface( "../../resources/imgs/Avion_001.png" ) );
-	m_oSpritesUp.push_back( TextureManager::GetInstance()->LoadSurface( "../../resources/imgs/Avion_002.png" ) );
-	m_oSpritesUp.push_back( TextureManager::GetInstance()->LoadSurface( "../../resources/imgs/Avion_003.png" ) );
-	m_oSpritesUp.push_back( TextureManager::GetInstance()->LoadSurface( "../../resources/imgs/Avion_004.png" ) );
-	m_oSpritesUp.push_back( TextureManager::GetInstance()->LoadSurface( "../../resources/imgs/Avion_005.png" ) );
-	m_oSpritesUp.push_back( TextureManager::GetInstance()->LoadSurface( "../../resources/imgs/Avion_006.png" ) );
-	m_oSpritesUp.push_back( TextureManager::GetInstance()->LoadSurface( "../../resources/imgs/Avion_007.png" ) );
-	m_oSpritesUp.push_back( TextureManager::GetInstance()->LoadSurface( "../../resources/imgs/Avion_008.png" ) );
-	m_oSpritesUp.push_back( TextureManager::GetInstance()->LoadSurface( "../../resources/imgs/Avion_009.png" ) );
-	m_oSpritesUp.push_back( TextureManager::GetInstance()->LoadSurface( "../../resources/imgs/Avion_010.png" ) );
-	m_oSpritesUp.push_back( TextureManager::GetInstance()->LoadSurface( "../../resources/imgs/Avion_011.png" ) );
+	m_oSpritesUp.push_back( pTextureManager->LoadSurface( "../../resources/imgs/Avion_000.png" ) );
+	m_oSpritesUp.push_back( pTextureManager->LoadSurface( "../../resources/imgs/Avion_001.png" ) );
+	m_oSpritesUp.push_back( pTextureManager->LoadSurface( "../../resources/imgs/Avion_002.png" ) );
+	m_oSpritesUp.push_back( pTextureManager->LoadSurface( "../../resources/imgs/Avion_003.png" ) );
+	m_oSpritesUp.push_back( pTextureManager->LoadSurface( "../../resources/imgs/Avion_004.png" ) );
+	m_oSpritesUp.push_back( pTextureManager->LoadSurface( "../../resources/imgs/Avion_005.png" ) );
+	m_oSpritesUp.push_back( pTextureManager->LoadSurface( "../../resources/imgs/Avion_006.png" ) );
+	m_oSpritesUp.push_back( pTextureManager->LoadSurface( "../../resources/imgs/Avion_007.png" ) );
+	m_oSpritesUp.push_back( pTextureManager->LoadSurface( "../../resources/imgs/Avion_008.png" ) );
+	m_oSpritesUp.push_back( pTextureManager->LoadSurface( "../../resources/imgs/Avion_009.png" ) );
+	m_oSpritesUp.push_back( pTextureManager->LoadSurface( "../../resources/imgs/Avion_010.png" ) );
+	m_oSpritesUp.push_back( pTextureManager->LoadSurface( "../../resources/imgs/Avion_011.png" ) );
 
-	m_oSpritesTurnLeft.push_back( TextureManager::GetInstance()->LoadSurface( "../../resources/imgs/Avion_Turn_L_000.png" ) );
-	m_oSpritesTurnLeft.push_back( TextureManager::GetInstance()->LoadSurface( "../../resources/imgs/Avion_Turn_L_001.png" ) );
-	m_oSpritesTurnLeft.push_back( TextureManager::GetInstance()->LoadSurface( "../../resources/imgs/Avion_Turn_L_002.png" ) );
-	m_oSpritesTurnLeft.push_back( TextureManager::GetInstance()->LoadSurface( "../../resources/imgs/Avion_Turn_L_003.png" ) );
-	m_oSpritesTurnLeft.push_back( TextureManager::GetInstance()->LoadSurface( "../../resources/imgs/Avion_Turn_L_004.png" ) );
- 
-	m_oSpritesLeft.push_back( TextureManager::GetInstance()->LoadSurface( "../../resources/imgs/Avion_Left_000.png" ) );
-	m_oSpritesLeft.push_back( TextureManager::GetInstance()->LoadSurface( "../../resources/imgs/Avion_Left_001.png" ) );
-	m_oSpritesLeft.push_back( TextureManager::GetInstance()->LoadSurface( "../../resources/imgs/Avion_Left_002.png" ) );
-	m_oSpritesLeft.push_back( TextureManager::GetInstance()->LoadSurface( "../../resources/imgs/Avion_Left_003.png" ) );
-	m_oSpritesLeft.push_back( TextureManager::GetInstance()->LoadSurface( "../../resources/imgs/Avion_Left_004.png" ) );
-	m_oSpritesLeft.push_back( TextureManager::GetInstance()->LoadSurface( "../../resources/imgs/Avion_Left_005.png" ) );
-	m_oSpritesLeft.push_back( TextureManager::GetInstance()->LoadSurface( "../../resources/imgs/Avion_Left_006.png" ) );
-	m_oSpritesLeft.push_back( TextureManager::GetInstance()->LoadSurface( "../../resources/imgs/Avion_Left_007.png" ) );
-	m_oSpritesLeft.push_back( TextureManager::GetInstance()->LoadSurface( "../../resources/imgs/Avion_Left_008.png" ) );
-	m_oSpritesLeft.push_back( TextureManager::GetInstance()->LoadSurface( "../../resources/imgs/Avion_Left_009.png" ) );
-	m_oSpritesLeft.push_back( TextureManager::GetInstance()->LoadSurface( "../../resources/imgs/Avion_Left_010.png" ) );
+	m_oSpritesTurnLeft.push_back( pTextureManager->LoadSurface( "../../resources/imgs/Avion_Turn_L_000.png" ) );
+	m_oSpritesTurnLeft.push_back( pTextureManager->LoadSurface( "../../resources/imgs/Avion_Turn_L_001.png" ) );
+	m_oSpritesTurnLeft.push_back( pTextureManager->LoadSurface( "../../resources/imgs/Avion_Turn_L_002.png" ) );
+	m_oSpritesTurnLeft.push_back( pTextureManager->LoadSurface( "../../resources/imgs/Avion_Turn_L_003.png" ) );
+	m_oSpritesTurnLeft.push_back( pTextureManager->LoadSurface( "../../resources/imgs/Avion_Turn_L_004.png" ) );
 
-	m_oSpritesTurnRight.push_back( TextureManager::GetInstance()->LoadSurface( "../../resources/imgs/Avion_Turn_R_000.png" ) );
-	m_oSpritesTurnRight.push_back( TextureManager::GetInstance()->LoadSurface( "../../resources/imgs/Avion_Turn_R_001.png" ) );
-	m_oSpritesTurnRight.push_back( TextureManager::GetInstance()->LoadSurface( "../../resources/imgs/Avion_Turn_R_002.png" ) );
-	m_oSpritesTurnRight.push_back( TextureManager::GetInstance()->LoadSurface( "../../resources/imgs/Avion_Turn_R_003.png" ) );
-	m_oSpritesTurnRight.push_back( TextureManager::GetInstance()->LoadSurface( "../../resources/imgs/Avion_Turn_R_004.png" ) );
+	m_oSpritesLeft.push_back( pTextureManager->LoadSurface( "../../resources/imgs/Avion_Left_000.png" ) );
+	m_oSpritesLeft.push_back( pTextureManager->LoadSurface( "../../resources/imgs/Avion_Left_001.png" ) );
+	m_oSpritesLeft.push_back( pTextureManager->LoadSurface( "../../resources/imgs/Avion_Left_002.png" ) );
+	m_oSpritesLeft.push_back( pTextureManager->LoadSurface( "../../resources/imgs/Avion_Left_003.png" ) );
+	m_oSpritesLeft.push_back( pTextureManager->LoadSurface( "../../resources/imgs/Avion_Left_004.png" ) );
+	m_oSpritesLeft.push_back( pTextureManager->LoadSurface( "../../resources/imgs/Avion_Left_005.png" ) );
+	m_oSpritesLeft.push_back( pTextureManager->LoadSurface( "../../resources/imgs/Avion_Left_006.png" ) );
+	m_oSpritesLeft.push_back( pTextureManager->LoadSurface( "../../resources/imgs/Avion_Left_007.png" ) );
+	m_oSpritesLeft.push_back( pTextureManager->LoadSurface( "../../resources/imgs/Avion_Left_008.png" ) );
+	m_oSpritesLeft.push_back( pTextureManager->LoadSurface( "../../resources/imgs/Avion_Left_009.png" ) );
+	m_oSpritesLeft.push_back( pTextureManager->LoadSurface( "../../resources/imgs/Avion_Left_010.png" ) );
 
-	m_oSpritesRight.push_back( TextureManager::GetInstance()->LoadSurface( "../../resources/imgs/Avion_Right_000.png" ) );
-	m_oSpritesRight.push_back( TextureManager::GetInstance()->LoadSurface( "../../resources/imgs/Avion_Right_001.png" ) );
-	m_oSpritesRight.push_back( TextureManager::GetInstance()->LoadSurface( "../../resources/imgs/Avion_Right_002.png" ) );
-	m_oSpritesRight.push_back( TextureManager::GetInstance()->LoadSurface( "../../resources/imgs/Avion_Right_003.png" ) );
-	m_oSpritesRight.push_back( TextureManager::GetInstance()->LoadSurface( "../../resources/imgs/Avion_Right_004.png" ) );
-	m_oSpritesRight.push_back( TextureManager::GetInstance()->LoadSurface( "../../resources/imgs/Avion_Right_005.png" ) );
-	m_oSpritesRight.push_back( TextureManager::GetInstance()->LoadSurface( "../../resources/imgs/Avion_Right_006.png" ) );
-	m_oSpritesRight.push_back( TextureManager::GetInstance()->LoadSurface( "../../resources/imgs/Avion_Right_007.png" ) );
-	m_oSpritesRight.push_back( TextureManager::GetInstance()->LoadSurface( "../../resources/imgs/Avion_Right_008.png" ) );
-	m_oSpritesRight.push_back( TextureManager::GetInstance()->LoadSurface( "../../resources/imgs/Avion_Right_009.png" ) );
-	m_oSpritesRight.push_back( TextureManager::GetInstance()->LoadSurface( "../../resources/imgs/Avion_Right_010.png" ) );
+	m_oSpritesTurnRight.push_back( pTextureManager->LoadSurface( "../../resources/imgs/Avion_Turn_R_000.png" ) );
+	m_oSpritesTurnRight.push_back( pTextureManager->LoadSurface( "../../resources/imgs/Avion_Turn_R_001.png" ) );
+	m_oSpritesTurnRight.push_back( pTextureManager->LoadSurface( "../../resources/imgs/Avion_Turn_R_002.png" ) );
+	m_oSpritesTurnRight.push_back( pTextureManager->LoadSurface( "../../resources/imgs/Avion_Turn_R_003.png" ) );
+	m_oSpritesTurnRight.push_back( pTextureManager->LoadSurface( "../../resources/imgs/Avion_Turn_R_004.png" ) );
+
+	m_oSpritesRight.push_back( pTextureManager->LoadSurface( "../../resources/imgs/Avion_Right_000.png" ) );
+	m_oSpritesRight.push_back( pTextureManager->LoadSurface( "../../resources/imgs/Avion_Right_001.png" ) );
+	m_oSpritesRight.push_back( pTextureManager->LoadSurface( "../../resources/imgs/Avion_Right_002.png" ) );
+	m_oSpritesRight.push_back( pTextureManager->LoadSurface( "../../resources/imgs/Avion_Right_003.png" ) );
+	m_oSpritesRight.push_back( pTextureManager->LoadSurface( "../../resources/imgs/Avion_Right_004.png" ) );
+	m_oSpritesRight.push_back( pTextureManager->LoadSurface( "../../resources/imgs/Avion_Right_005.png" ) );
+	m_oSpritesRight.push_back( pTextureManager->LoadSurface( "../../resources/imgs/Avion_Right_006.png" ) );
+	m_oSpritesRight.push_back( pTextureManager->LoadSurface( "../../resources/imgs/Avion_Right_007.png" ) );
+	m_oSpritesRight.push_back( pTextureManager->LoadSurface( "../../resources/imgs/Avion_Right_008.png" ) );
+	m_oSpritesRight.push_back( pTextureManager->LoadSurface( "../../resources/imgs/Avion_Right_009.png" ) );
+	m_oSpritesRight.push_back( pTextureManager->LoadSurface( "../../resources/imgs/Avion_Right_010.png" ) );
 
 	m_iCurrentSprite = 0;
 
-	m_pSpriteBase = TextureManager::GetInstance()->GetTextureById( m_iSpriteBase );
+	m_pSpriteBase = pTextureManager->GetTextureById( m_iSpriteBase );
 
 	m_oDrawRectBase.w = m_pSpriteBase->w;
 	m_oDrawRectBase.h = m_pSpriteBase->h;
@@ -109,6 +112,17 @@ Vector2D Plane::Move( int dT )
 {
 	static int elapsedTime = 0;
 	static bool oldleft, oldright;
+
+	if( m_bGoCenter )
+	{
+		if( m_vPos.getX() > (float)m_iScreenWidth/2 )
+			m_bLeft = true;
+		else if( m_vPos.getX() < (float)m_iScreenWidth/2 )
+			m_bRight = true;
+		if( m_vPos.getX() == (float)m_iScreenWidth/2 )
+			m_bGoCenter = false;
+	}
+
 	elapsedTime += dT;
 	if( elapsedTime > m_iAnimDelay || oldleft != m_bLeft || oldright != m_bRight )
 	{
@@ -122,19 +136,25 @@ Vector2D Plane::Move( int dT )
 	Vector2D oldPos = m_vPos;
 
 	if( m_bLeft )
-	{
 		m_vPos += Vector2D( -m_fMaxVel, 0 ) * (float)dT / 1000.0;
-	} 
+
 	if( m_bRight )
-	{
+
 		m_vPos += Vector2D( m_fMaxVel, 0 ) * (float)dT / 1000.0;
-	}
+
+	if( m_bGoCenter && ( (oldPos.getX() > (float)m_iScreenWidth/2) != (m_vPos.getX() > (float)m_iScreenWidth/2) ) )
+		m_vPos.setX( (float)m_iScreenWidth/2 );
 
 	ClipWorld();
 	m_bLeft = false;
 	m_bRight = false;
 
 	return oldPos;
+}
+
+void Plane::GoCenter()
+{
+	m_bGoCenter = true;
 }
 
 void Plane::UpdateAnim()

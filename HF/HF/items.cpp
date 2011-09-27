@@ -34,8 +34,10 @@ Items::Items()
 	m_iItemAppearRandomDelay = PrefsManager::GetInstance()->GetValue( "ITEM_RAND_DELAY" );
 	m_iItemLifeTime = PrefsManager::GetInstance()->GetValue( "ITEM_LIFE_TIME" );
 	m_iScreenWidth = PrefsManager::GetInstance()->GetValue( "GAME_WIDTH" );
+	m_iScreenHeight = PrefsManager::GetInstance()->GetValue( "GAME_HEIGHT" );
 	m_iAnimDelay = PrefsManager::GetInstance()->GetValue( "ANIM_DELAY" );
 	m_iTimeNextItemAppear = m_iItemAppearDelay + (rand() % m_iItemAppearRandomDelay);
+	m_bEnd = false;
 }
 
 Items::~Items()
@@ -136,6 +138,19 @@ void Items::Generate( int dT )
 		GenerateItemNow( Vector2D( 100.f + (rand() % (m_iScreenWidth-200) ), -20.f ),
 		Vector2D( (rand() % (int)ROUND(m_fScrollSpeed)) - m_fScrollSpeed / 2, m_fScrollSpeed + (rand() % (int)ROUND(m_fScrollSpeed/4)) ) );
 	}
+}
+
+void Items::GenerateEnd()
+{
+	static bool bEnd = false;
+	if( !bEnd )
+	{
+		Vector2D pos = Vector2D( (float)m_iScreenWidth/2, (float)m_iScreenHeight/2 );
+		Vector2D vel = Vector2D( 0, 0 );
+		Item *item = new Item( pos, vel, ITEM_END, m_iItemLifeTime, m_iScreenWidth );
+		AddItem( item );
+	}
+	bEnd = true;
 }
 
 void Items::DeleteAllItems()

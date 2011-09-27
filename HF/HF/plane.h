@@ -44,6 +44,7 @@ class Plane
 	float m_fMaxVel;
 	bool m_bLeft;
 	bool m_bRight;
+	bool m_bGoCenter;
 
 	Items* m_pItems;
 	Game* m_pGame;
@@ -71,6 +72,7 @@ public:
 
 	void GoLeft(){ m_bLeft = true; }
 	void GoRight(){ m_bRight = true; }
+	void GoCenter();
 
 };
 

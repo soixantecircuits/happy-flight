@@ -51,11 +51,13 @@ void Background::GenerateBackground( int length )
 	AddTile( "../../resources/imgs/Ville_01.png" );
 	AddTile( "../../resources/imgs/Ville_02.png" );
 
+	TextureManager* pTextureManager = TextureManager::GetInstance();
+
 	// load all tiles
 	for( int i=0; i<(int)m_oTileNames.size(); ++i )
 	{
-		int iTextureId = TextureManager::GetInstance()->LoadSurface( m_oTileNames[i], false );
-		SDL_Surface* pSurface = TextureManager::GetInstance()->GetTextureById( iTextureId );
+		int iTextureId = pTextureManager->LoadSurface( m_oTileNames[i], false );
+		SDL_Surface* pSurface = pTextureManager->GetTextureById( iTextureId );
 
 		if( iTextureId > 0 )
 		{
@@ -147,9 +149,11 @@ void Background::Draw( SDL_Surface* screen )
 	Draw( screen, m_iStep );
 }
 
-bool Background::Draw( SDL_Surface* screen, int step )
+int Background::Draw( SDL_Surface* screen, int step )
 {
-	bool bEnd = true;
+	int ret = 0;
+	bool bEndTiles = false;
+	bool bRegularTiles = false;
 	int iWidth = PrefsManager::GetInstance()->GetValue("GAME_WIDTH");
 	int iHeight = PrefsManager::GetInstance()->GetValue("GAME_HEIGHT");
 
@@ -196,16 +200,26 @@ bool Background::Draw( SDL_Surface* screen, int step )
 			int currentTile = ((y+startLine)*m_iTilesPerLine+x);
 			int tile = 0;
 			if( currentTile > (int)m_oTileNumbers.size() - 1 )
+			{
+				bEndTiles = true;
 				tile = 5 + currentTile%2;
+			}
 			else
 			{
-				bEnd = false;
+				bRegularTiles = true;
 				tile = m_oTileNumbers[ currentTile ];
 			}
 
 			Video::GetInstance()->DrawRect( m_oTileIds[ tile ], &srcRect, &dstRect );
 		}
 	}
-	return bEnd;
+	ret = 0;
+	if( bEndTiles )
+	{
+		ret = 1;
+		if( !bRegularTiles )
+			ret = 2;
+	}
+	return ret;
 }
 

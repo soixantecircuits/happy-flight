@@ -52,6 +52,8 @@ Game::Game()
 	m_pDebugFont = new Font( "../../resources/imgs/font-20red.png" );
 	m_iDebugFontSize = m_pDebugFont->GetCharWidth();
 
+	LoadResources();
+
 	m_bScrolling = true;
 	m_pBackground = new Background();
 	m_pBackground->GenerateBackground( PrefsManager::GetInstance()->GetValue("BKG_LENGTH") );
@@ -71,6 +73,7 @@ Game::~Game()
 void Game::InitNewGame()
 {
 	m_iScore = 0;
+	m_iEnding = 0;
 	m_fScrollSpeed = (float)PrefsManager::GetInstance()->GetValue( "SCROLL_SPEED" );
 	m_fMoveSpeed = (float)PrefsManager::GetInstance()->GetValue( "MOVE_SPEED" );
 
@@ -100,14 +103,6 @@ void Game::Run(){
 				//intro->run( gameState );
 				//break;
 			}
-			case GS_ENDING:
-			{
-				break;
-			}
-			case GS_END:
-			{
-				break;
-			}
 			case GS_PLAYON: 
 			{
 				InitNewGame();
@@ -129,7 +124,7 @@ void Game::PlayOn()
 {
 	m_iFrameCnt = 0;
 
-	while( m_eGameState == GS_PLAYON || m_eGameState == GS_ENDING )
+	while( m_eGameState == GS_PLAYON )
 	{
 		int A = SDL_GetTicks();
 		HandleEventsPlayOn();
@@ -139,9 +134,9 @@ void Game::PlayOn()
 		}
 		DrawPlayOn();
 		int iTime = SDL_GetTicks() - m_iSdlTicks;
-		//if( iTime < 8 )
+		//if( iTime < 16 )
 		//{
-		//	SDL_Delay( 8 - iTime );
+		//	SDL_Delay( 16 - iTime );
 		//}
 		m_iSdlTicks = SDL_GetTicks();
 		m_iFrameCnt++;
@@ -270,6 +265,11 @@ void Game::HandleEventsPlayOn()
 						m_eGameState = GS_INTRO;
 						break;
 					}
+				case SDLK_g:
+					{
+						m_pPlane->GoCenter();
+						break;
+					}
 				case SDLK_F12:
 					{
 						PrefsManager::GetInstance()->LoadPrefs("prefs.ini");
@@ -324,13 +324,25 @@ void Game::UpdateGameState()
 		m_fMoveSpeed += (float)dT/m_fAcceleration;
 	}
 
-	if( m_bLeftDown )
-		m_pPlane->GoLeft();
-	else if( m_bRightDown )
-		m_pPlane->GoRight();
+	if( m_iEnding == 0)
+	{
+		if( m_bLeftDown )
+			m_pPlane->GoLeft();
+		else if( m_bRightDown )
+			m_pPlane->GoRight();
+
+		m_pItems->Generate( dT );
+	}
+	else if( m_iEnding == 1 )
+	{
+		m_pPlane->GoCenter();
+	}
+	else if( m_iEnding == 2 )
+	{
+		m_pItems->GenerateEnd();
+	}
 
 	m_pItems->SetScrollSpeed( m_fScrollSpeed );
-	m_pItems->Generate( dT );
 	m_pItems->Update( dT );
 
 	m_pPlane->SetMaxVel( m_fMoveSpeed );
@@ -362,7 +374,7 @@ void Game::DrawPlayOn()
 
 void Game::DrawBackground()
 {
-	bool bEnd = m_pBackground->Draw(m_pScreen, (int) (m_fActBackgoundPos + 0.5) );
+	m_iEnding = m_pBackground->Draw(m_pScreen, (int) (m_fActBackgoundPos + 0.5) );
 }
 
 
@@ -433,5 +445,165 @@ void Game::EnterThunder()
 	m_iScore-=2;
 	if( m_iScore < 0 )
 		m_iScore = 0;
+}
+
+void Game::LoadResources()
+{
+	TextureManager* pTextureManager = TextureManager::GetInstance();
+	pTextureManager->LoadSurface( "../../resources/imgs/coins.png" );
+	pTextureManager->LoadSurface( "../../resources/imgs/coins2.png" );
+
+	pTextureManager->LoadSurface( "../../resources/imgs/Orage_000.png" );
+	pTextureManager->LoadSurface( "../../resources/imgs/Orage_001.png" );
+	pTextureManager->LoadSurface( "../../resources/imgs/Orage_002.png" );
+	pTextureManager->LoadSurface( "../../resources/imgs/Orage_003.png" );
+	pTextureManager->LoadSurface( "../../resources/imgs/Orage_004.png" );
+	pTextureManager->LoadSurface( "../../resources/imgs/Orage_005.png" );
+	pTextureManager->LoadSurface( "../../resources/imgs/Orage_006.png" );
+	pTextureManager->LoadSurface( "../../resources/imgs/Orage_007.png" );
+	pTextureManager->LoadSurface( "../../resources/imgs/Orage_008.png" );
+	pTextureManager->LoadSurface( "../../resources/imgs/Orage_009.png" );
+	pTextureManager->LoadSurface( "../../resources/imgs/Orage_010.png" );
+	pTextureManager->LoadSurface( "../../resources/imgs/Orage_011.png" );
+	pTextureManager->LoadSurface( "../../resources/imgs/Orage_012.png" );
+
+	pTextureManager->LoadSurface( "../../resources/imgs/Foudre_000.png" );
+	pTextureManager->LoadSurface( "../../resources/imgs/Foudre_001.png" );
+	pTextureManager->LoadSurface( "../../resources/imgs/Foudre_002.png" );
+	pTextureManager->LoadSurface( "../../resources/imgs/Foudre_003.png" );
+	pTextureManager->LoadSurface( "../../resources/imgs/Foudre_004.png" );
+	pTextureManager->LoadSurface( "../../resources/imgs/Foudre_005.png" );
+	pTextureManager->LoadSurface( "../../resources/imgs/Foudre_006.png" );
+	pTextureManager->LoadSurface( "../../resources/imgs/Foudre_007.png" );
+	pTextureManager->LoadSurface( "../../resources/imgs/Foudre_008.png" );
+	pTextureManager->LoadSurface( "../../resources/imgs/Foudre_009.png" );
+	pTextureManager->LoadSurface( "../../resources/imgs/Foudre_010.png" );
+	pTextureManager->LoadSurface( "../../resources/imgs/Foudre_011.png" );
+	pTextureManager->LoadSurface( "../../resources/imgs/Foudre_012.png" );
+
+	pTextureManager->LoadSurface( "../../resources/imgs/EndofGame_000.png" );
+	pTextureManager->LoadSurface( "../../resources/imgs/EndofGame_001.png" );
+	pTextureManager->LoadSurface( "../../resources/imgs/EndofGame_002.png" );
+	pTextureManager->LoadSurface( "../../resources/imgs/EndofGame_003.png" );
+	pTextureManager->LoadSurface( "../../resources/imgs/EndofGame_004.png" );
+	pTextureManager->LoadSurface( "../../resources/imgs/EndofGame_005.png" );
+	pTextureManager->LoadSurface( "../../resources/imgs/EndofGame_006.png" );
+	pTextureManager->LoadSurface( "../../resources/imgs/EndofGame_007.png" );
+	pTextureManager->LoadSurface( "../../resources/imgs/EndofGame_008.png" );
+	pTextureManager->LoadSurface( "../../resources/imgs/EndofGame_009.png" );
+	pTextureManager->LoadSurface( "../../resources/imgs/EndofGame_010.png" );
+	pTextureManager->LoadSurface( "../../resources/imgs/EndofGame_011.png" );
+	pTextureManager->LoadSurface( "../../resources/imgs/EndofGame_012.png" );
+	pTextureManager->LoadSurface( "../../resources/imgs/EndofGame_013.png" );
+	pTextureManager->LoadSurface( "../../resources/imgs/EndofGame_014.png" );
+	pTextureManager->LoadSurface( "../../resources/imgs/EndofGame_015.png" );
+	pTextureManager->LoadSurface( "../../resources/imgs/EndofGame_016.png" );
+	pTextureManager->LoadSurface( "../../resources/imgs/EndofGame_017.png" );
+	pTextureManager->LoadSurface( "../../resources/imgs/EndofGame_018.png" );
+	pTextureManager->LoadSurface( "../../resources/imgs/EndofGame_019.png" );
+	pTextureManager->LoadSurface( "../../resources/imgs/EndofGame_020.png" );
+	pTextureManager->LoadSurface( "../../resources/imgs/EndofGame_021.png" );
+	pTextureManager->LoadSurface( "../../resources/imgs/EndofGame_022.png" );
+	pTextureManager->LoadSurface( "../../resources/imgs/EndofGame_023.png" );
+	pTextureManager->LoadSurface( "../../resources/imgs/EndofGame_024.png" );
+	pTextureManager->LoadSurface( "../../resources/imgs/EndofGame_025.png" );
+	pTextureManager->LoadSurface( "../../resources/imgs/EndofGame_026.png" );
+	pTextureManager->LoadSurface( "../../resources/imgs/EndofGame_027.png" );
+	pTextureManager->LoadSurface( "../../resources/imgs/EndofGame_028.png" );
+	pTextureManager->LoadSurface( "../../resources/imgs/EndofGame_029.png" );
+	pTextureManager->LoadSurface( "../../resources/imgs/EndofGame_030.png" );
+	pTextureManager->LoadSurface( "../../resources/imgs/EndofGame_031.png" );
+	pTextureManager->LoadSurface( "../../resources/imgs/EndofGame_032.png" );
+	pTextureManager->LoadSurface( "../../resources/imgs/EndofGame_033.png" );
+	pTextureManager->LoadSurface( "../../resources/imgs/EndofGame_034.png" );
+	pTextureManager->LoadSurface( "../../resources/imgs/EndofGame_035.png" );
+	pTextureManager->LoadSurface( "../../resources/imgs/EndofGame_036.png" );
+	pTextureManager->LoadSurface( "../../resources/imgs/EndofGame_037.png" );
+	pTextureManager->LoadSurface( "../../resources/imgs/EndofGame_038.png" );
+	pTextureManager->LoadSurface( "../../resources/imgs/EndofGame_039.png" );
+	pTextureManager->LoadSurface( "../../resources/imgs/EndofGame_040.png" );
+	pTextureManager->LoadSurface( "../../resources/imgs/EndofGame_041.png" );
+	pTextureManager->LoadSurface( "../../resources/imgs/EndofGame_042.png" );
+	pTextureManager->LoadSurface( "../../resources/imgs/EndofGame_043.png" );
+	pTextureManager->LoadSurface( "../../resources/imgs/EndofGame_044.png" );
+	pTextureManager->LoadSurface( "../../resources/imgs/EndofGame_045.png" );
+	pTextureManager->LoadSurface( "../../resources/imgs/EndofGame_046.png" );
+	pTextureManager->LoadSurface( "../../resources/imgs/EndofGame_047.png" );
+	pTextureManager->LoadSurface( "../../resources/imgs/EndofGame_048.png" );
+	pTextureManager->LoadSurface( "../../resources/imgs/EndofGame_049.png" );
+	pTextureManager->LoadSurface( "../../resources/imgs/EndofGame_050.png" );
+	pTextureManager->LoadSurface( "../../resources/imgs/EndofGame_051.png" );
+	pTextureManager->LoadSurface( "../../resources/imgs/EndofGame_052.png" );
+	pTextureManager->LoadSurface( "../../resources/imgs/EndofGame_053.png" );
+	pTextureManager->LoadSurface( "../../resources/imgs/EndofGame_054.png" );
+	pTextureManager->LoadSurface( "../../resources/imgs/EndofGame_055.png" );
+	pTextureManager->LoadSurface( "../../resources/imgs/EndofGame_056.png" );
+	pTextureManager->LoadSurface( "../../resources/imgs/EndofGame_057.png" );
+	pTextureManager->LoadSurface( "../../resources/imgs/EndofGame_058.png" );
+	pTextureManager->LoadSurface( "../../resources/imgs/EndofGame_059.png" );
+	pTextureManager->LoadSurface( "../../resources/imgs/EndofGame_060.png" );
+	pTextureManager->LoadSurface( "../../resources/imgs/EndofGame_061.png" );
+	pTextureManager->LoadSurface( "../../resources/imgs/EndofGame_062.png" );
+	pTextureManager->LoadSurface( "../../resources/imgs/EndofGame_063.png" );
+	pTextureManager->LoadSurface( "../../resources/imgs/EndofGame_064.png" );
+	pTextureManager->LoadSurface( "../../resources/imgs/EndofGame_065.png" );
+	pTextureManager->LoadSurface( "../../resources/imgs/EndofGame_066.png" );
+	pTextureManager->LoadSurface( "../../resources/imgs/EndofGame_067.png" );
+	pTextureManager->LoadSurface( "../../resources/imgs/EndofGame_068.png" );
+	pTextureManager->LoadSurface( "../../resources/imgs/EndofGame_069.png" );
+	pTextureManager->LoadSurface( "../../resources/imgs/EndofGame_070.png" );
+	pTextureManager->LoadSurface( "../../resources/imgs/EndofGame_071.png" );
+	pTextureManager->LoadSurface( "../../resources/imgs/EndofGame_072.png" );
+	pTextureManager->LoadSurface( "../../resources/imgs/EndofGame_073.png" );
+	pTextureManager->LoadSurface( "../../resources/imgs/EndofGame_074.png" );
+
+	pTextureManager->LoadSurface( "../../resources/imgs/Avion_000.png" );
+	pTextureManager->LoadSurface( "../../resources/imgs/Avion_001.png" );
+	pTextureManager->LoadSurface( "../../resources/imgs/Avion_002.png" );
+	pTextureManager->LoadSurface( "../../resources/imgs/Avion_003.png" );
+	pTextureManager->LoadSurface( "../../resources/imgs/Avion_004.png" );
+	pTextureManager->LoadSurface( "../../resources/imgs/Avion_005.png" );
+	pTextureManager->LoadSurface( "../../resources/imgs/Avion_006.png" );
+	pTextureManager->LoadSurface( "../../resources/imgs/Avion_007.png" );
+	pTextureManager->LoadSurface( "../../resources/imgs/Avion_008.png" );
+	pTextureManager->LoadSurface( "../../resources/imgs/Avion_009.png" );
+	pTextureManager->LoadSurface( "../../resources/imgs/Avion_010.png" );
+	pTextureManager->LoadSurface( "../../resources/imgs/Avion_011.png" );
+
+	pTextureManager->LoadSurface( "../../resources/imgs/Avion_Turn_L_000.png" );
+	pTextureManager->LoadSurface( "../../resources/imgs/Avion_Turn_L_001.png" );
+	pTextureManager->LoadSurface( "../../resources/imgs/Avion_Turn_L_002.png" );
+	pTextureManager->LoadSurface( "../../resources/imgs/Avion_Turn_L_003.png" );
+	pTextureManager->LoadSurface( "../../resources/imgs/Avion_Turn_L_004.png" );
+
+	pTextureManager->LoadSurface( "../../resources/imgs/Avion_Left_000.png" );
+	pTextureManager->LoadSurface( "../../resources/imgs/Avion_Left_001.png" );
+	pTextureManager->LoadSurface( "../../resources/imgs/Avion_Left_002.png" );
+	pTextureManager->LoadSurface( "../../resources/imgs/Avion_Left_003.png" );
+	pTextureManager->LoadSurface( "../../resources/imgs/Avion_Left_004.png" );
+	pTextureManager->LoadSurface( "../../resources/imgs/Avion_Left_005.png" );
+	pTextureManager->LoadSurface( "../../resources/imgs/Avion_Left_006.png" );
+	pTextureManager->LoadSurface( "../../resources/imgs/Avion_Left_007.png" );
+	pTextureManager->LoadSurface( "../../resources/imgs/Avion_Left_008.png" );
+	pTextureManager->LoadSurface( "../../resources/imgs/Avion_Left_009.png" );
+	pTextureManager->LoadSurface( "../../resources/imgs/Avion_Left_010.png" );
+
+	pTextureManager->LoadSurface( "../../resources/imgs/Avion_Turn_R_000.png" );
+	pTextureManager->LoadSurface( "../../resources/imgs/Avion_Turn_R_001.png" );
+	pTextureManager->LoadSurface( "../../resources/imgs/Avion_Turn_R_002.png" );
+	pTextureManager->LoadSurface( "../../resources/imgs/Avion_Turn_R_003.png" );
+	pTextureManager->LoadSurface( "../../resources/imgs/Avion_Turn_R_004.png" );
+
+	pTextureManager->LoadSurface( "../../resources/imgs/Avion_Right_000.png" );
+	pTextureManager->LoadSurface( "../../resources/imgs/Avion_Right_001.png" );
+	pTextureManager->LoadSurface( "../../resources/imgs/Avion_Right_002.png" );
+	pTextureManager->LoadSurface( "../../resources/imgs/Avion_Right_003.png" );
+	pTextureManager->LoadSurface( "../../resources/imgs/Avion_Right_004.png" );
+	pTextureManager->LoadSurface( "../../resources/imgs/Avion_Right_005.png" );
+	pTextureManager->LoadSurface( "../../resources/imgs/Avion_Right_006.png" );
+	pTextureManager->LoadSurface( "../../resources/imgs/Avion_Right_007.png" );
+	pTextureManager->LoadSurface( "../../resources/imgs/Avion_Right_008.png" );
+	pTextureManager->LoadSurface( "../../resources/imgs/Avion_Right_009.png" );
+	pTextureManager->LoadSurface( "../../resources/imgs/Avion_Right_010.png" );
 }
 

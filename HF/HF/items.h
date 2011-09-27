@@ -16,8 +16,10 @@ class Items
 	int m_iItemAppearRandomDelay;
 	int m_iItemLifeTime;
 	int m_iScreenWidth;
+	int m_iScreenHeight;
 	int m_iAnimDelay;
 	float m_fScrollSpeed;
+	float m_bEnd;
 
 public:
 	Items();
@@ -27,6 +29,7 @@ public:
 	void AddItem(Item *item);
 	void GenerateItemNow( Vector2D pos, Vector2D vel );
 	void Generate( int dT );
+	void GenerateEnd();
 	void ExpireItems();
 	void Update( int dT );
 	void Draw(SDL_Surface *screen);
