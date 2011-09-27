@@ -51,6 +51,8 @@ class Game {
 	//keys
 	bool m_bLeftDown;
 	bool m_bRightDown;
+	bool m_bOSCLeft;
+	bool m_bOSCRight;
 	bool m_bF5down;
 	bool m_bF6down;
 	bool m_bF7down;

@@ -39,6 +39,8 @@ Game::Game()
 	m_bF6down = false;
 	m_bF7down = false;
 	m_bF8down = false;
+	m_bOSCLeft = false;
+	m_bOSCRight = false;
 
 	m_iScore = 0;
 
@@ -138,8 +140,8 @@ void Game::PlayOn()
 	while( m_eGameState == GS_PLAYON )
 	{
 		int A = SDL_GetTicks();
-		HandleEventsPlayOn();
 		HandleOSCEventsPlayOn();
+		HandleEventsPlayOn();
 		if( !m_bPaused ) 
 		{
 			UpdateGameState();
@@ -186,15 +188,15 @@ void Game::HandleOSCEventsPlayOn()
 			if ( m.getAddress() == "/keyboard/left" )
 			{
 				if (m.getArgAsInt32( 0 ) == 1){
-					m_bLeftDown = true;
-				} else m_bLeftDown = false;
+					m_bOSCLeft = true;
+				} else m_bOSCLeft = false;
 			}
 			// check for mouse button message
 			else if ( m.getAddress() == "/keyboard/right" )
 			{
 				if (m.getArgAsInt32( 0 ) == 1){
-					m_bRightDown = true;
-				} else m_bRightDown = false;
+					m_bOSCRight = true;
+				} else m_bOSCRight = false;
 			}
 			else
 			{
@@ -389,9 +391,9 @@ void Game::UpdateGameState()
 	else if( m_pBackground->GetState() == E_FLYING || m_pBackground->GetState() == E_APPROACH )
 	{
 		m_pPlane->SetState( E_PLANE_FLYING );
-		if( m_bLeftDown )
+		if( m_bLeftDown || m_bOSCLeft )
 			m_pPlane->GoLeft();
-		else if( m_bRightDown )
+		else if( m_bRightDown || m_bOSCRight )
 			m_pPlane->GoRight();
 
 		if( m_pBackground->GetState() == E_FLYING )
