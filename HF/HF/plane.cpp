@@ -84,7 +84,7 @@ Plane::Plane( Items* pItems, Game* pGame )
 	m_vPos = Vector2D( (float)m_iScreenWidth/2, (float)m_iScreenHeight-m_iPlaneDist );
 
 	m_vRealSize = Vector2D( (float)iPlaneWidth, (float)iPlaneHeight ); //l'avion est moins grand que le png
-	m_vRealDisplaySize = Vector2D( m_pSpriteBase->w, m_pSpriteBase->h );
+	m_vRealDisplaySize = Vector2D( (float)m_pSpriteBase->w, (float)m_pSpriteBase->h );
 	m_vDisplaySize = m_vRealDisplaySize/2;
 	m_vVel = Vector2D( 0,0 );
 	m_bLeft = false;

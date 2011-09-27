@@ -14,6 +14,7 @@ using namespace std;
 #include "PrefsManager.h"
 #include "plane.h"
 #include "items.h"
+#include "Score.h"
 
 template<typename T> std::string asString( const T& obj )
 {
@@ -60,12 +61,15 @@ Game::Game()
 
 	m_pItems = NULL;
 	m_pPlane = NULL;
+	m_pScore = NULL;
 }
 
 Game::~Game()
 {
 	if( m_pPlane ) delete m_pPlane;
 	if( m_pItems ) delete m_pItems;
+	if( m_pScore ) delete m_pScore;
+
 	TextureManager::GetInstance()->Delete();
 	Video::GetInstance()->Delete();
 }
@@ -77,6 +81,9 @@ void Game::InitNewGame()
 	m_fScrollSpeed = (float)PrefsManager::GetInstance()->GetValue( "SCROLL_SPEED" );
 	m_fMoveSpeed = (float)PrefsManager::GetInstance()->GetValue( "MOVE_SPEED" );
 	m_pBackground->SetState( E_START );
+
+	if( m_pScore ) delete m_pScore;
+	m_pScore = new Score();
 
 	if( m_pItems ) delete m_pItems;
 	m_pItems = new Items();
@@ -357,6 +364,8 @@ void Game::UpdateGameState()
 	m_pPlane->PickUpItems();
 
 	m_pItems->ExpireItems();
+
+	m_pScore->SetScore( m_iScore );
 }
 
 void Game::DrawPlayOn()
@@ -364,11 +373,10 @@ void Game::DrawPlayOn()
 	DrawBackground();
 	m_pPlane->DrawPlane( m_pScreen );
 	m_pItems->Draw( m_pScreen );
+	m_pScore->Draw( m_pScreen );
 
 	if( m_bDebug )
 	{
-		if( m_eGameState == GS_PLAYON )
-			DrawTime();
 		DrawDebugInfos();
 	}
 
@@ -384,36 +392,18 @@ void Game::DrawBackground()
 	m_pBackground->Draw(m_pScreen, (int) (m_fActBackgoundPos + 0.5) );
 }
 
-
-void Game::DrawTime()
-{
-	int timeToDraw;
-	timeToDraw = m_iGameActRuntime / 1000;
-	if ( timeToDraw > 0 )
-	{
-		int digitCnt = 1;
-		int i=1;
-		while ( timeToDraw >= i*10 )
-		{
-			digitCnt++;
-			i *= 10;
-		}
-		m_pDebugFont->DrawInt(m_pScreen, (m_pScreen->w / 2) - (m_iDebugFontSize * digitCnt) / 2, 5, timeToDraw, digitCnt, 0);
-	}
-}
-
 void Game::DrawDebugInfos()
 {
 	static vector<int> oFrameTime;
 	static int iPos = 0;
 	string debuginfo =  "Scroll speed : " + asString( (int)m_fScrollSpeed );
-	m_pDebugFont->DrawStr( m_pScreen, 10, 10, debuginfo );
+	m_pDebugFont->DrawStr( m_pScreen, 10, 110, debuginfo );
 
 	debuginfo =  "Move speed : " + asString( (int)m_fMoveSpeed );
-	m_pDebugFont->DrawStr( m_pScreen, 10, 30, debuginfo );
+	m_pDebugFont->DrawStr( m_pScreen, 10, 130, debuginfo );
 
 	debuginfo =  "Score : " + asString( m_iScore );
-	m_pDebugFont->DrawStr( m_pScreen, 10, 50, debuginfo );
+	m_pDebugFont->DrawStr( m_pScreen, 10, 150, debuginfo );
 
 	if( iMs > 0 )
 	{
@@ -442,14 +432,12 @@ void Game::PickUpCoin()
 
 void Game::EnterCloud()
 {
-	m_iScore--;
-	if( m_iScore < 0 )
-		m_iScore = 0;
+
 }
 
 void Game::EnterThunder()
 {
-	m_iScore-=2;
+	m_iScore--;
 	if( m_iScore < 0 )
 		m_iScore = 0;
 }
@@ -612,5 +600,17 @@ void Game::LoadResources()
 	pTextureManager->LoadSurface( "../../resources/imgs/Avion_Right_008.png" );
 	pTextureManager->LoadSurface( "../../resources/imgs/Avion_Right_009.png" );
 	pTextureManager->LoadSurface( "../../resources/imgs/Avion_Right_010.png" );
+
+	pTextureManager->LoadSurface( "../../resources/imgs/Score.png" );
+	pTextureManager->LoadSurface( "../../resources/imgs/Chiffre_00.png" );
+	pTextureManager->LoadSurface( "../../resources/imgs/Chiffre_01.png" );
+	pTextureManager->LoadSurface( "../../resources/imgs/Chiffre_02.png" );
+	pTextureManager->LoadSurface( "../../resources/imgs/Chiffre_03.png" );
+	pTextureManager->LoadSurface( "../../resources/imgs/Chiffre_04.png" );
+	pTextureManager->LoadSurface( "../../resources/imgs/Chiffre_05.png" );
+	pTextureManager->LoadSurface( "../../resources/imgs/Chiffre_06.png" );
+	pTextureManager->LoadSurface( "../../resources/imgs/Chiffre_07.png" );
+	pTextureManager->LoadSurface( "../../resources/imgs/Chiffre_08.png" );
+	pTextureManager->LoadSurface( "../../resources/imgs/Chiffre_09.png" );
 }
 

@@ -8,6 +8,7 @@ class Font;
 class Background;
 class Plane;
 class Items;
+class Score;
 
 enum GameStates { GS_INTRO, GS_PLAYON, GS_QUIT };
 
@@ -32,6 +33,7 @@ class Game {
 	Background *m_pBackground;
 	Plane* m_pPlane;
 	Items* m_pItems;
+	Score* m_pScore;
 	int m_iScore;
 
 	bool m_bDebug;
@@ -70,7 +72,6 @@ private:
 	void UpdateGameState();
 	void DrawPlayOn();
 	void DrawBackground();
-	void DrawTime();
 	void DrawDebugInfos();
 	void DrawPaused();
 	void LoadResources();
