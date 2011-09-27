@@ -33,8 +33,8 @@ void Background::AddTile( string tilename )
 
 void Background::GenerateBackground( int length )
 {
-	int iWidth = PrefsManager::GetInstance()->GetValue("SCREEN_WIDTH");
-	int iHeight = PrefsManager::GetInstance()->GetValue("SCREEN_HEIGHT");
+	int iWidth = PrefsManager::GetInstance()->GetValue("GAME_WIDTH");
+	int iHeight = PrefsManager::GetInstance()->GetValue("GAME_HEIGHT");
 
 	m_oTileIds.clear();
 	m_oTileNames.clear();
@@ -150,8 +150,8 @@ void Background::Draw( SDL_Surface* screen )
 bool Background::Draw( SDL_Surface* screen, int step )
 {
 	bool bEnd = true;
-	int iWidth = PrefsManager::GetInstance()->GetValue("SCREEN_WIDTH");
-	int iHeight = PrefsManager::GetInstance()->GetValue("SCREEN_HEIGHT");
+	int iWidth = PrefsManager::GetInstance()->GetValue("GAME_WIDTH");
+	int iHeight = PrefsManager::GetInstance()->GetValue("GAME_HEIGHT");
 
 	if (step < 0)
 	{

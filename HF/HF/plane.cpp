@@ -12,8 +12,8 @@ Plane::Plane( Items* pItems, Game* pGame )
 : m_pItems( pItems )
 , m_pGame( pGame )
 {
-	m_iScreenWidth = PrefsManager::GetInstance()->GetValue( "SCREEN_WIDTH" );
-	m_iScreenHeight = PrefsManager::GetInstance()->GetValue( "SCREEN_HEIGHT" );
+	m_iScreenWidth = PrefsManager::GetInstance()->GetValue( "GAME_WIDTH" );
+	m_iScreenHeight = PrefsManager::GetInstance()->GetValue( "GAME_HEIGHT" );
 	m_iAnimDelay = PrefsManager::GetInstance()->GetValue( "ANIM_DELAY" );
 	m_iPickDistance = PrefsManager::GetInstance()->GetValue( "PICK_DISTANCE" );
 	m_iPlaneDist = PrefsManager::GetInstance()->GetValue( "PLANE_DIST" );

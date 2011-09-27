@@ -72,8 +72,10 @@ GLuint gl_tiles;
 Video::Video()
 {
 	m_pScreen = 0;
-	m_iWidth = PrefsManager::GetInstance()->GetValue( "SCREEN_WIDTH" );
-	m_iHeight = PrefsManager::GetInstance()->GetValue( "SCREEN_HEIGHT" );
+	m_iGameWidth = PrefsManager::GetInstance()->GetValue( "GAME_WIDTH" );
+	m_iGameHeight = PrefsManager::GetInstance()->GetValue( "GAME_HEIGHT" );
+	m_iWindowWidth = PrefsManager::GetInstance()->GetValue( "WINDOW_WIDTH" );
+	m_iWindowHeight = PrefsManager::GetInstance()->GetValue( "WINDOW_HEIGHT" );
 	m_iDepth = PrefsManager::GetInstance()->GetValue( "BIT_DEPTH" );
 	m_bFullScreen = PrefsManager::GetInstance()->GetValue( "FULL_SCREEN" )==0?false:true;
 }
@@ -121,10 +123,10 @@ SDL_Surface *Video::Init()
 	SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, m_iDepth);
 	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, gl_doublebuf);
 
-	m_pScreen = SDL_SetVideoMode( m_iWidth, m_iHeight, m_iDepth, flags );
+	m_pScreen = SDL_SetVideoMode( m_iWindowWidth, m_iWindowHeight, m_iDepth, flags );
 	if (!m_pScreen)
 	{
-		printf("Couldn't set %dx%d, %dbit video mode: %s\n", m_iWidth, m_iHeight, m_iDepth, SDL_GetError());
+		printf("Couldn't set %dx%d, %dbit video mode: %s\n", m_iWindowWidth, m_iWindowHeight, m_iDepth, SDL_GetError());
 		exit(2);
 	}
 
@@ -132,10 +134,10 @@ SDL_Surface *Video::Init()
 	glDisable(GL_DEPTH_TEST);
 	glDisable(GL_CULL_FACE);
 
-	glViewport( 0, 0, m_iWidth, m_iHeight );
+	glViewport( 0, 0, m_iWindowWidth, m_iWindowHeight );
 	glMatrixMode( GL_PROJECTION );
 	glLoadIdentity();
-	glOrtho( 0, m_iWidth, m_iHeight, 0, -1.0, 1.0 );
+	glOrtho( 0, m_iGameWidth, m_iGameHeight, 0, -1.0, 1.0 );
 
 	glMatrixMode( GL_MODELVIEW );
 	glLoadIdentity();
@@ -149,12 +151,12 @@ SDL_Surface *Video::Init()
 	// -----------------------------------------------------
 
 	if( m_bFullScreen )
-		m_pScreen = SDL_SetVideoMode( m_iWidth, m_iHeight, m_iDepth, SDL_DOUBLEBUF | SDL_FULLSCREEN | SDL_HWSURFACE );
+		m_pScreen = SDL_SetVideoMode( m_iGameWidth, m_iGameHeight, m_iDepth, SDL_DOUBLEBUF | SDL_FULLSCREEN | SDL_HWSURFACE );
 	else
-		m_pScreen = SDL_SetVideoMode( m_iWidth, m_iHeight, m_iDepth, SDL_DOUBLEBUF | SDL_HWSURFACE );
+		m_pScreen = SDL_SetVideoMode( m_iGameWidth, m_iGameHeight, m_iDepth, SDL_DOUBLEBUF | SDL_HWSURFACE );
 	if (!m_pScreen)
 	{
-		printf("Couldn't set %dx%d, %dbit video mode: %s\n", m_iWidth, m_iHeight, m_iDepth, SDL_GetError());
+		printf("Couldn't set %dx%d, %dbit video mode: %s\n", m_iGameWidth, m_iGameHeight, m_iDepth, SDL_GetError());
 		exit(2);
 	}
 
