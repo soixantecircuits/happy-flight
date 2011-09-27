@@ -51,6 +51,12 @@ base class for arguments
 
 */
 
+#if defined TARGET_WIN32 && defined _MSC_VER
+	// required because MSVC isn't ANSI-C compliant
+	// typedef long int32_t;
+#include "sdl_config_win32.h"
+#endif
+
 class ofxOscArg
 {
 public:
@@ -70,10 +76,7 @@ subclasses for each possible argument type
 
 */
 
-#if defined TARGET_WIN32 && defined _MSC_VER
-// required because MSVC isn't ANSI-C compliant
-typedef long int32_t;
-#endif
+
 
 class ofxOscArgInt32 : public ofxOscArg
 {

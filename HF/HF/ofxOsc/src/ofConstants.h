@@ -55,7 +55,7 @@ enum ofLoopType{
 	#define GLEW_STATIC
 	#include "GL\glew.h"
 	#include "GL\wglew.h"
-   	#include "glu.h"
+   	#include "GL\glu.h"
 	#define __WINDOWS_DS__
 	#define __WINDOWS_MM__
 	#if (_MSC_VER)       // microsoft visual studio

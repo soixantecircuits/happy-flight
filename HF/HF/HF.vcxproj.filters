@@ -13,6 +13,18 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="ofxOsc">
+      <UniqueIdentifier>{9dcd6be0-3b19-480c-80a5-b9a3f8d65d4a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ofxOsc\ospack">
+      <UniqueIdentifier>{de83598d-eb4b-4129-a6cd-e05e63314767}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ofxOsc\ospack\ip">
+      <UniqueIdentifier>{68acc5c1-b694-4c4b-9c11-158fc2335941}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ofxOsc\ospack\osc">
+      <UniqueIdentifier>{6197e93a-1ade-49e8-a308-055fa522a12a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -51,6 +63,39 @@
     <ClCompile Include="Score.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="ofxOsc\src\ofxOscBundle.cpp">
+      <Filter>ofxOsc</Filter>
+    </ClCompile>
+    <ClCompile Include="ofxOsc\src\ofxOscMessage.cpp">
+      <Filter>ofxOsc</Filter>
+    </ClCompile>
+    <ClCompile Include="ofxOsc\src\ofxOscReceiver.cpp">
+      <Filter>ofxOsc</Filter>
+    </ClCompile>
+    <ClCompile Include="ofxOsc\src\ofxOscSender.cpp">
+      <Filter>ofxOsc</Filter>
+    </ClCompile>
+    <ClCompile Include="ofxOsc\libs\oscpack\include\osc\OscOutboundPacketStream.cpp">
+      <Filter>ofxOsc\ospack\osc</Filter>
+    </ClCompile>
+    <ClCompile Include="ofxOsc\libs\oscpack\include\osc\OscPrintReceivedElements.cpp">
+      <Filter>ofxOsc\ospack\osc</Filter>
+    </ClCompile>
+    <ClCompile Include="ofxOsc\libs\oscpack\include\osc\OscReceivedElements.cpp">
+      <Filter>ofxOsc\ospack\osc</Filter>
+    </ClCompile>
+    <ClCompile Include="ofxOsc\libs\oscpack\include\osc\OscTypes.cpp">
+      <Filter>ofxOsc\ospack\osc</Filter>
+    </ClCompile>
+    <ClCompile Include="ofxOsc\libs\oscpack\include\ip\IpEndpointName.cpp">
+      <Filter>ofxOsc\ospack\ip</Filter>
+    </ClCompile>
+    <ClCompile Include="ofxOsc\libs\oscpack\include\ip\win32\NetworkingUtils.cpp">
+      <Filter>ofxOsc\ospack\ip</Filter>
+    </ClCompile>
+    <ClCompile Include="ofxOsc\libs\oscpack\include\ip\win32\UdpSocket.cpp">
+      <Filter>ofxOsc\ospack\ip</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="game.h">
@@ -88,6 +133,66 @@
     </ClInclude>
     <ClInclude Include="Score.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ofxOsc\src\ofxOscArg.h">
+      <Filter>ofxOsc</Filter>
+    </ClInclude>
+    <ClInclude Include="ofxOsc\src\ofxOscBundle.h">
+      <Filter>ofxOsc</Filter>
+    </ClInclude>
+    <ClInclude Include="ofxOsc\src\ofxOscMessage.h">
+      <Filter>ofxOsc</Filter>
+    </ClInclude>
+    <ClInclude Include="ofxOsc\src\ofxOscReceiver.h">
+      <Filter>ofxOsc</Filter>
+    </ClInclude>
+    <ClInclude Include="ofxOsc\src\ofxOscSender.h">
+      <Filter>ofxOsc</Filter>
+    </ClInclude>
+    <ClInclude Include="ofxOsc\src\ofConstants.h">
+      <Filter>ofxOsc</Filter>
+    </ClInclude>
+    <ClInclude Include="ofxOsc\src\ofxOsc.h">
+      <Filter>ofxOsc</Filter>
+    </ClInclude>
+    <ClInclude Include="ofxOsc\libs\oscpack\include\osc\OscException.h">
+      <Filter>ofxOsc\ospack\osc</Filter>
+    </ClInclude>
+    <ClInclude Include="ofxOsc\libs\oscpack\include\osc\OscHostEndianness.h">
+      <Filter>ofxOsc\ospack\osc</Filter>
+    </ClInclude>
+    <ClInclude Include="ofxOsc\libs\oscpack\include\osc\OscOutboundPacketStream.h">
+      <Filter>ofxOsc\ospack\osc</Filter>
+    </ClInclude>
+    <ClInclude Include="ofxOsc\libs\oscpack\include\osc\OscPacketListener.h">
+      <Filter>ofxOsc\ospack\osc</Filter>
+    </ClInclude>
+    <ClInclude Include="ofxOsc\libs\oscpack\include\osc\OscPrintReceivedElements.h">
+      <Filter>ofxOsc\ospack\osc</Filter>
+    </ClInclude>
+    <ClInclude Include="ofxOsc\libs\oscpack\include\osc\OscReceivedElements.h">
+      <Filter>ofxOsc\ospack\osc</Filter>
+    </ClInclude>
+    <ClInclude Include="ofxOsc\libs\oscpack\include\osc\OscTypes.h">
+      <Filter>ofxOsc\ospack\osc</Filter>
+    </ClInclude>
+    <ClInclude Include="ofxOsc\libs\oscpack\include\osc\MessageMappingOscPacketListener.h">
+      <Filter>ofxOsc\ospack\osc</Filter>
+    </ClInclude>
+    <ClInclude Include="ofxOsc\libs\oscpack\include\ip\IpEndpointName.h">
+      <Filter>ofxOsc\ospack\ip</Filter>
+    </ClInclude>
+    <ClInclude Include="ofxOsc\libs\oscpack\include\ip\NetworkingUtils.h">
+      <Filter>ofxOsc\ospack\ip</Filter>
+    </ClInclude>
+    <ClInclude Include="ofxOsc\libs\oscpack\include\ip\PacketListener.h">
+      <Filter>ofxOsc\ospack\ip</Filter>
+    </ClInclude>
+    <ClInclude Include="ofxOsc\libs\oscpack\include\ip\TimerListener.h">
+      <Filter>ofxOsc\ospack\ip</Filter>
+    </ClInclude>
+    <ClInclude Include="ofxOsc\libs\oscpack\include\ip\UdpSocket.h">
+      <Filter>ofxOsc\ospack\ip</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

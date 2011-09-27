@@ -284,10 +284,17 @@ void Plane::DrawPlane( SDL_Surface *screen )
 	SDL_Rect srcR;
 	SDL_Rect destR;
 
+#ifdef OPENGL
 	destR.x = Sint16( ROUND(m_vPos.getX()) - (m_vDisplaySize.getX() / 2) );
 	destR.y = Sint16( ROUND(m_vPos.getY()) - (m_vDisplaySize.getY() / 2) );
 	destR.w = (int)m_vDisplaySize.getX();
 	destR.h = (int)m_vDisplaySize.getY();
+#else
+	destR.x = Sint16( ROUND(m_vPos.getX()) - (m_pSpriteBase->w / 2) );
+	destR.y = Sint16( ROUND(m_vPos.getY()) - (m_pSpriteBase->h / 2) );
+	destR.w = m_pSpriteBase->w;
+	destR.h = m_pSpriteBase->h;
+#endif
 
 	srcR.x = 0;
 	srcR.y = 0;

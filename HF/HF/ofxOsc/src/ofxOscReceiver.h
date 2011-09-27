@@ -32,7 +32,7 @@
 
 #include <deque>
 
-#ifdef TARGET_WIN32
+#if defined _WIN32 || defined TARGET_WIN32
 // threads
 #include <windows.h>
 #else

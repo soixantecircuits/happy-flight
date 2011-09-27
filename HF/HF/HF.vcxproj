@@ -37,12 +37,12 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>..\..\;..\..\SDL-1.2.14\include;..\..\SDL_image-1.2.10\include;$(IncludePath)</IncludePath>
+    <IncludePath>ofxOsc\libs\oscpack\include;ofxOsc\libs\oscpack\include\ip;ofxOsc\libs\oscpack\include\osc;..\..\;..\..\SDL-1.2.14\include;..\..\SDL_image-1.2.10\include;ofxOsc\src;$(IncludePath)</IncludePath>
     <LibraryPath>..\..\GL;..\..\SDL-1.2.14\lib;..\..\SDL_image-1.2.10\lib;$(LibraryPath)</LibraryPath>
-    <TargetName>$(ProjectName)17</TargetName>
+    <TargetName>$(ProjectName)1</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>..\..\;..\..\SDL-1.2.14\include;..\..\SDL_image-1.2.10\include;$(IncludePath)</IncludePath>
+    <IncludePath>ofxOsc\libs\oscpack\include;ofxOsc\libs\oscpack\include\ip;ofxOsc\libs\oscpack\include\osc;..\..\;..\..\SDL-1.2.14\include;..\..\SDL_image-1.2.10\include;ofxOsc\src;$(IncludePath)</IncludePath>
     <LibraryPath>..\..\GL;..\..\SDL-1.2.14\lib;..\..\SDL_image-1.2.10\lib;$(LibraryPath)</LibraryPath>
     <TargetName>$(ProjectName)</TargetName>
   </PropertyGroup>
@@ -50,11 +50,11 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>OPENGL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_WIN32;OPENGL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>opengl32.lib;glut32.lib;SDL_image.lib;SDLmain.lib;SDL.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>winmm.lib;;ws2_32.lib;wsock32.lib;opengl32.lib;glut32.lib;SDL_image.lib;SDLmain.lib;SDL.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -63,13 +63,13 @@
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>OPENGL;_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_WIN32;OPENGL;_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>opengl32.lib;glut32.lib;SDL_image.lib;SDLmain.lib;SDL.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>winmm.lib;;ws2_32.lib;wsock32.lib;opengl32.lib;glut32.lib;SDL_image.lib;SDLmain.lib;SDL.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -80,6 +80,17 @@
     <ClCompile Include="item.cpp" />
     <ClCompile Include="items.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="ofxOsc\libs\oscpack\include\ip\IpEndpointName.cpp" />
+    <ClCompile Include="ofxOsc\libs\oscpack\include\ip\win32\NetworkingUtils.cpp" />
+    <ClCompile Include="ofxOsc\libs\oscpack\include\ip\win32\UdpSocket.cpp" />
+    <ClCompile Include="ofxOsc\libs\oscpack\include\osc\OscOutboundPacketStream.cpp" />
+    <ClCompile Include="ofxOsc\libs\oscpack\include\osc\OscPrintReceivedElements.cpp" />
+    <ClCompile Include="ofxOsc\libs\oscpack\include\osc\OscReceivedElements.cpp" />
+    <ClCompile Include="ofxOsc\libs\oscpack\include\osc\OscTypes.cpp" />
+    <ClCompile Include="ofxOsc\src\ofxOscBundle.cpp" />
+    <ClCompile Include="ofxOsc\src\ofxOscMessage.cpp" />
+    <ClCompile Include="ofxOsc\src\ofxOscReceiver.cpp" />
+    <ClCompile Include="ofxOsc\src\ofxOscSender.cpp" />
     <ClCompile Include="plane.cpp" />
     <ClCompile Include="PrefsManager.cpp" />
     <ClCompile Include="Score.cpp" />
@@ -93,6 +104,26 @@
     <ClInclude Include="geometry.h" />
     <ClInclude Include="item.h" />
     <ClInclude Include="items.h" />
+    <ClInclude Include="ofxOsc\libs\oscpack\include\ip\IpEndpointName.h" />
+    <ClInclude Include="ofxOsc\libs\oscpack\include\ip\NetworkingUtils.h" />
+    <ClInclude Include="ofxOsc\libs\oscpack\include\ip\PacketListener.h" />
+    <ClInclude Include="ofxOsc\libs\oscpack\include\ip\TimerListener.h" />
+    <ClInclude Include="ofxOsc\libs\oscpack\include\ip\UdpSocket.h" />
+    <ClInclude Include="ofxOsc\libs\oscpack\include\osc\MessageMappingOscPacketListener.h" />
+    <ClInclude Include="ofxOsc\libs\oscpack\include\osc\OscException.h" />
+    <ClInclude Include="ofxOsc\libs\oscpack\include\osc\OscHostEndianness.h" />
+    <ClInclude Include="ofxOsc\libs\oscpack\include\osc\OscOutboundPacketStream.h" />
+    <ClInclude Include="ofxOsc\libs\oscpack\include\osc\OscPacketListener.h" />
+    <ClInclude Include="ofxOsc\libs\oscpack\include\osc\OscPrintReceivedElements.h" />
+    <ClInclude Include="ofxOsc\libs\oscpack\include\osc\OscReceivedElements.h" />
+    <ClInclude Include="ofxOsc\libs\oscpack\include\osc\OscTypes.h" />
+    <ClInclude Include="ofxOsc\src\ofConstants.h" />
+    <ClInclude Include="ofxOsc\src\ofxOsc.h" />
+    <ClInclude Include="ofxOsc\src\ofxOscArg.h" />
+    <ClInclude Include="ofxOsc\src\ofxOscBundle.h" />
+    <ClInclude Include="ofxOsc\src\ofxOscMessage.h" />
+    <ClInclude Include="ofxOsc\src\ofxOscReceiver.h" />
+    <ClInclude Include="ofxOsc\src\ofxOscSender.h" />
     <ClInclude Include="plane.h" />
     <ClInclude Include="PrefsManager.h" />
     <ClInclude Include="Score.h" />

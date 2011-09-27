@@ -50,9 +50,9 @@ public:
 	Font(std::string fn);
 	~Font();
 
-	void SetCharWidth(int width);
-	int GetCharWidth();
-	int GetCharHeight();
+	void SetCharW(int width);
+	int GetCharW();
+	int GetCharH();
 	void DrawInt(SDL_Surface *screen, int posx, int posy, int val, int alignDigitCnt, int flags = 0);
 	void DrawStr(SDL_Surface *screen, int posx, int posy, const std::string &text, int flags = 0);
 };

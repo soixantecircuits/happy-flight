@@ -18,15 +18,15 @@ Font::~Font() {
 
 }
 
-void Font::SetCharWidth(int width) {
+void Font::SetCharW(int width) {
   m_iCharWidth = width;
 }
 
-int Font::GetCharWidth() {
+int Font::GetCharW() {
   return m_iCharWidth;
 }
 
-int Font::GetCharHeight() {
+int Font::GetCharH() {
   return m_pSprite->h;
 }
 

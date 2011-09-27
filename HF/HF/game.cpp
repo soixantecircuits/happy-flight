@@ -52,7 +52,7 @@ Game::Game()
 	m_iPauseSprite = TextureManager::GetInstance()->LoadSurface( "../../resources/imgs/paused.png" );
 	m_pPauseSprite = TextureManager::GetInstance()->GetTextureById( m_iPauseSprite );
 	m_pDebugFont = new Font( "../../resources/imgs/font-20red.png" );
-	m_iDebugFontSize = m_pDebugFont->GetCharWidth();
+	m_iDebugFontSize = m_pDebugFont->GetCharW();
 
 	LoadResources();
 
@@ -211,7 +211,7 @@ void Game::HandleOSCEventsPlayOn()
 					if( m.getArgType( i ) == OFXOSC_TYPE_INT32 )
 						msg_string += m.getArgAsInt32( i ) ;
 					else if( m.getArgType( i ) == OFXOSC_TYPE_FLOAT )
-						msg_string += m.getArgAsFloat( i ) ;
+						msg_string += asString( m.getArgAsFloat( i ) );
 					else if( m.getArgType( i ) == OFXOSC_TYPE_STRING )
 						msg_string += m.getArgAsString( i );
 					else
