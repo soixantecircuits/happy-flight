@@ -530,7 +530,7 @@ void Game::PickUpCoin()
 
 void Game::EnterCloud()
 {
-
+	SoundManager::GetInstance()->Play( "../../resources/snd/cloud.wav" );
 }
 
 void Game::EnterThunder()
@@ -547,6 +547,7 @@ void Game::LoadResources()
 	SoundManager* pSoundManager = SoundManager::GetInstance();
 	pSoundManager->LoadWav( "../../resources/snd/coin.wav" );
 	pSoundManager->LoadWav( "../../resources/snd/storm.wav" );
+	pSoundManager->LoadWav( "../../resources/snd/cloud.wav" );
 
 	TextureManager* pTextureManager = TextureManager::GetInstance();
 
