@@ -47,7 +47,7 @@ Game::Game()
 	// needed for calculating fps
 	m_iFrameCnt = 0;
 
-	m_eGameState = GS_INTRO;
+	m_eGameState = GS_LOADING;
 	m_bPaused = true;
 	m_iSdlTicks = SDL_GetTicks();
 
@@ -56,6 +56,7 @@ Game::Game()
 	m_pDebugFont = new Font( "../../resources/imgs/font-20red.png" );
 	m_iDebugFontSize = m_pDebugFont->GetCharW();
 
+	DrawLoading();
 	LoadResources();
 
 	m_bScrolling = true;
@@ -107,18 +108,45 @@ void Game::InitNewGame()
 	m_iTimePauseOn = SDL_GetTicks();
 }
 
+void Game::DrawLoading( bool bLoaded )
+{
+	int iWindowWidth = PrefsManager::GetInstance()->GetValue( "WINDOW_WIDTH" );
+	int iWindowHeight = PrefsManager::GetInstance()->GetValue( "WINDOW_HEIGHT" );
+	int iLoadId = bLoaded?
+		TextureManager::GetInstance()->LoadSurface( "../../resources/imgs/Loaded.png" )
+		:TextureManager::GetInstance()->LoadSurface( "../../resources/imgs/Loading.png" );
+	SDL_Rect dst; dst.x = 0; dst.y = 0; dst.w = iWindowWidth; dst.h = iWindowHeight;
+	Video::GetInstance()->DrawRect( iLoadId, 0, &dst );
+	Video::GetInstance()->Flip();
+}
+
 void Game::Run(){
 	while( m_eGameState != GS_QUIT )
 	{
 		switch (m_eGameState)
 		{
+			case GS_LOADING: 
+			{
+				DrawLoading( true );
+				SDL_Event event;
+				if( SDL_PollEvent(&event) )
+				{
+					switch(event.type)
+					{
+					case SDL_KEYDOWN:
+						m_eGameState = GS_INTRO;
+					}
+				}
+				break;
+			}
 			case GS_INTRO: 
 			{
+				InitNewGame();
 				m_eGameState = GS_PLAYON;
+				break;
 			}
 			case GS_PLAYON: 
 			{
-				InitNewGame();
 				PlayOn();
 				break;
 			}
@@ -504,6 +532,7 @@ void Game::EnterThunder()
 void Game::LoadResources()
 {
 	TextureManager* pTextureManager = TextureManager::GetInstance();
+
 	pTextureManager->LoadSurface( "../../resources/imgs/coins.png" );
 	pTextureManager->LoadSurface( "../../resources/imgs/coins2.png" );
 

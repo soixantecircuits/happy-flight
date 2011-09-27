@@ -15,7 +15,7 @@ class Items;
 class Score;
 class ofxOscReceiver;
 
-enum GameStates { GS_INTRO, GS_PLAYON, GS_QUIT };
+enum GameStates { GS_LOADING, GS_INTRO, GS_PLAYON, GS_QUIT };
 
 class Game {
 	SDL_Surface *m_pScreen;
@@ -85,6 +85,7 @@ private:
 	void DrawDebugInfos();
 	void DrawPaused();
 	void LoadResources();
+	void DrawLoading( bool bLoaded = false );
 };
 
 #endif //#ifndef GAME_HH

@@ -20,8 +20,10 @@ Item::Item( const Vector2D &position, const Vector2D &velocity, ItemTypes itemTy
 	{
 		case ITEM_COIN:
 		{
-			m_oSprites.push_back( pTextureManager->LoadSurface( "../../resources/imgs/coins.png" ) );
-			m_oSprites.push_back( pTextureManager->LoadSurface( "../../resources/imgs/coins2.png" ) );
+			if( rand() % 2 )
+				m_oSprites.push_back( pTextureManager->LoadSurface( "../../resources/imgs/coins.png" ) );
+			else
+				m_oSprites.push_back( pTextureManager->LoadSurface( "../../resources/imgs/coins2.png" ) );
 			break;
 		}
 		case ITEM_CLOUD:
