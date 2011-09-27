@@ -49,8 +49,6 @@ class Game {
 	bool m_bF7down;
 	bool m_bF8down;
 
-	int m_iEnding;
-
 public:
 
 	Game();

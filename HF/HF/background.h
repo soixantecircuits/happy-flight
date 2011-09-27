@@ -6,6 +6,15 @@
 
 struct SDL_Surface;
 
+enum BackgroundState
+{
+	E_START = 0,
+	E_TAKEOFF,
+	E_FLYING,
+	E_LANDING,
+	E_STOP
+};
+
 class Background
 {
 public:
@@ -15,7 +24,9 @@ public:
 	void AddTile( std::string tilename );
 	void GenerateBackground( int length );
 	void Draw( SDL_Surface* screen );
-	int Draw( SDL_Surface* screen, int step );
+	void Draw( SDL_Surface* screen, int step );
+	int GetState(){ return m_eBackgroundState; }
+	void SetState( int iState ){ m_eBackgroundState = iState; }
 
 private:
 
@@ -24,6 +35,11 @@ private:
 	int m_iTilesPerLine;
 	int m_iTilesPerColumn;
 	int m_iStep;
+
+	int m_iWidth;
+	int m_iHeight;
+
+	int m_eBackgroundState;
 
 	std::vector< std::string > m_oTileNames;
 	std::vector< int > m_oTileIds;

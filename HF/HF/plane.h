@@ -10,6 +10,14 @@ class TextureManager;
 class Items;
 class Game;
 
+enum PlaneState
+{
+	E_PLANE_START,
+	E_PLANE_TAKE_OFF,
+	E_PLANE_FLYING,
+	E_PLANE_LANDING
+};
+
 /* The Racer is the vehicle, that the player can steer. */
 class Plane
 {
@@ -30,7 +38,11 @@ class Plane
 	// Movement-System
 	Vector2D m_vPos; // absolute position
 	Vector2D m_vVel; // the velocity vector
+
 	Vector2D m_vRealSize;
+
+	Vector2D m_vRealDisplaySize;
+	Vector2D m_vDisplaySize;
 
 	Uint32 m_iTimeLastMove;
 	int m_iScreenWidth;
@@ -38,16 +50,15 @@ class Plane
 	int m_iAnimDelay;
 	int m_iPickDistance;
 	int m_iPlaneDist;
-	int m_iPlaneWidth;
-	int m_iPlaneHeight;
 
 	float m_fMaxVel;
 	bool m_bLeft;
 	bool m_bRight;
-	bool m_bGoCenter;
 
 	Items* m_pItems;
 	Game* m_pGame;
+
+	int m_eState;
 
 public:
 	Plane( Items* pItems, Game* pGame );
@@ -72,7 +83,9 @@ public:
 
 	void GoLeft(){ m_bLeft = true; }
 	void GoRight(){ m_bRight = true; }
-	void GoCenter();
+
+	int GetState(){ return m_eState; }
+	void SetState( int iState ){ m_eState = iState; }
 
 };
 

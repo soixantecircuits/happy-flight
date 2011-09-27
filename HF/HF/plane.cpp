@@ -12,14 +12,14 @@ Plane::Plane( Items* pItems, Game* pGame )
 : m_pItems( pItems )
 , m_pGame( pGame )
 {
-	m_bGoCenter = false;
+	m_eState = E_PLANE_START;
 	m_iScreenWidth = PrefsManager::GetInstance()->GetValue( "GAME_WIDTH" );
 	m_iScreenHeight = PrefsManager::GetInstance()->GetValue( "GAME_HEIGHT" );
 	m_iAnimDelay = PrefsManager::GetInstance()->GetValue( "ANIM_DELAY" );
 	m_iPickDistance = PrefsManager::GetInstance()->GetValue( "PICK_DISTANCE" );
 	m_iPlaneDist = PrefsManager::GetInstance()->GetValue( "PLANE_DIST" );
-	m_iPlaneWidth = PrefsManager::GetInstance()->GetValue( "PLANE_WIDTH" );
-	m_iPlaneHeight = PrefsManager::GetInstance()->GetValue( "PLANE_HEIGHT" );
+	int iPlaneWidth = PrefsManager::GetInstance()->GetValue( "PLANE_WIDTH" );
+	int iPlaneHeight = PrefsManager::GetInstance()->GetValue( "PLANE_HEIGHT" );
 
 	TextureManager* pTextureManager = TextureManager::GetInstance();
 
@@ -83,7 +83,9 @@ Plane::Plane( Items* pItems, Game* pGame )
 	m_oDrawRectBase.h = m_pSpriteBase->h;
 	m_vPos = Vector2D( (float)m_iScreenWidth/2, (float)m_iScreenHeight-m_iPlaneDist );
 
-	m_vRealSize = Vector2D( (float)m_iPlaneWidth, (float)m_iPlaneHeight ); //l'avion est moins grand que le png
+	m_vRealSize = Vector2D( (float)iPlaneWidth, (float)iPlaneHeight ); //l'avion est moins grand que le png
+	m_vRealDisplaySize = Vector2D( m_pSpriteBase->w, m_pSpriteBase->h );
+	m_vDisplaySize = m_vRealDisplaySize/2;
 	m_vVel = Vector2D( 0,0 );
 	m_bLeft = false;
 	m_bRight = false;
@@ -101,11 +103,11 @@ void Plane::ReloadConfig()
 {
 	m_iAnimDelay = PrefsManager::GetInstance()->GetValue( "ANIM_DELAY" );
 	m_iPlaneDist = PrefsManager::GetInstance()->GetValue( "PLANE_DIST" );
-	m_iPlaneWidth = PrefsManager::GetInstance()->GetValue( "PLANE_WIDTH" );
-	m_iPlaneHeight = PrefsManager::GetInstance()->GetValue( "PLANE_HEIGHT" );
+	int iPlaneWidth = PrefsManager::GetInstance()->GetValue( "PLANE_WIDTH" );
+	int iPlaneHeight = PrefsManager::GetInstance()->GetValue( "PLANE_HEIGHT" );
 
 	m_vPos = Vector2D( (float)m_iScreenWidth/2, (float)m_iScreenHeight-m_iPlaneDist );
-	m_vRealSize = Vector2D( (float)m_iPlaneWidth, (float)m_iPlaneHeight ); //l'avion est moins grand que le png
+	m_vRealSize = Vector2D( (float)iPlaneWidth, (float)iPlaneHeight ); //l'avion est moins grand que le png
 }
 
 Vector2D Plane::Move( int dT )
@@ -113,14 +115,25 @@ Vector2D Plane::Move( int dT )
 	static int elapsedTime = 0;
 	static bool oldleft, oldright;
 
-	if( m_bGoCenter )
+	if( m_eState == E_PLANE_LANDING )
 	{
 		if( m_vPos.getX() > (float)m_iScreenWidth/2 )
 			m_bLeft = true;
 		else if( m_vPos.getX() < (float)m_iScreenWidth/2 )
 			m_bRight = true;
 		if( m_vPos.getX() == (float)m_iScreenWidth/2 )
-			m_bGoCenter = false;
+		{
+			m_vDisplaySize = m_vDisplaySize / 1.01f;
+			if( m_vDisplaySize.getX() < m_vRealDisplaySize.getX()/2 )
+				m_vDisplaySize = m_vRealDisplaySize/2;
+		}
+	}
+	else if( m_eState == E_PLANE_TAKE_OFF ||
+		( m_eState == E_PLANE_FLYING && ( m_vDisplaySize.getX() < m_vRealDisplaySize.getX() ) ) )
+	{
+		m_vDisplaySize = m_vDisplaySize * 1.01f;
+		if( m_vDisplaySize.getX() > m_vRealDisplaySize.getX() )
+			m_vDisplaySize = m_vRealDisplaySize;
 	}
 
 	elapsedTime += dT;
@@ -139,10 +152,9 @@ Vector2D Plane::Move( int dT )
 		m_vPos += Vector2D( -m_fMaxVel, 0 ) * (float)dT / 1000.0;
 
 	if( m_bRight )
-
 		m_vPos += Vector2D( m_fMaxVel, 0 ) * (float)dT / 1000.0;
 
-	if( m_bGoCenter && ( (oldPos.getX() > (float)m_iScreenWidth/2) != (m_vPos.getX() > (float)m_iScreenWidth/2) ) )
+	if( m_eState == E_PLANE_LANDING && ( (oldPos.getX() > (float)m_iScreenWidth/2) != (m_vPos.getX() > (float)m_iScreenWidth/2) ) )
 		m_vPos.setX( (float)m_iScreenWidth/2 );
 
 	ClipWorld();
@@ -150,11 +162,6 @@ Vector2D Plane::Move( int dT )
 	m_bRight = false;
 
 	return oldPos;
-}
-
-void Plane::GoCenter()
-{
-	m_bGoCenter = true;
 }
 
 void Plane::UpdateAnim()
@@ -277,10 +284,10 @@ void Plane::DrawPlane( SDL_Surface *screen )
 	SDL_Rect srcR;
 	SDL_Rect destR;
 
-	destR.x = Sint16( ROUND(m_vPos.getX()) - (m_pSpriteBase->w / 2) );
-	destR.y = Sint16( ROUND(m_vPos.getY()) - (m_pSpriteBase->h / 2) );
-	destR.w = m_pSpriteBase->w;
-	destR.h = m_pSpriteBase->h;
+	destR.x = Sint16( ROUND(m_vPos.getX()) - (m_vDisplaySize.getX() / 2) );
+	destR.y = Sint16( ROUND(m_vPos.getY()) - (m_vDisplaySize.getY() / 2) );
+	destR.w = (int)m_vDisplaySize.getX();
+	destR.h = (int)m_vDisplaySize.getY();
 
 	srcR.x = 0;
 	srcR.y = 0;

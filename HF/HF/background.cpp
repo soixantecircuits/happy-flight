@@ -14,6 +14,9 @@ Background::Background()
 	m_iTilesPerLine   = 0;
 	m_iTilesPerColumn = 0;
 	m_iStep           = 0;
+	m_iWidth = PrefsManager::GetInstance()->GetValue("GAME_WIDTH");
+	m_iHeight = PrefsManager::GetInstance()->GetValue("GAME_HEIGHT");
+	m_eBackgroundState = E_START;
 }
 
 
@@ -33,9 +36,6 @@ void Background::AddTile( string tilename )
 
 void Background::GenerateBackground( int length )
 {
-	int iWidth = PrefsManager::GetInstance()->GetValue("GAME_WIDTH");
-	int iHeight = PrefsManager::GetInstance()->GetValue("GAME_HEIGHT");
-
 	m_oTileIds.clear();
 	m_oTileNames.clear();
 	m_oTileNumbers.clear();
@@ -50,6 +50,9 @@ void Background::GenerateBackground( int length )
 	AddTile( "../../resources/imgs/Tile_Prairie_02.png" );
 	AddTile( "../../resources/imgs/Ville_01.png" );
 	AddTile( "../../resources/imgs/Ville_02.png" );
+	AddTile( "../../resources/imgs/Airport_01.png" );
+	AddTile( "../../resources/imgs/Airport_02.png" );
+	AddTile( "../../resources/imgs/Airport_03.png" );
 
 	TextureManager* pTextureManager = TextureManager::GetInstance();
 
@@ -74,13 +77,13 @@ void Background::GenerateBackground( int length )
 	}
 
 	// calculate tiles per line and tiles per row
-	m_iTilesPerLine = iWidth / m_iMinTileWidth;
-	if (iWidth % m_iMinTileWidth)
+	m_iTilesPerLine = m_iWidth / m_iMinTileWidth;
+	if (m_iWidth % m_iMinTileWidth)
 	{
 		m_iTilesPerLine++;
 	}
-	m_iTilesPerColumn = iHeight / m_iMinTileHeight;
-	if (iHeight % m_iMinTileHeight)
+	m_iTilesPerColumn = m_iHeight / m_iMinTileHeight;
+	if (m_iHeight % m_iMinTileHeight)
 	{
 		m_iTilesPerColumn++;
 	}
@@ -91,7 +94,22 @@ void Background::GenerateBackground( int length )
 		rows++;
 	}
 
-	int lastTile = rand() % (m_oTileIds.size()-2);
+	int lastTile = 0;
+
+	//airport
+	for( int i=0; i<2 ; i++ )
+	{
+		for( int j=0; j<m_iTilesPerLine; ++j )
+		{
+			if( lastTile == 7 )
+				m_oTileNumbers.push_back( 8 );
+			else
+				m_oTileNumbers.push_back( 7 );
+		}
+		lastTile = m_oTileNumbers.back();
+	}
+
+	lastTile = 2; //to start with "prairie"
 
 	// generate random background
 	for(int i= 0; i< rows; ++i )
@@ -140,6 +158,19 @@ void Background::GenerateBackground( int length )
 				m_oTileNumbers.push_back( 3 + rand() % 2 );
 		}
 	}
+
+	//airport
+	for( int i=0; i<2 ; i++ )
+	{
+		for( int j=0; j<m_iTilesPerLine; ++j )
+		{
+			if( lastTile == 7 )
+				m_oTileNumbers.push_back( 8 );
+			else
+				m_oTileNumbers.push_back( 7 );
+		}
+		lastTile = m_oTileNumbers.back();
+	}
 }
 
 
@@ -149,13 +180,14 @@ void Background::Draw( SDL_Surface* screen )
 	Draw( screen, m_iStep );
 }
 
-int Background::Draw( SDL_Surface* screen, int step )
+void Background::Draw( SDL_Surface* screen, int step )
 {
 	int ret = 0;
-	bool bEndTiles = false;
+	bool bEndingTiles = false;
 	bool bRegularTiles = false;
-	int iWidth = PrefsManager::GetInstance()->GetValue("GAME_WIDTH");
-	int iHeight = PrefsManager::GetInstance()->GetValue("GAME_HEIGHT");
+	bool bAddStartAirport = false;
+	bool bAddEndAirport = false;
+	SDL_Rect oStartDst, oStartSrc, oEndDst, oEndSrc;
 
 	if (step < 0)
 	{
@@ -174,7 +206,7 @@ int Background::Draw( SDL_Surface* screen, int step )
 	{
 		for(int x = 0; x < m_iTilesPerLine; x++)
 		{
-			int diffX = iWidth - x * m_iMinTileWidth;
+			int diffX = m_iWidth - x * m_iMinTileWidth;
 			if ( diffX >= m_iMinTileWidth )
 			{
 				srcRect.w = m_iMinTileWidth;
@@ -196,30 +228,73 @@ int Background::Draw( SDL_Surface* screen, int step )
 			}
 			dstRect.h = srcRect.h;
 			dstRect.x = x * m_iMinTileWidth;
-			dstRect.y = iHeight + offset - (y+1) * m_iMinTileHeight;
+			dstRect.y = m_iHeight + offset - (y+1) * m_iMinTileHeight;
 			int currentTile = ((y+startLine)*m_iTilesPerLine+x);
 			int tile = 0;
 			if( currentTile > (int)m_oTileNumbers.size() - 1 )
 			{
-				bEndTiles = true;
 				tile = 5 + currentTile%2;
+			}
+			else if( m_oTileNumbers[ currentTile ] == 7 )
+			{
+				if( y==0 )
+					bEndingTiles = true;
+				if( !bAddStartAirport )
+				{
+					oStartSrc = srcRect;
+					oStartDst = dstRect;
+				}
+				bAddStartAirport = true;
+				tile = 9;
+			}
+			else if( m_oTileNumbers[ currentTile ] == 8 )
+			{
+				if( !bAddEndAirport )
+				{
+					oEndSrc = srcRect;
+					oEndDst = dstRect;
+				}
+				bAddEndAirport = true;
+				tile = 9;
 			}
 			else
 			{
 				bRegularTiles = true;
 				tile = m_oTileNumbers[ currentTile ];
 			}
-
 			Video::GetInstance()->DrawRect( m_oTileIds[ tile ], &srcRect, &dstRect );
 		}
 	}
-	ret = 0;
-	if( bEndTiles )
+
+	if( bAddStartAirport )
 	{
-		ret = 1;
-		if( !bRegularTiles )
-			ret = 2;
+		for(int x = 0; x < m_iTilesPerLine+1; x++)
+		{
+			oStartDst.x = m_iWidth/2 - m_iMinTileWidth/2;
+			oStartSrc.w = m_iMinTileWidth;
+			oStartDst.w = oStartSrc.w;
+			Video::GetInstance()->DrawRect( m_oTileIds[ 7 ], &oStartSrc, &oStartDst );
+		}
+		
 	}
-	return ret;
+	if( bAddEndAirport )
+	{
+		for(int x = 0; x < m_iTilesPerLine+1; x++)
+		{
+			oEndDst.x = m_iWidth/2 - m_iMinTileWidth/2;
+			oEndSrc.w = m_iMinTileWidth;
+			oEndDst.w = oEndSrc.w;
+			Video::GetInstance()->DrawRect( m_oTileIds[ 8 ], &oEndSrc, &oEndDst );
+		}
+	}
+
+	if( m_eBackgroundState == E_START && !bAddStartAirport )
+		m_eBackgroundState = E_TAKEOFF;
+	else if( m_eBackgroundState == E_TAKEOFF && !bAddEndAirport )
+		m_eBackgroundState = E_FLYING;
+	else if( m_eBackgroundState == E_FLYING && bAddEndAirport )
+		m_eBackgroundState = E_LANDING;
+	else if( m_eBackgroundState == E_LANDING && bEndingTiles )
+		m_eBackgroundState = E_STOP;
 }
 

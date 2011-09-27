@@ -73,9 +73,9 @@ Game::~Game()
 void Game::InitNewGame()
 {
 	m_iScore = 0;
-	m_iEnding = 0;
 	m_fScrollSpeed = (float)PrefsManager::GetInstance()->GetValue( "SCROLL_SPEED" );
 	m_fMoveSpeed = (float)PrefsManager::GetInstance()->GetValue( "MOVE_SPEED" );
+	m_pBackground->SetState( E_START );
 
 	if( m_pItems ) delete m_pItems;
 	m_pItems = new Items();
@@ -100,8 +100,6 @@ void Game::Run(){
 			case GS_INTRO: 
 			{
 				m_eGameState = GS_PLAYON;
-				//intro->run( gameState );
-				//break;
 			}
 			case GS_PLAYON: 
 			{
@@ -265,11 +263,6 @@ void Game::HandleEventsPlayOn()
 						m_eGameState = GS_INTRO;
 						break;
 					}
-				case SDLK_g:
-					{
-						m_pPlane->GoCenter();
-						break;
-					}
 				case SDLK_F12:
 					{
 						PrefsManager::GetInstance()->LoadPrefs("prefs.ini");
@@ -324,8 +317,13 @@ void Game::UpdateGameState()
 		m_fMoveSpeed += (float)dT/m_fAcceleration;
 	}
 
-	if( m_iEnding == 0)
+	if( m_pBackground->GetState() == E_TAKEOFF )
 	{
+		m_pPlane->SetState( E_PLANE_TAKE_OFF );
+	}
+	else if( m_pBackground->GetState() == E_FLYING )
+	{
+		m_pPlane->SetState( E_PLANE_FLYING );
 		if( m_bLeftDown )
 			m_pPlane->GoLeft();
 		else if( m_bRightDown )
@@ -333,13 +331,14 @@ void Game::UpdateGameState()
 
 		m_pItems->Generate( dT );
 	}
-	else if( m_iEnding == 1 )
+	else if( m_pBackground->GetState() == E_LANDING )
 	{
-		m_pPlane->GoCenter();
+		m_pPlane->SetState( E_PLANE_LANDING );
 	}
-	else if( m_iEnding == 2 )
+	else if( m_pBackground->GetState() == E_STOP )
 	{
 		m_pItems->GenerateEnd();
+		m_fScrollSpeed = 0;
 	}
 
 	m_pItems->SetScrollSpeed( m_fScrollSpeed );
@@ -374,7 +373,7 @@ void Game::DrawPlayOn()
 
 void Game::DrawBackground()
 {
-	m_iEnding = m_pBackground->Draw(m_pScreen, (int) (m_fActBackgoundPos + 0.5) );
+	m_pBackground->Draw(m_pScreen, (int) (m_fActBackgoundPos + 0.5) );
 }
 
 
