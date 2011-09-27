@@ -87,6 +87,7 @@ Game::~Game()
 void Game::InitNewGame()
 {
 	SoundManager::GetInstance()->Stop( "../../resources/snd/avion.wav" );
+	SoundManager::GetInstance()->Stop( "../../resources/snd/boucle.wav" );
 	m_bEnd = false;
 	m_iScore = 0;
 	m_fScrollSpeed = (float)PrefsManager::GetInstance()->GetValue( "SCROLL_SPEED" );
@@ -106,8 +107,8 @@ void Game::InitNewGame()
 	m_fActBackgoundPos = 0;
 	m_iGameActRuntime = 0;
 	m_bPaused = true;
-	SoundManager::GetInstance()->Play( "../../resources/snd/avion.wav", true );
-	SoundManager::GetInstance()->Pause( "../../resources/snd/avion.wav", true );
+	SoundManager::GetInstance()->Play( "../../resources/snd/avion.wav", true, true );
+	SoundManager::GetInstance()->Play( "../../resources/snd/boucle.wav", true, true );
 
 	m_iTimeLastUpdate = SDL_GetTicks();
 	m_iTimePauseOn = SDL_GetTicks();
@@ -202,12 +203,14 @@ void Game::Pause()
 	if (m_bPaused)
 	{
 		SoundManager::GetInstance()->Pause( "../../resources/snd/avion.wav", false );
+		SoundManager::GetInstance()->Pause( "../../resources/snd/boucle.wav", false );
 		Uint32 timePaused = SDL_GetTicks() - m_iTimePauseOn;
 		m_iTimeLastUpdate += timePaused;
 	}
 	else
 	{
 		SoundManager::GetInstance()->Pause( "../../resources/snd/avion.wav", true );
+		SoundManager::GetInstance()->Pause( "../../resources/snd/boucle.wav", true );
 		m_iTimePauseOn = SDL_GetTicks();
 	}
 	m_bPaused = !m_bPaused;
