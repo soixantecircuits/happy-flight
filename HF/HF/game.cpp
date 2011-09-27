@@ -72,6 +72,7 @@ Game::~Game()
 
 void Game::InitNewGame()
 {
+	m_bEnd = false;
 	m_iScore = 0;
 	m_fScrollSpeed = (float)PrefsManager::GetInstance()->GetValue( "SCROLL_SPEED" );
 	m_fMoveSpeed = (float)PrefsManager::GetInstance()->GetValue( "MOVE_SPEED" );
@@ -329,8 +330,10 @@ void Game::UpdateGameState()
 		else if( m_bRightDown )
 			m_pPlane->GoRight();
 
-		if( m_pBackground->GetState() != E_APPROACH )
+		if( m_pBackground->GetState() == E_FLYING )
 			m_pItems->Generate( dT );
+		else
+			m_pItems->DeleteAllItems();
 	}
 	else if( m_pBackground->GetState() == E_LANDING )
 	{
@@ -338,8 +341,12 @@ void Game::UpdateGameState()
 	}
 	else if( m_pBackground->GetState() == E_STOP )
 	{
-		m_pItems->GenerateEnd();
-		m_fScrollSpeed = 0;
+		if( !m_bEnd )
+		{
+			m_pItems->GenerateEnd();
+			m_fScrollSpeed = 0;
+		}
+		m_bEnd = true;
 	}
 
 	m_pItems->SetScrollSpeed( m_fScrollSpeed );

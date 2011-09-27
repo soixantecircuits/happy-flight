@@ -142,15 +142,10 @@ void Items::Generate( int dT )
 
 void Items::GenerateEnd()
 {
-	static bool bEnd = false;
-	if( !bEnd )
-	{
-		Vector2D pos = Vector2D( (float)m_iScreenWidth/2, (float)m_iScreenHeight/3 );
-		Vector2D vel = Vector2D( 0, 0 );
-		Item *item = new Item( pos, vel, ITEM_END, m_iItemLifeTime, m_iScreenWidth );
-		AddItem( item );
-	}
-	bEnd = true;
+	Vector2D pos = Vector2D( (float)m_iScreenWidth/2, (float)m_iScreenHeight/3 );
+	Vector2D vel = Vector2D( 0, 0 );
+	Item *item = new Item( pos, vel, ITEM_END, m_iItemLifeTime, m_iScreenWidth );
+	AddItem( item );
 }
 
 void Items::DeleteAllItems()
