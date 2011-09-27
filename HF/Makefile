@@ -77,12 +77,12 @@ AUTOHEADER = ${SHELL} /Users/emmanuel/Documents/Soixante/projets/happyFlight/rea
 AUTOMAKE = ${SHELL} /Users/emmanuel/Documents/Soixante/projets/happyFlight/realisation/happy-flight/HF/missing --run automake-1.10
 AWK = gawk
 CC = gcc
-CCDEPMODE = depmode=none
+CCDEPMODE = depmode=gcc3
 CFLAGS = -g -O2
 CPP = gcc -E
 CPPFLAGS = 
 CXX = g++
-CXXDEPMODE = depmode=none
+CXXDEPMODE = depmode=gcc3
 CXXFLAGS = -g -O2
 CYGPATH_W = echo
 DEFS = -DHAVE_CONFIG_H
@@ -105,7 +105,7 @@ LTLIBOBJS =
 MAKEINFO = ${SHELL} /Users/emmanuel/Documents/Soixante/projets/happyFlight/realisation/happy-flight/HF/missing --run makeinfo
 MKDIR_P = ./install-sh -c -d
 OBJC = gcc
-OBJCDEPMODE = depmode=none
+OBJCDEPMODE = depmode=gcc3
 OBJCFLAGS = -g -O2
 OBJEXT = o
 OPENGL_LIBS = -lGL
