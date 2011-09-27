@@ -46,10 +46,17 @@ am__installdirs = "$(DESTDIR)$(bindir)"
 binPROGRAMS_INSTALL = $(INSTALL_PROGRAM)
 PROGRAMS = $(bin_PROGRAMS)
 am_HF_OBJECTS = HF-background.$(OBJEXT) HF-item.$(OBJEXT) \
-	HF-items.$(OBJEXT) HF-font.$(OBJEXT) HF-game.$(OBJEXT) \
-	HF-geometry.$(OBJEXT) HF-plane.$(OBJEXT) \
+	HF-items.$(OBJEXT) HF-font.$(OBJEXT) HF-Score.$(OBJEXT) \
+	HF-game.$(OBJEXT) HF-geometry.$(OBJEXT) HF-plane.$(OBJEXT) \
 	HF-PrefsManager.$(OBJEXT) HF-mainOS.$(OBJEXT) \
-	HF-surfaceDB.$(OBJEXT) HF-SDLMain.$(OBJEXT) HF-video.$(OBJEXT)
+	HF-TextureManager.$(OBJEXT) HF-SDLMain.$(OBJEXT) \
+	HF-video.$(OBJEXT) HF-ofxOscBundle.$(OBJEXT) \
+	HF-ofxOscMessage.$(OBJEXT) HF-ofxOscReceiver.$(OBJEXT) \
+	HF-ofxOscSender.$(OBJEXT) HF-IpEndpointName.$(OBJEXT) \
+	HF-NetworkingUtils.$(OBJEXT) HF-UdpSocket.$(OBJEXT) \
+	HF-OscOutboundPacketStream.$(OBJEXT) \
+	HF-OscPrintReceivedElements.$(OBJEXT) \
+	HF-OscReceivedElements.$(OBJEXT) HF-OscTypes.$(OBJEXT)
 HF_OBJECTS = $(am_HF_OBJECTS)
 HF_DEPENDENCIES =
 HF_LINK = $(CXXLD) $(HF_CXXFLAGS) $(CXXFLAGS) $(HF_LDFLAGS) $(LDFLAGS) \
@@ -83,12 +90,12 @@ AUTOHEADER = ${SHELL} /Users/emmanuel/Documents/Soixante/projets/happyFlight/rea
 AUTOMAKE = ${SHELL} /Users/emmanuel/Documents/Soixante/projets/happyFlight/realisation/happy-flight/HF/missing --run automake-1.10
 AWK = gawk
 CC = gcc
-CCDEPMODE = depmode=gcc3
+CCDEPMODE = depmode=none
 CFLAGS = -g -O2
 CPP = gcc -E
 CPPFLAGS = 
 CXX = g++
-CXXDEPMODE = depmode=gcc3
+CXXDEPMODE = depmode=none
 CXXFLAGS = -g -O2
 CYGPATH_W = echo
 DEFS = -DHAVE_CONFIG_H
@@ -111,7 +118,7 @@ LTLIBOBJS =
 MAKEINFO = ${SHELL} /Users/emmanuel/Documents/Soixante/projets/happyFlight/realisation/happy-flight/HF/missing --run makeinfo
 MKDIR_P = .././install-sh -c -d
 OBJC = gcc
-OBJCDEPMODE = depmode=gcc3
+OBJCDEPMODE = depmode=none
 OBJCFLAGS = -g -O2
 OBJEXT = o
 OPENGL_LIBS = -lGL
@@ -184,16 +191,42 @@ HF_SOURCES = background.h		    background.cpp \
 					item.h		    		item.cpp \
 					items.h		    		items.cpp \
 					font.h		    		font.cpp \
+					Score.h		    		Score.cpp \
 					game.h		    		game.cpp \
 					geometry.h		    	geometry.cpp \
 					plane.h		    		plane.cpp \
 					PrefsManager.h		    PrefsManager.cpp \
 					Singleton.h				mainOS.cpp \
-					surfaceDB.h		    	surfaceDB.cpp \
+					TextureManager.h		TextureManager.cpp \
 					SDLMain.h		    	SDLMain.m \
-					video.h		    		video.cpp
+					video.h		    		video.cpp \
+					ofxOsc/src/ofxOsc.h		ofxOsc/src/ofxOscArg.h \
+					ofxOsc/src/ofxOscBundle.h		ofxOsc/src/ofxOscBundle.cpp \
+					ofxOsc/src/ofxOscMessage.h		ofxOsc/src/ofxOscMessage.cpp \
+					ofxOsc/src/ofxOscReceiver.h		ofxOsc/src/ofxOscReceiver.cpp \
+					ofxOsc/src/ofxOscSender.h		ofxOsc/src/ofxOscSender.cpp \
+					ofxOsc/libs/oscpack/include/ip/IpEndpointName.h \
+					ofxOsc/libs/oscpack/include/ip/IpEndpointName.cpp \
+					ofxOsc/libs/oscpack/include/ip/posix/NetworkingUtils.cpp \
+					ofxOsc/libs/oscpack/include/ip/posix/UdpSocket.cpp \
+					ofxOsc/libs/oscpack/include/ip/NetworkingUtils.h \
+					ofxOsc/libs/oscpack/include/ip/PacketListener.h \
+					ofxOsc/libs/oscpack/include/ip/TimerListener.h \
+					ofxOsc/libs/oscpack/include/ip/UdpSocket.h \
+					ofxOsc/libs/oscpack/include/osc/MessageMappingOscPacketListener.h \
+					ofxOsc/libs/oscpack/include/osc/OscException.h \
+					ofxOsc/libs/oscpack/include/osc/OscHostEndianness.h \
+					ofxOsc/libs/oscpack/include/osc/OscOutboundPacketStream.h \
+					ofxOsc/libs/oscpack/include/osc/OscOutboundPacketStream.cpp \
+					ofxOsc/libs/oscpack/include/osc/OscPacketListener.h \
+					ofxOsc/libs/oscpack/include/osc/OscPrintReceivedElements.h \
+					ofxOsc/libs/oscpack/include/osc/OscPrintReceivedElements.cpp \
+					ofxOsc/libs/oscpack/include/osc/OscReceivedElements.h \
+					ofxOsc/libs/oscpack/include/osc/OscReceivedElements.cpp \
+					ofxOsc/libs/oscpack/include/osc/OscTypes.h \
+					ofxOsc/libs/oscpack/include/osc/OscTypes.cpp
 
-HF_CXXFLAGS = -D__STDC_LIMIT_MACROS -D__STDC_CONSTANT_MACROS -I/Library/Frameworks/SDL.framework/Headers -I/Library/Frameworks/SDL_image.framework/Headers -I/System/Library/Frameworks/OpenGL.framework/Headers
+HF_CXXFLAGS = -D__STDC_LIMIT_MACROS -D__STDC_CONSTANT_MACROS -I/Library/Frameworks/SDL.framework/Headers -I/Library/Frameworks/SDL_image.framework/Headers -I/System/Library/Frameworks/OpenGL.framework/Headers -IofxOsc/src -IofxOsc/libs/oscpack/include -IofxOsc/libs/oscpack/include/ip -IofxOsc/libs/oscpack/include/osc
 HF_OBJCFLAGS = -I/Library/Frameworks/SDL.framework/Headers -I/Library/Frameworks/SDL_image.framework/Headers -I/System/Library/Frameworks/OpenGL.framework/Headers
 HF_LDADD = 
 HF_LDFLAGS = -framework SDL -framework SDL_image -framework Cocoa -framework OpenGL
@@ -263,8 +296,17 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
+include ./$(DEPDIR)/HF-IpEndpointName.Po
+include ./$(DEPDIR)/HF-NetworkingUtils.Po
+include ./$(DEPDIR)/HF-OscOutboundPacketStream.Po
+include ./$(DEPDIR)/HF-OscPrintReceivedElements.Po
+include ./$(DEPDIR)/HF-OscReceivedElements.Po
+include ./$(DEPDIR)/HF-OscTypes.Po
 include ./$(DEPDIR)/HF-PrefsManager.Po
 include ./$(DEPDIR)/HF-SDLMain.Po
+include ./$(DEPDIR)/HF-Score.Po
+include ./$(DEPDIR)/HF-TextureManager.Po
+include ./$(DEPDIR)/HF-UdpSocket.Po
 include ./$(DEPDIR)/HF-background.Po
 include ./$(DEPDIR)/HF-font.Po
 include ./$(DEPDIR)/HF-game.Po
@@ -272,205 +314,376 @@ include ./$(DEPDIR)/HF-geometry.Po
 include ./$(DEPDIR)/HF-item.Po
 include ./$(DEPDIR)/HF-items.Po
 include ./$(DEPDIR)/HF-mainOS.Po
+include ./$(DEPDIR)/HF-ofxOscBundle.Po
+include ./$(DEPDIR)/HF-ofxOscMessage.Po
+include ./$(DEPDIR)/HF-ofxOscReceiver.Po
+include ./$(DEPDIR)/HF-ofxOscSender.Po
 include ./$(DEPDIR)/HF-plane.Po
-include ./$(DEPDIR)/HF-surfaceDB.Po
 include ./$(DEPDIR)/HF-video.Po
 
 .cpp.o:
-	$(CXXCOMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<
-	mv -f $(DEPDIR)/$*.Tpo $(DEPDIR)/$*.Po
-#	source='$<' object='$@' libtool=no \
-#	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
-#	$(CXXCOMPILE) -c -o $@ $<
+#	$(CXXCOMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<
+#	mv -f $(DEPDIR)/$*.Tpo $(DEPDIR)/$*.Po
+	source='$<' object='$@' libtool=no \
+	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
+	$(CXXCOMPILE) -c -o $@ $<
 
 .cpp.obj:
-	$(CXXCOMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ `$(CYGPATH_W) '$<'`
-	mv -f $(DEPDIR)/$*.Tpo $(DEPDIR)/$*.Po
-#	source='$<' object='$@' libtool=no \
-#	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
-#	$(CXXCOMPILE) -c -o $@ `$(CYGPATH_W) '$<'`
+#	$(CXXCOMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ `$(CYGPATH_W) '$<'`
+#	mv -f $(DEPDIR)/$*.Tpo $(DEPDIR)/$*.Po
+	source='$<' object='$@' libtool=no \
+	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
+	$(CXXCOMPILE) -c -o $@ `$(CYGPATH_W) '$<'`
 
 HF-background.o: background.cpp
-	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(HF_CXXFLAGS) $(CXXFLAGS) -MT HF-background.o -MD -MP -MF $(DEPDIR)/HF-background.Tpo -c -o HF-background.o `test -f 'background.cpp' || echo '$(srcdir)/'`background.cpp
-	mv -f $(DEPDIR)/HF-background.Tpo $(DEPDIR)/HF-background.Po
-#	source='background.cpp' object='HF-background.o' libtool=no \
-#	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
-#	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(HF_CXXFLAGS) $(CXXFLAGS) -c -o HF-background.o `test -f 'background.cpp' || echo '$(srcdir)/'`background.cpp
+#	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(HF_CXXFLAGS) $(CXXFLAGS) -MT HF-background.o -MD -MP -MF $(DEPDIR)/HF-background.Tpo -c -o HF-background.o `test -f 'background.cpp' || echo '$(srcdir)/'`background.cpp
+#	mv -f $(DEPDIR)/HF-background.Tpo $(DEPDIR)/HF-background.Po
+	source='background.cpp' object='HF-background.o' libtool=no \
+	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
+	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(HF_CXXFLAGS) $(CXXFLAGS) -c -o HF-background.o `test -f 'background.cpp' || echo '$(srcdir)/'`background.cpp
 
 HF-background.obj: background.cpp
-	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(HF_CXXFLAGS) $(CXXFLAGS) -MT HF-background.obj -MD -MP -MF $(DEPDIR)/HF-background.Tpo -c -o HF-background.obj `if test -f 'background.cpp'; then $(CYGPATH_W) 'background.cpp'; else $(CYGPATH_W) '$(srcdir)/background.cpp'; fi`
-	mv -f $(DEPDIR)/HF-background.Tpo $(DEPDIR)/HF-background.Po
-#	source='background.cpp' object='HF-background.obj' libtool=no \
-#	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
-#	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(HF_CXXFLAGS) $(CXXFLAGS) -c -o HF-background.obj `if test -f 'background.cpp'; then $(CYGPATH_W) 'background.cpp'; else $(CYGPATH_W) '$(srcdir)/background.cpp'; fi`
+#	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(HF_CXXFLAGS) $(CXXFLAGS) -MT HF-background.obj -MD -MP -MF $(DEPDIR)/HF-background.Tpo -c -o HF-background.obj `if test -f 'background.cpp'; then $(CYGPATH_W) 'background.cpp'; else $(CYGPATH_W) '$(srcdir)/background.cpp'; fi`
+#	mv -f $(DEPDIR)/HF-background.Tpo $(DEPDIR)/HF-background.Po
+	source='background.cpp' object='HF-background.obj' libtool=no \
+	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
+	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(HF_CXXFLAGS) $(CXXFLAGS) -c -o HF-background.obj `if test -f 'background.cpp'; then $(CYGPATH_W) 'background.cpp'; else $(CYGPATH_W) '$(srcdir)/background.cpp'; fi`
 
 HF-item.o: item.cpp
-	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(HF_CXXFLAGS) $(CXXFLAGS) -MT HF-item.o -MD -MP -MF $(DEPDIR)/HF-item.Tpo -c -o HF-item.o `test -f 'item.cpp' || echo '$(srcdir)/'`item.cpp
-	mv -f $(DEPDIR)/HF-item.Tpo $(DEPDIR)/HF-item.Po
-#	source='item.cpp' object='HF-item.o' libtool=no \
-#	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
-#	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(HF_CXXFLAGS) $(CXXFLAGS) -c -o HF-item.o `test -f 'item.cpp' || echo '$(srcdir)/'`item.cpp
+#	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(HF_CXXFLAGS) $(CXXFLAGS) -MT HF-item.o -MD -MP -MF $(DEPDIR)/HF-item.Tpo -c -o HF-item.o `test -f 'item.cpp' || echo '$(srcdir)/'`item.cpp
+#	mv -f $(DEPDIR)/HF-item.Tpo $(DEPDIR)/HF-item.Po
+	source='item.cpp' object='HF-item.o' libtool=no \
+	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
+	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(HF_CXXFLAGS) $(CXXFLAGS) -c -o HF-item.o `test -f 'item.cpp' || echo '$(srcdir)/'`item.cpp
 
 HF-item.obj: item.cpp
-	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(HF_CXXFLAGS) $(CXXFLAGS) -MT HF-item.obj -MD -MP -MF $(DEPDIR)/HF-item.Tpo -c -o HF-item.obj `if test -f 'item.cpp'; then $(CYGPATH_W) 'item.cpp'; else $(CYGPATH_W) '$(srcdir)/item.cpp'; fi`
-	mv -f $(DEPDIR)/HF-item.Tpo $(DEPDIR)/HF-item.Po
-#	source='item.cpp' object='HF-item.obj' libtool=no \
-#	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
-#	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(HF_CXXFLAGS) $(CXXFLAGS) -c -o HF-item.obj `if test -f 'item.cpp'; then $(CYGPATH_W) 'item.cpp'; else $(CYGPATH_W) '$(srcdir)/item.cpp'; fi`
+#	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(HF_CXXFLAGS) $(CXXFLAGS) -MT HF-item.obj -MD -MP -MF $(DEPDIR)/HF-item.Tpo -c -o HF-item.obj `if test -f 'item.cpp'; then $(CYGPATH_W) 'item.cpp'; else $(CYGPATH_W) '$(srcdir)/item.cpp'; fi`
+#	mv -f $(DEPDIR)/HF-item.Tpo $(DEPDIR)/HF-item.Po
+	source='item.cpp' object='HF-item.obj' libtool=no \
+	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
+	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(HF_CXXFLAGS) $(CXXFLAGS) -c -o HF-item.obj `if test -f 'item.cpp'; then $(CYGPATH_W) 'item.cpp'; else $(CYGPATH_W) '$(srcdir)/item.cpp'; fi`
 
 HF-items.o: items.cpp
-	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(HF_CXXFLAGS) $(CXXFLAGS) -MT HF-items.o -MD -MP -MF $(DEPDIR)/HF-items.Tpo -c -o HF-items.o `test -f 'items.cpp' || echo '$(srcdir)/'`items.cpp
-	mv -f $(DEPDIR)/HF-items.Tpo $(DEPDIR)/HF-items.Po
-#	source='items.cpp' object='HF-items.o' libtool=no \
-#	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
-#	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(HF_CXXFLAGS) $(CXXFLAGS) -c -o HF-items.o `test -f 'items.cpp' || echo '$(srcdir)/'`items.cpp
+#	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(HF_CXXFLAGS) $(CXXFLAGS) -MT HF-items.o -MD -MP -MF $(DEPDIR)/HF-items.Tpo -c -o HF-items.o `test -f 'items.cpp' || echo '$(srcdir)/'`items.cpp
+#	mv -f $(DEPDIR)/HF-items.Tpo $(DEPDIR)/HF-items.Po
+	source='items.cpp' object='HF-items.o' libtool=no \
+	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
+	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(HF_CXXFLAGS) $(CXXFLAGS) -c -o HF-items.o `test -f 'items.cpp' || echo '$(srcdir)/'`items.cpp
 
 HF-items.obj: items.cpp
-	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(HF_CXXFLAGS) $(CXXFLAGS) -MT HF-items.obj -MD -MP -MF $(DEPDIR)/HF-items.Tpo -c -o HF-items.obj `if test -f 'items.cpp'; then $(CYGPATH_W) 'items.cpp'; else $(CYGPATH_W) '$(srcdir)/items.cpp'; fi`
-	mv -f $(DEPDIR)/HF-items.Tpo $(DEPDIR)/HF-items.Po
-#	source='items.cpp' object='HF-items.obj' libtool=no \
-#	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
-#	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(HF_CXXFLAGS) $(CXXFLAGS) -c -o HF-items.obj `if test -f 'items.cpp'; then $(CYGPATH_W) 'items.cpp'; else $(CYGPATH_W) '$(srcdir)/items.cpp'; fi`
+#	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(HF_CXXFLAGS) $(CXXFLAGS) -MT HF-items.obj -MD -MP -MF $(DEPDIR)/HF-items.Tpo -c -o HF-items.obj `if test -f 'items.cpp'; then $(CYGPATH_W) 'items.cpp'; else $(CYGPATH_W) '$(srcdir)/items.cpp'; fi`
+#	mv -f $(DEPDIR)/HF-items.Tpo $(DEPDIR)/HF-items.Po
+	source='items.cpp' object='HF-items.obj' libtool=no \
+	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
+	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(HF_CXXFLAGS) $(CXXFLAGS) -c -o HF-items.obj `if test -f 'items.cpp'; then $(CYGPATH_W) 'items.cpp'; else $(CYGPATH_W) '$(srcdir)/items.cpp'; fi`
 
 HF-font.o: font.cpp
-	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(HF_CXXFLAGS) $(CXXFLAGS) -MT HF-font.o -MD -MP -MF $(DEPDIR)/HF-font.Tpo -c -o HF-font.o `test -f 'font.cpp' || echo '$(srcdir)/'`font.cpp
-	mv -f $(DEPDIR)/HF-font.Tpo $(DEPDIR)/HF-font.Po
-#	source='font.cpp' object='HF-font.o' libtool=no \
-#	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
-#	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(HF_CXXFLAGS) $(CXXFLAGS) -c -o HF-font.o `test -f 'font.cpp' || echo '$(srcdir)/'`font.cpp
+#	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(HF_CXXFLAGS) $(CXXFLAGS) -MT HF-font.o -MD -MP -MF $(DEPDIR)/HF-font.Tpo -c -o HF-font.o `test -f 'font.cpp' || echo '$(srcdir)/'`font.cpp
+#	mv -f $(DEPDIR)/HF-font.Tpo $(DEPDIR)/HF-font.Po
+	source='font.cpp' object='HF-font.o' libtool=no \
+	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
+	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(HF_CXXFLAGS) $(CXXFLAGS) -c -o HF-font.o `test -f 'font.cpp' || echo '$(srcdir)/'`font.cpp
 
 HF-font.obj: font.cpp
-	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(HF_CXXFLAGS) $(CXXFLAGS) -MT HF-font.obj -MD -MP -MF $(DEPDIR)/HF-font.Tpo -c -o HF-font.obj `if test -f 'font.cpp'; then $(CYGPATH_W) 'font.cpp'; else $(CYGPATH_W) '$(srcdir)/font.cpp'; fi`
-	mv -f $(DEPDIR)/HF-font.Tpo $(DEPDIR)/HF-font.Po
-#	source='font.cpp' object='HF-font.obj' libtool=no \
-#	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
-#	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(HF_CXXFLAGS) $(CXXFLAGS) -c -o HF-font.obj `if test -f 'font.cpp'; then $(CYGPATH_W) 'font.cpp'; else $(CYGPATH_W) '$(srcdir)/font.cpp'; fi`
+#	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(HF_CXXFLAGS) $(CXXFLAGS) -MT HF-font.obj -MD -MP -MF $(DEPDIR)/HF-font.Tpo -c -o HF-font.obj `if test -f 'font.cpp'; then $(CYGPATH_W) 'font.cpp'; else $(CYGPATH_W) '$(srcdir)/font.cpp'; fi`
+#	mv -f $(DEPDIR)/HF-font.Tpo $(DEPDIR)/HF-font.Po
+	source='font.cpp' object='HF-font.obj' libtool=no \
+	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
+	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(HF_CXXFLAGS) $(CXXFLAGS) -c -o HF-font.obj `if test -f 'font.cpp'; then $(CYGPATH_W) 'font.cpp'; else $(CYGPATH_W) '$(srcdir)/font.cpp'; fi`
+
+HF-Score.o: Score.cpp
+#	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(HF_CXXFLAGS) $(CXXFLAGS) -MT HF-Score.o -MD -MP -MF $(DEPDIR)/HF-Score.Tpo -c -o HF-Score.o `test -f 'Score.cpp' || echo '$(srcdir)/'`Score.cpp
+#	mv -f $(DEPDIR)/HF-Score.Tpo $(DEPDIR)/HF-Score.Po
+	source='Score.cpp' object='HF-Score.o' libtool=no \
+	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
+	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(HF_CXXFLAGS) $(CXXFLAGS) -c -o HF-Score.o `test -f 'Score.cpp' || echo '$(srcdir)/'`Score.cpp
+
+HF-Score.obj: Score.cpp
+#	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(HF_CXXFLAGS) $(CXXFLAGS) -MT HF-Score.obj -MD -MP -MF $(DEPDIR)/HF-Score.Tpo -c -o HF-Score.obj `if test -f 'Score.cpp'; then $(CYGPATH_W) 'Score.cpp'; else $(CYGPATH_W) '$(srcdir)/Score.cpp'; fi`
+#	mv -f $(DEPDIR)/HF-Score.Tpo $(DEPDIR)/HF-Score.Po
+	source='Score.cpp' object='HF-Score.obj' libtool=no \
+	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
+	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(HF_CXXFLAGS) $(CXXFLAGS) -c -o HF-Score.obj `if test -f 'Score.cpp'; then $(CYGPATH_W) 'Score.cpp'; else $(CYGPATH_W) '$(srcdir)/Score.cpp'; fi`
 
 HF-game.o: game.cpp
-	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(HF_CXXFLAGS) $(CXXFLAGS) -MT HF-game.o -MD -MP -MF $(DEPDIR)/HF-game.Tpo -c -o HF-game.o `test -f 'game.cpp' || echo '$(srcdir)/'`game.cpp
-	mv -f $(DEPDIR)/HF-game.Tpo $(DEPDIR)/HF-game.Po
-#	source='game.cpp' object='HF-game.o' libtool=no \
-#	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
-#	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(HF_CXXFLAGS) $(CXXFLAGS) -c -o HF-game.o `test -f 'game.cpp' || echo '$(srcdir)/'`game.cpp
+#	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(HF_CXXFLAGS) $(CXXFLAGS) -MT HF-game.o -MD -MP -MF $(DEPDIR)/HF-game.Tpo -c -o HF-game.o `test -f 'game.cpp' || echo '$(srcdir)/'`game.cpp
+#	mv -f $(DEPDIR)/HF-game.Tpo $(DEPDIR)/HF-game.Po
+	source='game.cpp' object='HF-game.o' libtool=no \
+	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
+	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(HF_CXXFLAGS) $(CXXFLAGS) -c -o HF-game.o `test -f 'game.cpp' || echo '$(srcdir)/'`game.cpp
 
 HF-game.obj: game.cpp
-	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(HF_CXXFLAGS) $(CXXFLAGS) -MT HF-game.obj -MD -MP -MF $(DEPDIR)/HF-game.Tpo -c -o HF-game.obj `if test -f 'game.cpp'; then $(CYGPATH_W) 'game.cpp'; else $(CYGPATH_W) '$(srcdir)/game.cpp'; fi`
-	mv -f $(DEPDIR)/HF-game.Tpo $(DEPDIR)/HF-game.Po
-#	source='game.cpp' object='HF-game.obj' libtool=no \
-#	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
-#	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(HF_CXXFLAGS) $(CXXFLAGS) -c -o HF-game.obj `if test -f 'game.cpp'; then $(CYGPATH_W) 'game.cpp'; else $(CYGPATH_W) '$(srcdir)/game.cpp'; fi`
+#	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(HF_CXXFLAGS) $(CXXFLAGS) -MT HF-game.obj -MD -MP -MF $(DEPDIR)/HF-game.Tpo -c -o HF-game.obj `if test -f 'game.cpp'; then $(CYGPATH_W) 'game.cpp'; else $(CYGPATH_W) '$(srcdir)/game.cpp'; fi`
+#	mv -f $(DEPDIR)/HF-game.Tpo $(DEPDIR)/HF-game.Po
+	source='game.cpp' object='HF-game.obj' libtool=no \
+	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
+	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(HF_CXXFLAGS) $(CXXFLAGS) -c -o HF-game.obj `if test -f 'game.cpp'; then $(CYGPATH_W) 'game.cpp'; else $(CYGPATH_W) '$(srcdir)/game.cpp'; fi`
 
 HF-geometry.o: geometry.cpp
-	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(HF_CXXFLAGS) $(CXXFLAGS) -MT HF-geometry.o -MD -MP -MF $(DEPDIR)/HF-geometry.Tpo -c -o HF-geometry.o `test -f 'geometry.cpp' || echo '$(srcdir)/'`geometry.cpp
-	mv -f $(DEPDIR)/HF-geometry.Tpo $(DEPDIR)/HF-geometry.Po
-#	source='geometry.cpp' object='HF-geometry.o' libtool=no \
-#	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
-#	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(HF_CXXFLAGS) $(CXXFLAGS) -c -o HF-geometry.o `test -f 'geometry.cpp' || echo '$(srcdir)/'`geometry.cpp
+#	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(HF_CXXFLAGS) $(CXXFLAGS) -MT HF-geometry.o -MD -MP -MF $(DEPDIR)/HF-geometry.Tpo -c -o HF-geometry.o `test -f 'geometry.cpp' || echo '$(srcdir)/'`geometry.cpp
+#	mv -f $(DEPDIR)/HF-geometry.Tpo $(DEPDIR)/HF-geometry.Po
+	source='geometry.cpp' object='HF-geometry.o' libtool=no \
+	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
+	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(HF_CXXFLAGS) $(CXXFLAGS) -c -o HF-geometry.o `test -f 'geometry.cpp' || echo '$(srcdir)/'`geometry.cpp
 
 HF-geometry.obj: geometry.cpp
-	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(HF_CXXFLAGS) $(CXXFLAGS) -MT HF-geometry.obj -MD -MP -MF $(DEPDIR)/HF-geometry.Tpo -c -o HF-geometry.obj `if test -f 'geometry.cpp'; then $(CYGPATH_W) 'geometry.cpp'; else $(CYGPATH_W) '$(srcdir)/geometry.cpp'; fi`
-	mv -f $(DEPDIR)/HF-geometry.Tpo $(DEPDIR)/HF-geometry.Po
-#	source='geometry.cpp' object='HF-geometry.obj' libtool=no \
-#	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
-#	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(HF_CXXFLAGS) $(CXXFLAGS) -c -o HF-geometry.obj `if test -f 'geometry.cpp'; then $(CYGPATH_W) 'geometry.cpp'; else $(CYGPATH_W) '$(srcdir)/geometry.cpp'; fi`
+#	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(HF_CXXFLAGS) $(CXXFLAGS) -MT HF-geometry.obj -MD -MP -MF $(DEPDIR)/HF-geometry.Tpo -c -o HF-geometry.obj `if test -f 'geometry.cpp'; then $(CYGPATH_W) 'geometry.cpp'; else $(CYGPATH_W) '$(srcdir)/geometry.cpp'; fi`
+#	mv -f $(DEPDIR)/HF-geometry.Tpo $(DEPDIR)/HF-geometry.Po
+	source='geometry.cpp' object='HF-geometry.obj' libtool=no \
+	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
+	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(HF_CXXFLAGS) $(CXXFLAGS) -c -o HF-geometry.obj `if test -f 'geometry.cpp'; then $(CYGPATH_W) 'geometry.cpp'; else $(CYGPATH_W) '$(srcdir)/geometry.cpp'; fi`
 
 HF-plane.o: plane.cpp
-	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(HF_CXXFLAGS) $(CXXFLAGS) -MT HF-plane.o -MD -MP -MF $(DEPDIR)/HF-plane.Tpo -c -o HF-plane.o `test -f 'plane.cpp' || echo '$(srcdir)/'`plane.cpp
-	mv -f $(DEPDIR)/HF-plane.Tpo $(DEPDIR)/HF-plane.Po
-#	source='plane.cpp' object='HF-plane.o' libtool=no \
-#	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
-#	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(HF_CXXFLAGS) $(CXXFLAGS) -c -o HF-plane.o `test -f 'plane.cpp' || echo '$(srcdir)/'`plane.cpp
+#	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(HF_CXXFLAGS) $(CXXFLAGS) -MT HF-plane.o -MD -MP -MF $(DEPDIR)/HF-plane.Tpo -c -o HF-plane.o `test -f 'plane.cpp' || echo '$(srcdir)/'`plane.cpp
+#	mv -f $(DEPDIR)/HF-plane.Tpo $(DEPDIR)/HF-plane.Po
+	source='plane.cpp' object='HF-plane.o' libtool=no \
+	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
+	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(HF_CXXFLAGS) $(CXXFLAGS) -c -o HF-plane.o `test -f 'plane.cpp' || echo '$(srcdir)/'`plane.cpp
 
 HF-plane.obj: plane.cpp
-	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(HF_CXXFLAGS) $(CXXFLAGS) -MT HF-plane.obj -MD -MP -MF $(DEPDIR)/HF-plane.Tpo -c -o HF-plane.obj `if test -f 'plane.cpp'; then $(CYGPATH_W) 'plane.cpp'; else $(CYGPATH_W) '$(srcdir)/plane.cpp'; fi`
-	mv -f $(DEPDIR)/HF-plane.Tpo $(DEPDIR)/HF-plane.Po
-#	source='plane.cpp' object='HF-plane.obj' libtool=no \
-#	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
-#	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(HF_CXXFLAGS) $(CXXFLAGS) -c -o HF-plane.obj `if test -f 'plane.cpp'; then $(CYGPATH_W) 'plane.cpp'; else $(CYGPATH_W) '$(srcdir)/plane.cpp'; fi`
+#	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(HF_CXXFLAGS) $(CXXFLAGS) -MT HF-plane.obj -MD -MP -MF $(DEPDIR)/HF-plane.Tpo -c -o HF-plane.obj `if test -f 'plane.cpp'; then $(CYGPATH_W) 'plane.cpp'; else $(CYGPATH_W) '$(srcdir)/plane.cpp'; fi`
+#	mv -f $(DEPDIR)/HF-plane.Tpo $(DEPDIR)/HF-plane.Po
+	source='plane.cpp' object='HF-plane.obj' libtool=no \
+	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
+	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(HF_CXXFLAGS) $(CXXFLAGS) -c -o HF-plane.obj `if test -f 'plane.cpp'; then $(CYGPATH_W) 'plane.cpp'; else $(CYGPATH_W) '$(srcdir)/plane.cpp'; fi`
 
 HF-PrefsManager.o: PrefsManager.cpp
-	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(HF_CXXFLAGS) $(CXXFLAGS) -MT HF-PrefsManager.o -MD -MP -MF $(DEPDIR)/HF-PrefsManager.Tpo -c -o HF-PrefsManager.o `test -f 'PrefsManager.cpp' || echo '$(srcdir)/'`PrefsManager.cpp
-	mv -f $(DEPDIR)/HF-PrefsManager.Tpo $(DEPDIR)/HF-PrefsManager.Po
-#	source='PrefsManager.cpp' object='HF-PrefsManager.o' libtool=no \
-#	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
-#	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(HF_CXXFLAGS) $(CXXFLAGS) -c -o HF-PrefsManager.o `test -f 'PrefsManager.cpp' || echo '$(srcdir)/'`PrefsManager.cpp
+#	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(HF_CXXFLAGS) $(CXXFLAGS) -MT HF-PrefsManager.o -MD -MP -MF $(DEPDIR)/HF-PrefsManager.Tpo -c -o HF-PrefsManager.o `test -f 'PrefsManager.cpp' || echo '$(srcdir)/'`PrefsManager.cpp
+#	mv -f $(DEPDIR)/HF-PrefsManager.Tpo $(DEPDIR)/HF-PrefsManager.Po
+	source='PrefsManager.cpp' object='HF-PrefsManager.o' libtool=no \
+	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
+	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(HF_CXXFLAGS) $(CXXFLAGS) -c -o HF-PrefsManager.o `test -f 'PrefsManager.cpp' || echo '$(srcdir)/'`PrefsManager.cpp
 
 HF-PrefsManager.obj: PrefsManager.cpp
-	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(HF_CXXFLAGS) $(CXXFLAGS) -MT HF-PrefsManager.obj -MD -MP -MF $(DEPDIR)/HF-PrefsManager.Tpo -c -o HF-PrefsManager.obj `if test -f 'PrefsManager.cpp'; then $(CYGPATH_W) 'PrefsManager.cpp'; else $(CYGPATH_W) '$(srcdir)/PrefsManager.cpp'; fi`
-	mv -f $(DEPDIR)/HF-PrefsManager.Tpo $(DEPDIR)/HF-PrefsManager.Po
-#	source='PrefsManager.cpp' object='HF-PrefsManager.obj' libtool=no \
-#	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
-#	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(HF_CXXFLAGS) $(CXXFLAGS) -c -o HF-PrefsManager.obj `if test -f 'PrefsManager.cpp'; then $(CYGPATH_W) 'PrefsManager.cpp'; else $(CYGPATH_W) '$(srcdir)/PrefsManager.cpp'; fi`
+#	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(HF_CXXFLAGS) $(CXXFLAGS) -MT HF-PrefsManager.obj -MD -MP -MF $(DEPDIR)/HF-PrefsManager.Tpo -c -o HF-PrefsManager.obj `if test -f 'PrefsManager.cpp'; then $(CYGPATH_W) 'PrefsManager.cpp'; else $(CYGPATH_W) '$(srcdir)/PrefsManager.cpp'; fi`
+#	mv -f $(DEPDIR)/HF-PrefsManager.Tpo $(DEPDIR)/HF-PrefsManager.Po
+	source='PrefsManager.cpp' object='HF-PrefsManager.obj' libtool=no \
+	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
+	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(HF_CXXFLAGS) $(CXXFLAGS) -c -o HF-PrefsManager.obj `if test -f 'PrefsManager.cpp'; then $(CYGPATH_W) 'PrefsManager.cpp'; else $(CYGPATH_W) '$(srcdir)/PrefsManager.cpp'; fi`
 
 HF-mainOS.o: mainOS.cpp
-	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(HF_CXXFLAGS) $(CXXFLAGS) -MT HF-mainOS.o -MD -MP -MF $(DEPDIR)/HF-mainOS.Tpo -c -o HF-mainOS.o `test -f 'mainOS.cpp' || echo '$(srcdir)/'`mainOS.cpp
-	mv -f $(DEPDIR)/HF-mainOS.Tpo $(DEPDIR)/HF-mainOS.Po
-#	source='mainOS.cpp' object='HF-mainOS.o' libtool=no \
-#	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
-#	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(HF_CXXFLAGS) $(CXXFLAGS) -c -o HF-mainOS.o `test -f 'mainOS.cpp' || echo '$(srcdir)/'`mainOS.cpp
+#	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(HF_CXXFLAGS) $(CXXFLAGS) -MT HF-mainOS.o -MD -MP -MF $(DEPDIR)/HF-mainOS.Tpo -c -o HF-mainOS.o `test -f 'mainOS.cpp' || echo '$(srcdir)/'`mainOS.cpp
+#	mv -f $(DEPDIR)/HF-mainOS.Tpo $(DEPDIR)/HF-mainOS.Po
+	source='mainOS.cpp' object='HF-mainOS.o' libtool=no \
+	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
+	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(HF_CXXFLAGS) $(CXXFLAGS) -c -o HF-mainOS.o `test -f 'mainOS.cpp' || echo '$(srcdir)/'`mainOS.cpp
 
 HF-mainOS.obj: mainOS.cpp
-	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(HF_CXXFLAGS) $(CXXFLAGS) -MT HF-mainOS.obj -MD -MP -MF $(DEPDIR)/HF-mainOS.Tpo -c -o HF-mainOS.obj `if test -f 'mainOS.cpp'; then $(CYGPATH_W) 'mainOS.cpp'; else $(CYGPATH_W) '$(srcdir)/mainOS.cpp'; fi`
-	mv -f $(DEPDIR)/HF-mainOS.Tpo $(DEPDIR)/HF-mainOS.Po
-#	source='mainOS.cpp' object='HF-mainOS.obj' libtool=no \
-#	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
-#	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(HF_CXXFLAGS) $(CXXFLAGS) -c -o HF-mainOS.obj `if test -f 'mainOS.cpp'; then $(CYGPATH_W) 'mainOS.cpp'; else $(CYGPATH_W) '$(srcdir)/mainOS.cpp'; fi`
+#	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(HF_CXXFLAGS) $(CXXFLAGS) -MT HF-mainOS.obj -MD -MP -MF $(DEPDIR)/HF-mainOS.Tpo -c -o HF-mainOS.obj `if test -f 'mainOS.cpp'; then $(CYGPATH_W) 'mainOS.cpp'; else $(CYGPATH_W) '$(srcdir)/mainOS.cpp'; fi`
+#	mv -f $(DEPDIR)/HF-mainOS.Tpo $(DEPDIR)/HF-mainOS.Po
+	source='mainOS.cpp' object='HF-mainOS.obj' libtool=no \
+	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
+	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(HF_CXXFLAGS) $(CXXFLAGS) -c -o HF-mainOS.obj `if test -f 'mainOS.cpp'; then $(CYGPATH_W) 'mainOS.cpp'; else $(CYGPATH_W) '$(srcdir)/mainOS.cpp'; fi`
 
-HF-surfaceDB.o: surfaceDB.cpp
-	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(HF_CXXFLAGS) $(CXXFLAGS) -MT HF-surfaceDB.o -MD -MP -MF $(DEPDIR)/HF-surfaceDB.Tpo -c -o HF-surfaceDB.o `test -f 'surfaceDB.cpp' || echo '$(srcdir)/'`surfaceDB.cpp
-	mv -f $(DEPDIR)/HF-surfaceDB.Tpo $(DEPDIR)/HF-surfaceDB.Po
-#	source='surfaceDB.cpp' object='HF-surfaceDB.o' libtool=no \
-#	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
-#	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(HF_CXXFLAGS) $(CXXFLAGS) -c -o HF-surfaceDB.o `test -f 'surfaceDB.cpp' || echo '$(srcdir)/'`surfaceDB.cpp
+HF-TextureManager.o: TextureManager.cpp
+#	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(HF_CXXFLAGS) $(CXXFLAGS) -MT HF-TextureManager.o -MD -MP -MF $(DEPDIR)/HF-TextureManager.Tpo -c -o HF-TextureManager.o `test -f 'TextureManager.cpp' || echo '$(srcdir)/'`TextureManager.cpp
+#	mv -f $(DEPDIR)/HF-TextureManager.Tpo $(DEPDIR)/HF-TextureManager.Po
+	source='TextureManager.cpp' object='HF-TextureManager.o' libtool=no \
+	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
+	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(HF_CXXFLAGS) $(CXXFLAGS) -c -o HF-TextureManager.o `test -f 'TextureManager.cpp' || echo '$(srcdir)/'`TextureManager.cpp
 
-HF-surfaceDB.obj: surfaceDB.cpp
-	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(HF_CXXFLAGS) $(CXXFLAGS) -MT HF-surfaceDB.obj -MD -MP -MF $(DEPDIR)/HF-surfaceDB.Tpo -c -o HF-surfaceDB.obj `if test -f 'surfaceDB.cpp'; then $(CYGPATH_W) 'surfaceDB.cpp'; else $(CYGPATH_W) '$(srcdir)/surfaceDB.cpp'; fi`
-	mv -f $(DEPDIR)/HF-surfaceDB.Tpo $(DEPDIR)/HF-surfaceDB.Po
-#	source='surfaceDB.cpp' object='HF-surfaceDB.obj' libtool=no \
-#	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
-#	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(HF_CXXFLAGS) $(CXXFLAGS) -c -o HF-surfaceDB.obj `if test -f 'surfaceDB.cpp'; then $(CYGPATH_W) 'surfaceDB.cpp'; else $(CYGPATH_W) '$(srcdir)/surfaceDB.cpp'; fi`
+HF-TextureManager.obj: TextureManager.cpp
+#	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(HF_CXXFLAGS) $(CXXFLAGS) -MT HF-TextureManager.obj -MD -MP -MF $(DEPDIR)/HF-TextureManager.Tpo -c -o HF-TextureManager.obj `if test -f 'TextureManager.cpp'; then $(CYGPATH_W) 'TextureManager.cpp'; else $(CYGPATH_W) '$(srcdir)/TextureManager.cpp'; fi`
+#	mv -f $(DEPDIR)/HF-TextureManager.Tpo $(DEPDIR)/HF-TextureManager.Po
+	source='TextureManager.cpp' object='HF-TextureManager.obj' libtool=no \
+	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
+	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(HF_CXXFLAGS) $(CXXFLAGS) -c -o HF-TextureManager.obj `if test -f 'TextureManager.cpp'; then $(CYGPATH_W) 'TextureManager.cpp'; else $(CYGPATH_W) '$(srcdir)/TextureManager.cpp'; fi`
 
 HF-video.o: video.cpp
-	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(HF_CXXFLAGS) $(CXXFLAGS) -MT HF-video.o -MD -MP -MF $(DEPDIR)/HF-video.Tpo -c -o HF-video.o `test -f 'video.cpp' || echo '$(srcdir)/'`video.cpp
-	mv -f $(DEPDIR)/HF-video.Tpo $(DEPDIR)/HF-video.Po
-#	source='video.cpp' object='HF-video.o' libtool=no \
-#	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
-#	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(HF_CXXFLAGS) $(CXXFLAGS) -c -o HF-video.o `test -f 'video.cpp' || echo '$(srcdir)/'`video.cpp
+#	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(HF_CXXFLAGS) $(CXXFLAGS) -MT HF-video.o -MD -MP -MF $(DEPDIR)/HF-video.Tpo -c -o HF-video.o `test -f 'video.cpp' || echo '$(srcdir)/'`video.cpp
+#	mv -f $(DEPDIR)/HF-video.Tpo $(DEPDIR)/HF-video.Po
+	source='video.cpp' object='HF-video.o' libtool=no \
+	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
+	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(HF_CXXFLAGS) $(CXXFLAGS) -c -o HF-video.o `test -f 'video.cpp' || echo '$(srcdir)/'`video.cpp
 
 HF-video.obj: video.cpp
-	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(HF_CXXFLAGS) $(CXXFLAGS) -MT HF-video.obj -MD -MP -MF $(DEPDIR)/HF-video.Tpo -c -o HF-video.obj `if test -f 'video.cpp'; then $(CYGPATH_W) 'video.cpp'; else $(CYGPATH_W) '$(srcdir)/video.cpp'; fi`
-	mv -f $(DEPDIR)/HF-video.Tpo $(DEPDIR)/HF-video.Po
-#	source='video.cpp' object='HF-video.obj' libtool=no \
-#	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
-#	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(HF_CXXFLAGS) $(CXXFLAGS) -c -o HF-video.obj `if test -f 'video.cpp'; then $(CYGPATH_W) 'video.cpp'; else $(CYGPATH_W) '$(srcdir)/video.cpp'; fi`
+#	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(HF_CXXFLAGS) $(CXXFLAGS) -MT HF-video.obj -MD -MP -MF $(DEPDIR)/HF-video.Tpo -c -o HF-video.obj `if test -f 'video.cpp'; then $(CYGPATH_W) 'video.cpp'; else $(CYGPATH_W) '$(srcdir)/video.cpp'; fi`
+#	mv -f $(DEPDIR)/HF-video.Tpo $(DEPDIR)/HF-video.Po
+	source='video.cpp' object='HF-video.obj' libtool=no \
+	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
+	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(HF_CXXFLAGS) $(CXXFLAGS) -c -o HF-video.obj `if test -f 'video.cpp'; then $(CYGPATH_W) 'video.cpp'; else $(CYGPATH_W) '$(srcdir)/video.cpp'; fi`
+
+HF-ofxOscBundle.o: ofxOsc/src/ofxOscBundle.cpp
+#	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(HF_CXXFLAGS) $(CXXFLAGS) -MT HF-ofxOscBundle.o -MD -MP -MF $(DEPDIR)/HF-ofxOscBundle.Tpo -c -o HF-ofxOscBundle.o `test -f 'ofxOsc/src/ofxOscBundle.cpp' || echo '$(srcdir)/'`ofxOsc/src/ofxOscBundle.cpp
+#	mv -f $(DEPDIR)/HF-ofxOscBundle.Tpo $(DEPDIR)/HF-ofxOscBundle.Po
+	source='ofxOsc/src/ofxOscBundle.cpp' object='HF-ofxOscBundle.o' libtool=no \
+	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
+	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(HF_CXXFLAGS) $(CXXFLAGS) -c -o HF-ofxOscBundle.o `test -f 'ofxOsc/src/ofxOscBundle.cpp' || echo '$(srcdir)/'`ofxOsc/src/ofxOscBundle.cpp
+
+HF-ofxOscBundle.obj: ofxOsc/src/ofxOscBundle.cpp
+#	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(HF_CXXFLAGS) $(CXXFLAGS) -MT HF-ofxOscBundle.obj -MD -MP -MF $(DEPDIR)/HF-ofxOscBundle.Tpo -c -o HF-ofxOscBundle.obj `if test -f 'ofxOsc/src/ofxOscBundle.cpp'; then $(CYGPATH_W) 'ofxOsc/src/ofxOscBundle.cpp'; else $(CYGPATH_W) '$(srcdir)/ofxOsc/src/ofxOscBundle.cpp'; fi`
+#	mv -f $(DEPDIR)/HF-ofxOscBundle.Tpo $(DEPDIR)/HF-ofxOscBundle.Po
+	source='ofxOsc/src/ofxOscBundle.cpp' object='HF-ofxOscBundle.obj' libtool=no \
+	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
+	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(HF_CXXFLAGS) $(CXXFLAGS) -c -o HF-ofxOscBundle.obj `if test -f 'ofxOsc/src/ofxOscBundle.cpp'; then $(CYGPATH_W) 'ofxOsc/src/ofxOscBundle.cpp'; else $(CYGPATH_W) '$(srcdir)/ofxOsc/src/ofxOscBundle.cpp'; fi`
+
+HF-ofxOscMessage.o: ofxOsc/src/ofxOscMessage.cpp
+#	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(HF_CXXFLAGS) $(CXXFLAGS) -MT HF-ofxOscMessage.o -MD -MP -MF $(DEPDIR)/HF-ofxOscMessage.Tpo -c -o HF-ofxOscMessage.o `test -f 'ofxOsc/src/ofxOscMessage.cpp' || echo '$(srcdir)/'`ofxOsc/src/ofxOscMessage.cpp
+#	mv -f $(DEPDIR)/HF-ofxOscMessage.Tpo $(DEPDIR)/HF-ofxOscMessage.Po
+	source='ofxOsc/src/ofxOscMessage.cpp' object='HF-ofxOscMessage.o' libtool=no \
+	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
+	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(HF_CXXFLAGS) $(CXXFLAGS) -c -o HF-ofxOscMessage.o `test -f 'ofxOsc/src/ofxOscMessage.cpp' || echo '$(srcdir)/'`ofxOsc/src/ofxOscMessage.cpp
+
+HF-ofxOscMessage.obj: ofxOsc/src/ofxOscMessage.cpp
+#	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(HF_CXXFLAGS) $(CXXFLAGS) -MT HF-ofxOscMessage.obj -MD -MP -MF $(DEPDIR)/HF-ofxOscMessage.Tpo -c -o HF-ofxOscMessage.obj `if test -f 'ofxOsc/src/ofxOscMessage.cpp'; then $(CYGPATH_W) 'ofxOsc/src/ofxOscMessage.cpp'; else $(CYGPATH_W) '$(srcdir)/ofxOsc/src/ofxOscMessage.cpp'; fi`
+#	mv -f $(DEPDIR)/HF-ofxOscMessage.Tpo $(DEPDIR)/HF-ofxOscMessage.Po
+	source='ofxOsc/src/ofxOscMessage.cpp' object='HF-ofxOscMessage.obj' libtool=no \
+	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
+	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(HF_CXXFLAGS) $(CXXFLAGS) -c -o HF-ofxOscMessage.obj `if test -f 'ofxOsc/src/ofxOscMessage.cpp'; then $(CYGPATH_W) 'ofxOsc/src/ofxOscMessage.cpp'; else $(CYGPATH_W) '$(srcdir)/ofxOsc/src/ofxOscMessage.cpp'; fi`
+
+HF-ofxOscReceiver.o: ofxOsc/src/ofxOscReceiver.cpp
+#	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(HF_CXXFLAGS) $(CXXFLAGS) -MT HF-ofxOscReceiver.o -MD -MP -MF $(DEPDIR)/HF-ofxOscReceiver.Tpo -c -o HF-ofxOscReceiver.o `test -f 'ofxOsc/src/ofxOscReceiver.cpp' || echo '$(srcdir)/'`ofxOsc/src/ofxOscReceiver.cpp
+#	mv -f $(DEPDIR)/HF-ofxOscReceiver.Tpo $(DEPDIR)/HF-ofxOscReceiver.Po
+	source='ofxOsc/src/ofxOscReceiver.cpp' object='HF-ofxOscReceiver.o' libtool=no \
+	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
+	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(HF_CXXFLAGS) $(CXXFLAGS) -c -o HF-ofxOscReceiver.o `test -f 'ofxOsc/src/ofxOscReceiver.cpp' || echo '$(srcdir)/'`ofxOsc/src/ofxOscReceiver.cpp
+
+HF-ofxOscReceiver.obj: ofxOsc/src/ofxOscReceiver.cpp
+#	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(HF_CXXFLAGS) $(CXXFLAGS) -MT HF-ofxOscReceiver.obj -MD -MP -MF $(DEPDIR)/HF-ofxOscReceiver.Tpo -c -o HF-ofxOscReceiver.obj `if test -f 'ofxOsc/src/ofxOscReceiver.cpp'; then $(CYGPATH_W) 'ofxOsc/src/ofxOscReceiver.cpp'; else $(CYGPATH_W) '$(srcdir)/ofxOsc/src/ofxOscReceiver.cpp'; fi`
+#	mv -f $(DEPDIR)/HF-ofxOscReceiver.Tpo $(DEPDIR)/HF-ofxOscReceiver.Po
+	source='ofxOsc/src/ofxOscReceiver.cpp' object='HF-ofxOscReceiver.obj' libtool=no \
+	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
+	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(HF_CXXFLAGS) $(CXXFLAGS) -c -o HF-ofxOscReceiver.obj `if test -f 'ofxOsc/src/ofxOscReceiver.cpp'; then $(CYGPATH_W) 'ofxOsc/src/ofxOscReceiver.cpp'; else $(CYGPATH_W) '$(srcdir)/ofxOsc/src/ofxOscReceiver.cpp'; fi`
+
+HF-ofxOscSender.o: ofxOsc/src/ofxOscSender.cpp
+#	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(HF_CXXFLAGS) $(CXXFLAGS) -MT HF-ofxOscSender.o -MD -MP -MF $(DEPDIR)/HF-ofxOscSender.Tpo -c -o HF-ofxOscSender.o `test -f 'ofxOsc/src/ofxOscSender.cpp' || echo '$(srcdir)/'`ofxOsc/src/ofxOscSender.cpp
+#	mv -f $(DEPDIR)/HF-ofxOscSender.Tpo $(DEPDIR)/HF-ofxOscSender.Po
+	source='ofxOsc/src/ofxOscSender.cpp' object='HF-ofxOscSender.o' libtool=no \
+	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
+	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(HF_CXXFLAGS) $(CXXFLAGS) -c -o HF-ofxOscSender.o `test -f 'ofxOsc/src/ofxOscSender.cpp' || echo '$(srcdir)/'`ofxOsc/src/ofxOscSender.cpp
+
+HF-ofxOscSender.obj: ofxOsc/src/ofxOscSender.cpp
+#	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(HF_CXXFLAGS) $(CXXFLAGS) -MT HF-ofxOscSender.obj -MD -MP -MF $(DEPDIR)/HF-ofxOscSender.Tpo -c -o HF-ofxOscSender.obj `if test -f 'ofxOsc/src/ofxOscSender.cpp'; then $(CYGPATH_W) 'ofxOsc/src/ofxOscSender.cpp'; else $(CYGPATH_W) '$(srcdir)/ofxOsc/src/ofxOscSender.cpp'; fi`
+#	mv -f $(DEPDIR)/HF-ofxOscSender.Tpo $(DEPDIR)/HF-ofxOscSender.Po
+	source='ofxOsc/src/ofxOscSender.cpp' object='HF-ofxOscSender.obj' libtool=no \
+	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
+	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(HF_CXXFLAGS) $(CXXFLAGS) -c -o HF-ofxOscSender.obj `if test -f 'ofxOsc/src/ofxOscSender.cpp'; then $(CYGPATH_W) 'ofxOsc/src/ofxOscSender.cpp'; else $(CYGPATH_W) '$(srcdir)/ofxOsc/src/ofxOscSender.cpp'; fi`
+
+HF-IpEndpointName.o: ofxOsc/libs/oscpack/include/ip/IpEndpointName.cpp
+#	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(HF_CXXFLAGS) $(CXXFLAGS) -MT HF-IpEndpointName.o -MD -MP -MF $(DEPDIR)/HF-IpEndpointName.Tpo -c -o HF-IpEndpointName.o `test -f 'ofxOsc/libs/oscpack/include/ip/IpEndpointName.cpp' || echo '$(srcdir)/'`ofxOsc/libs/oscpack/include/ip/IpEndpointName.cpp
+#	mv -f $(DEPDIR)/HF-IpEndpointName.Tpo $(DEPDIR)/HF-IpEndpointName.Po
+	source='ofxOsc/libs/oscpack/include/ip/IpEndpointName.cpp' object='HF-IpEndpointName.o' libtool=no \
+	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
+	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(HF_CXXFLAGS) $(CXXFLAGS) -c -o HF-IpEndpointName.o `test -f 'ofxOsc/libs/oscpack/include/ip/IpEndpointName.cpp' || echo '$(srcdir)/'`ofxOsc/libs/oscpack/include/ip/IpEndpointName.cpp
+
+HF-IpEndpointName.obj: ofxOsc/libs/oscpack/include/ip/IpEndpointName.cpp
+#	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(HF_CXXFLAGS) $(CXXFLAGS) -MT HF-IpEndpointName.obj -MD -MP -MF $(DEPDIR)/HF-IpEndpointName.Tpo -c -o HF-IpEndpointName.obj `if test -f 'ofxOsc/libs/oscpack/include/ip/IpEndpointName.cpp'; then $(CYGPATH_W) 'ofxOsc/libs/oscpack/include/ip/IpEndpointName.cpp'; else $(CYGPATH_W) '$(srcdir)/ofxOsc/libs/oscpack/include/ip/IpEndpointName.cpp'; fi`
+#	mv -f $(DEPDIR)/HF-IpEndpointName.Tpo $(DEPDIR)/HF-IpEndpointName.Po
+	source='ofxOsc/libs/oscpack/include/ip/IpEndpointName.cpp' object='HF-IpEndpointName.obj' libtool=no \
+	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
+	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(HF_CXXFLAGS) $(CXXFLAGS) -c -o HF-IpEndpointName.obj `if test -f 'ofxOsc/libs/oscpack/include/ip/IpEndpointName.cpp'; then $(CYGPATH_W) 'ofxOsc/libs/oscpack/include/ip/IpEndpointName.cpp'; else $(CYGPATH_W) '$(srcdir)/ofxOsc/libs/oscpack/include/ip/IpEndpointName.cpp'; fi`
+
+HF-NetworkingUtils.o: ofxOsc/libs/oscpack/include/ip/posix/NetworkingUtils.cpp
+#	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(HF_CXXFLAGS) $(CXXFLAGS) -MT HF-NetworkingUtils.o -MD -MP -MF $(DEPDIR)/HF-NetworkingUtils.Tpo -c -o HF-NetworkingUtils.o `test -f 'ofxOsc/libs/oscpack/include/ip/posix/NetworkingUtils.cpp' || echo '$(srcdir)/'`ofxOsc/libs/oscpack/include/ip/posix/NetworkingUtils.cpp
+#	mv -f $(DEPDIR)/HF-NetworkingUtils.Tpo $(DEPDIR)/HF-NetworkingUtils.Po
+	source='ofxOsc/libs/oscpack/include/ip/posix/NetworkingUtils.cpp' object='HF-NetworkingUtils.o' libtool=no \
+	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
+	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(HF_CXXFLAGS) $(CXXFLAGS) -c -o HF-NetworkingUtils.o `test -f 'ofxOsc/libs/oscpack/include/ip/posix/NetworkingUtils.cpp' || echo '$(srcdir)/'`ofxOsc/libs/oscpack/include/ip/posix/NetworkingUtils.cpp
+
+HF-NetworkingUtils.obj: ofxOsc/libs/oscpack/include/ip/posix/NetworkingUtils.cpp
+#	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(HF_CXXFLAGS) $(CXXFLAGS) -MT HF-NetworkingUtils.obj -MD -MP -MF $(DEPDIR)/HF-NetworkingUtils.Tpo -c -o HF-NetworkingUtils.obj `if test -f 'ofxOsc/libs/oscpack/include/ip/posix/NetworkingUtils.cpp'; then $(CYGPATH_W) 'ofxOsc/libs/oscpack/include/ip/posix/NetworkingUtils.cpp'; else $(CYGPATH_W) '$(srcdir)/ofxOsc/libs/oscpack/include/ip/posix/NetworkingUtils.cpp'; fi`
+#	mv -f $(DEPDIR)/HF-NetworkingUtils.Tpo $(DEPDIR)/HF-NetworkingUtils.Po
+	source='ofxOsc/libs/oscpack/include/ip/posix/NetworkingUtils.cpp' object='HF-NetworkingUtils.obj' libtool=no \
+	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
+	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(HF_CXXFLAGS) $(CXXFLAGS) -c -o HF-NetworkingUtils.obj `if test -f 'ofxOsc/libs/oscpack/include/ip/posix/NetworkingUtils.cpp'; then $(CYGPATH_W) 'ofxOsc/libs/oscpack/include/ip/posix/NetworkingUtils.cpp'; else $(CYGPATH_W) '$(srcdir)/ofxOsc/libs/oscpack/include/ip/posix/NetworkingUtils.cpp'; fi`
+
+HF-UdpSocket.o: ofxOsc/libs/oscpack/include/ip/posix/UdpSocket.cpp
+#	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(HF_CXXFLAGS) $(CXXFLAGS) -MT HF-UdpSocket.o -MD -MP -MF $(DEPDIR)/HF-UdpSocket.Tpo -c -o HF-UdpSocket.o `test -f 'ofxOsc/libs/oscpack/include/ip/posix/UdpSocket.cpp' || echo '$(srcdir)/'`ofxOsc/libs/oscpack/include/ip/posix/UdpSocket.cpp
+#	mv -f $(DEPDIR)/HF-UdpSocket.Tpo $(DEPDIR)/HF-UdpSocket.Po
+	source='ofxOsc/libs/oscpack/include/ip/posix/UdpSocket.cpp' object='HF-UdpSocket.o' libtool=no \
+	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
+	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(HF_CXXFLAGS) $(CXXFLAGS) -c -o HF-UdpSocket.o `test -f 'ofxOsc/libs/oscpack/include/ip/posix/UdpSocket.cpp' || echo '$(srcdir)/'`ofxOsc/libs/oscpack/include/ip/posix/UdpSocket.cpp
+
+HF-UdpSocket.obj: ofxOsc/libs/oscpack/include/ip/posix/UdpSocket.cpp
+#	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(HF_CXXFLAGS) $(CXXFLAGS) -MT HF-UdpSocket.obj -MD -MP -MF $(DEPDIR)/HF-UdpSocket.Tpo -c -o HF-UdpSocket.obj `if test -f 'ofxOsc/libs/oscpack/include/ip/posix/UdpSocket.cpp'; then $(CYGPATH_W) 'ofxOsc/libs/oscpack/include/ip/posix/UdpSocket.cpp'; else $(CYGPATH_W) '$(srcdir)/ofxOsc/libs/oscpack/include/ip/posix/UdpSocket.cpp'; fi`
+#	mv -f $(DEPDIR)/HF-UdpSocket.Tpo $(DEPDIR)/HF-UdpSocket.Po
+	source='ofxOsc/libs/oscpack/include/ip/posix/UdpSocket.cpp' object='HF-UdpSocket.obj' libtool=no \
+	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
+	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(HF_CXXFLAGS) $(CXXFLAGS) -c -o HF-UdpSocket.obj `if test -f 'ofxOsc/libs/oscpack/include/ip/posix/UdpSocket.cpp'; then $(CYGPATH_W) 'ofxOsc/libs/oscpack/include/ip/posix/UdpSocket.cpp'; else $(CYGPATH_W) '$(srcdir)/ofxOsc/libs/oscpack/include/ip/posix/UdpSocket.cpp'; fi`
+
+HF-OscOutboundPacketStream.o: ofxOsc/libs/oscpack/include/osc/OscOutboundPacketStream.cpp
+#	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(HF_CXXFLAGS) $(CXXFLAGS) -MT HF-OscOutboundPacketStream.o -MD -MP -MF $(DEPDIR)/HF-OscOutboundPacketStream.Tpo -c -o HF-OscOutboundPacketStream.o `test -f 'ofxOsc/libs/oscpack/include/osc/OscOutboundPacketStream.cpp' || echo '$(srcdir)/'`ofxOsc/libs/oscpack/include/osc/OscOutboundPacketStream.cpp
+#	mv -f $(DEPDIR)/HF-OscOutboundPacketStream.Tpo $(DEPDIR)/HF-OscOutboundPacketStream.Po
+	source='ofxOsc/libs/oscpack/include/osc/OscOutboundPacketStream.cpp' object='HF-OscOutboundPacketStream.o' libtool=no \
+	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
+	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(HF_CXXFLAGS) $(CXXFLAGS) -c -o HF-OscOutboundPacketStream.o `test -f 'ofxOsc/libs/oscpack/include/osc/OscOutboundPacketStream.cpp' || echo '$(srcdir)/'`ofxOsc/libs/oscpack/include/osc/OscOutboundPacketStream.cpp
+
+HF-OscOutboundPacketStream.obj: ofxOsc/libs/oscpack/include/osc/OscOutboundPacketStream.cpp
+#	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(HF_CXXFLAGS) $(CXXFLAGS) -MT HF-OscOutboundPacketStream.obj -MD -MP -MF $(DEPDIR)/HF-OscOutboundPacketStream.Tpo -c -o HF-OscOutboundPacketStream.obj `if test -f 'ofxOsc/libs/oscpack/include/osc/OscOutboundPacketStream.cpp'; then $(CYGPATH_W) 'ofxOsc/libs/oscpack/include/osc/OscOutboundPacketStream.cpp'; else $(CYGPATH_W) '$(srcdir)/ofxOsc/libs/oscpack/include/osc/OscOutboundPacketStream.cpp'; fi`
+#	mv -f $(DEPDIR)/HF-OscOutboundPacketStream.Tpo $(DEPDIR)/HF-OscOutboundPacketStream.Po
+	source='ofxOsc/libs/oscpack/include/osc/OscOutboundPacketStream.cpp' object='HF-OscOutboundPacketStream.obj' libtool=no \
+	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
+	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(HF_CXXFLAGS) $(CXXFLAGS) -c -o HF-OscOutboundPacketStream.obj `if test -f 'ofxOsc/libs/oscpack/include/osc/OscOutboundPacketStream.cpp'; then $(CYGPATH_W) 'ofxOsc/libs/oscpack/include/osc/OscOutboundPacketStream.cpp'; else $(CYGPATH_W) '$(srcdir)/ofxOsc/libs/oscpack/include/osc/OscOutboundPacketStream.cpp'; fi`
+
+HF-OscPrintReceivedElements.o: ofxOsc/libs/oscpack/include/osc/OscPrintReceivedElements.cpp
+#	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(HF_CXXFLAGS) $(CXXFLAGS) -MT HF-OscPrintReceivedElements.o -MD -MP -MF $(DEPDIR)/HF-OscPrintReceivedElements.Tpo -c -o HF-OscPrintReceivedElements.o `test -f 'ofxOsc/libs/oscpack/include/osc/OscPrintReceivedElements.cpp' || echo '$(srcdir)/'`ofxOsc/libs/oscpack/include/osc/OscPrintReceivedElements.cpp
+#	mv -f $(DEPDIR)/HF-OscPrintReceivedElements.Tpo $(DEPDIR)/HF-OscPrintReceivedElements.Po
+	source='ofxOsc/libs/oscpack/include/osc/OscPrintReceivedElements.cpp' object='HF-OscPrintReceivedElements.o' libtool=no \
+	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
+	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(HF_CXXFLAGS) $(CXXFLAGS) -c -o HF-OscPrintReceivedElements.o `test -f 'ofxOsc/libs/oscpack/include/osc/OscPrintReceivedElements.cpp' || echo '$(srcdir)/'`ofxOsc/libs/oscpack/include/osc/OscPrintReceivedElements.cpp
+
+HF-OscPrintReceivedElements.obj: ofxOsc/libs/oscpack/include/osc/OscPrintReceivedElements.cpp
+#	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(HF_CXXFLAGS) $(CXXFLAGS) -MT HF-OscPrintReceivedElements.obj -MD -MP -MF $(DEPDIR)/HF-OscPrintReceivedElements.Tpo -c -o HF-OscPrintReceivedElements.obj `if test -f 'ofxOsc/libs/oscpack/include/osc/OscPrintReceivedElements.cpp'; then $(CYGPATH_W) 'ofxOsc/libs/oscpack/include/osc/OscPrintReceivedElements.cpp'; else $(CYGPATH_W) '$(srcdir)/ofxOsc/libs/oscpack/include/osc/OscPrintReceivedElements.cpp'; fi`
+#	mv -f $(DEPDIR)/HF-OscPrintReceivedElements.Tpo $(DEPDIR)/HF-OscPrintReceivedElements.Po
+	source='ofxOsc/libs/oscpack/include/osc/OscPrintReceivedElements.cpp' object='HF-OscPrintReceivedElements.obj' libtool=no \
+	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
+	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(HF_CXXFLAGS) $(CXXFLAGS) -c -o HF-OscPrintReceivedElements.obj `if test -f 'ofxOsc/libs/oscpack/include/osc/OscPrintReceivedElements.cpp'; then $(CYGPATH_W) 'ofxOsc/libs/oscpack/include/osc/OscPrintReceivedElements.cpp'; else $(CYGPATH_W) '$(srcdir)/ofxOsc/libs/oscpack/include/osc/OscPrintReceivedElements.cpp'; fi`
+
+HF-OscReceivedElements.o: ofxOsc/libs/oscpack/include/osc/OscReceivedElements.cpp
+#	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(HF_CXXFLAGS) $(CXXFLAGS) -MT HF-OscReceivedElements.o -MD -MP -MF $(DEPDIR)/HF-OscReceivedElements.Tpo -c -o HF-OscReceivedElements.o `test -f 'ofxOsc/libs/oscpack/include/osc/OscReceivedElements.cpp' || echo '$(srcdir)/'`ofxOsc/libs/oscpack/include/osc/OscReceivedElements.cpp
+#	mv -f $(DEPDIR)/HF-OscReceivedElements.Tpo $(DEPDIR)/HF-OscReceivedElements.Po
+	source='ofxOsc/libs/oscpack/include/osc/OscReceivedElements.cpp' object='HF-OscReceivedElements.o' libtool=no \
+	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
+	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(HF_CXXFLAGS) $(CXXFLAGS) -c -o HF-OscReceivedElements.o `test -f 'ofxOsc/libs/oscpack/include/osc/OscReceivedElements.cpp' || echo '$(srcdir)/'`ofxOsc/libs/oscpack/include/osc/OscReceivedElements.cpp
+
+HF-OscReceivedElements.obj: ofxOsc/libs/oscpack/include/osc/OscReceivedElements.cpp
+#	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(HF_CXXFLAGS) $(CXXFLAGS) -MT HF-OscReceivedElements.obj -MD -MP -MF $(DEPDIR)/HF-OscReceivedElements.Tpo -c -o HF-OscReceivedElements.obj `if test -f 'ofxOsc/libs/oscpack/include/osc/OscReceivedElements.cpp'; then $(CYGPATH_W) 'ofxOsc/libs/oscpack/include/osc/OscReceivedElements.cpp'; else $(CYGPATH_W) '$(srcdir)/ofxOsc/libs/oscpack/include/osc/OscReceivedElements.cpp'; fi`
+#	mv -f $(DEPDIR)/HF-OscReceivedElements.Tpo $(DEPDIR)/HF-OscReceivedElements.Po
+	source='ofxOsc/libs/oscpack/include/osc/OscReceivedElements.cpp' object='HF-OscReceivedElements.obj' libtool=no \
+	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
+	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(HF_CXXFLAGS) $(CXXFLAGS) -c -o HF-OscReceivedElements.obj `if test -f 'ofxOsc/libs/oscpack/include/osc/OscReceivedElements.cpp'; then $(CYGPATH_W) 'ofxOsc/libs/oscpack/include/osc/OscReceivedElements.cpp'; else $(CYGPATH_W) '$(srcdir)/ofxOsc/libs/oscpack/include/osc/OscReceivedElements.cpp'; fi`
+
+HF-OscTypes.o: ofxOsc/libs/oscpack/include/osc/OscTypes.cpp
+#	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(HF_CXXFLAGS) $(CXXFLAGS) -MT HF-OscTypes.o -MD -MP -MF $(DEPDIR)/HF-OscTypes.Tpo -c -o HF-OscTypes.o `test -f 'ofxOsc/libs/oscpack/include/osc/OscTypes.cpp' || echo '$(srcdir)/'`ofxOsc/libs/oscpack/include/osc/OscTypes.cpp
+#	mv -f $(DEPDIR)/HF-OscTypes.Tpo $(DEPDIR)/HF-OscTypes.Po
+	source='ofxOsc/libs/oscpack/include/osc/OscTypes.cpp' object='HF-OscTypes.o' libtool=no \
+	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
+	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(HF_CXXFLAGS) $(CXXFLAGS) -c -o HF-OscTypes.o `test -f 'ofxOsc/libs/oscpack/include/osc/OscTypes.cpp' || echo '$(srcdir)/'`ofxOsc/libs/oscpack/include/osc/OscTypes.cpp
+
+HF-OscTypes.obj: ofxOsc/libs/oscpack/include/osc/OscTypes.cpp
+#	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(HF_CXXFLAGS) $(CXXFLAGS) -MT HF-OscTypes.obj -MD -MP -MF $(DEPDIR)/HF-OscTypes.Tpo -c -o HF-OscTypes.obj `if test -f 'ofxOsc/libs/oscpack/include/osc/OscTypes.cpp'; then $(CYGPATH_W) 'ofxOsc/libs/oscpack/include/osc/OscTypes.cpp'; else $(CYGPATH_W) '$(srcdir)/ofxOsc/libs/oscpack/include/osc/OscTypes.cpp'; fi`
+#	mv -f $(DEPDIR)/HF-OscTypes.Tpo $(DEPDIR)/HF-OscTypes.Po
+	source='ofxOsc/libs/oscpack/include/osc/OscTypes.cpp' object='HF-OscTypes.obj' libtool=no \
+	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
+	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(HF_CXXFLAGS) $(CXXFLAGS) -c -o HF-OscTypes.obj `if test -f 'ofxOsc/libs/oscpack/include/osc/OscTypes.cpp'; then $(CYGPATH_W) 'ofxOsc/libs/oscpack/include/osc/OscTypes.cpp'; else $(CYGPATH_W) '$(srcdir)/ofxOsc/libs/oscpack/include/osc/OscTypes.cpp'; fi`
 
 .m.o:
-	$(OBJCCOMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<
-	mv -f $(DEPDIR)/$*.Tpo $(DEPDIR)/$*.Po
-#	source='$<' object='$@' libtool=no \
-#	DEPDIR=$(DEPDIR) $(OBJCDEPMODE) $(depcomp) \
-#	$(OBJCCOMPILE) -c -o $@ $<
+#	$(OBJCCOMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<
+#	mv -f $(DEPDIR)/$*.Tpo $(DEPDIR)/$*.Po
+	source='$<' object='$@' libtool=no \
+	DEPDIR=$(DEPDIR) $(OBJCDEPMODE) $(depcomp) \
+	$(OBJCCOMPILE) -c -o $@ $<
 
 .m.obj:
-	$(OBJCCOMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ `$(CYGPATH_W) '$<'`
-	mv -f $(DEPDIR)/$*.Tpo $(DEPDIR)/$*.Po
-#	source='$<' object='$@' libtool=no \
-#	DEPDIR=$(DEPDIR) $(OBJCDEPMODE) $(depcomp) \
-#	$(OBJCCOMPILE) -c -o $@ `$(CYGPATH_W) '$<'`
+#	$(OBJCCOMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ `$(CYGPATH_W) '$<'`
+#	mv -f $(DEPDIR)/$*.Tpo $(DEPDIR)/$*.Po
+	source='$<' object='$@' libtool=no \
+	DEPDIR=$(DEPDIR) $(OBJCDEPMODE) $(depcomp) \
+	$(OBJCCOMPILE) -c -o $@ `$(CYGPATH_W) '$<'`
 
 HF-SDLMain.o: SDLMain.m
-	$(OBJC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(HF_OBJCFLAGS) $(OBJCFLAGS) -MT HF-SDLMain.o -MD -MP -MF $(DEPDIR)/HF-SDLMain.Tpo -c -o HF-SDLMain.o `test -f 'SDLMain.m' || echo '$(srcdir)/'`SDLMain.m
-	mv -f $(DEPDIR)/HF-SDLMain.Tpo $(DEPDIR)/HF-SDLMain.Po
-#	source='SDLMain.m' object='HF-SDLMain.o' libtool=no \
-#	DEPDIR=$(DEPDIR) $(OBJCDEPMODE) $(depcomp) \
-#	$(OBJC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(HF_OBJCFLAGS) $(OBJCFLAGS) -c -o HF-SDLMain.o `test -f 'SDLMain.m' || echo '$(srcdir)/'`SDLMain.m
+#	$(OBJC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(HF_OBJCFLAGS) $(OBJCFLAGS) -MT HF-SDLMain.o -MD -MP -MF $(DEPDIR)/HF-SDLMain.Tpo -c -o HF-SDLMain.o `test -f 'SDLMain.m' || echo '$(srcdir)/'`SDLMain.m
+#	mv -f $(DEPDIR)/HF-SDLMain.Tpo $(DEPDIR)/HF-SDLMain.Po
+	source='SDLMain.m' object='HF-SDLMain.o' libtool=no \
+	DEPDIR=$(DEPDIR) $(OBJCDEPMODE) $(depcomp) \
+	$(OBJC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(HF_OBJCFLAGS) $(OBJCFLAGS) -c -o HF-SDLMain.o `test -f 'SDLMain.m' || echo '$(srcdir)/'`SDLMain.m
 
 HF-SDLMain.obj: SDLMain.m
-	$(OBJC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(HF_OBJCFLAGS) $(OBJCFLAGS) -MT HF-SDLMain.obj -MD -MP -MF $(DEPDIR)/HF-SDLMain.Tpo -c -o HF-SDLMain.obj `if test -f 'SDLMain.m'; then $(CYGPATH_W) 'SDLMain.m'; else $(CYGPATH_W) '$(srcdir)/SDLMain.m'; fi`
-	mv -f $(DEPDIR)/HF-SDLMain.Tpo $(DEPDIR)/HF-SDLMain.Po
-#	source='SDLMain.m' object='HF-SDLMain.obj' libtool=no \
-#	DEPDIR=$(DEPDIR) $(OBJCDEPMODE) $(depcomp) \
-#	$(OBJC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(HF_OBJCFLAGS) $(OBJCFLAGS) -c -o HF-SDLMain.obj `if test -f 'SDLMain.m'; then $(CYGPATH_W) 'SDLMain.m'; else $(CYGPATH_W) '$(srcdir)/SDLMain.m'; fi`
+#	$(OBJC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(HF_OBJCFLAGS) $(OBJCFLAGS) -MT HF-SDLMain.obj -MD -MP -MF $(DEPDIR)/HF-SDLMain.Tpo -c -o HF-SDLMain.obj `if test -f 'SDLMain.m'; then $(CYGPATH_W) 'SDLMain.m'; else $(CYGPATH_W) '$(srcdir)/SDLMain.m'; fi`
+#	mv -f $(DEPDIR)/HF-SDLMain.Tpo $(DEPDIR)/HF-SDLMain.Po
+	source='SDLMain.m' object='HF-SDLMain.obj' libtool=no \
+	DEPDIR=$(DEPDIR) $(OBJCDEPMODE) $(depcomp) \
+	$(OBJC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(HF_OBJCFLAGS) $(OBJCFLAGS) -c -o HF-SDLMain.obj `if test -f 'SDLMain.m'; then $(CYGPATH_W) 'SDLMain.m'; else $(CYGPATH_W) '$(srcdir)/SDLMain.m'; fi`
 
 ID: $(HEADERS) $(SOURCES) $(LISP) $(TAGS_FILES)
 	list='$(SOURCES) $(HEADERS) $(LISP) $(TAGS_FILES)'; \

@@ -1,6 +1,7 @@
 #include "game.h"
 #include "SDL.h"
 #include "PrefsManager.h"
+#include <string>
 
 using namespace std;
 

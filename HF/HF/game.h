@@ -4,11 +4,16 @@
 #include "SDL.h"
 #include <string>
 
+// listen on port 12345
+#define PORT 12345
+#define NUM_MSG_STRINGS 20
+
 class Font;
 class Background;
 class Plane;
 class Items;
 class Score;
+class ofxOscReceiver;
 
 enum GameStates { GS_INTRO, GS_PLAYON, GS_QUIT };
 
@@ -52,6 +57,8 @@ class Game {
 	bool m_bF8down;
 
 	bool m_bEnd;
+	
+	ofxOscReceiver	*m_pReceiver;
 
 public:
 
@@ -68,6 +75,7 @@ private:
 	void InitNewGame();
 	void PlayOn();
 	void HandleEventsPlayOn();
+	void HandleOSCEventsPlayOn();
 	void Pause();
 	void UpdateGameState();
 	void DrawPlayOn();

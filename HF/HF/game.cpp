@@ -15,6 +15,7 @@ using namespace std;
 #include "plane.h"
 #include "items.h"
 #include "Score.h"
+#include "ofxOsc.h"
 
 template<typename T> std::string asString( const T& obj )
 {
@@ -62,6 +63,10 @@ Game::Game()
 	m_pItems = NULL;
 	m_pPlane = NULL;
 	m_pScore = NULL;
+	
+	cout << "listening for osc messages on port " << PORT << "\n";
+	m_pReceiver = new ofxOscReceiver();
+	m_pReceiver->setup( PORT );
 }
 
 Game::~Game()
@@ -134,6 +139,7 @@ void Game::PlayOn()
 	{
 		int A = SDL_GetTicks();
 		HandleEventsPlayOn();
+		HandleOSCEventsPlayOn();
 		if( !m_bPaused ) 
 		{
 			UpdateGameState();
@@ -167,6 +173,57 @@ void Game::Pause()
 	m_bPaused = !m_bPaused;
 }
 
+void Game::HandleOSCEventsPlayOn()
+{
+	// check for waiting messages
+		while( m_pReceiver->hasWaitingMessages() )
+		{
+			// get the next message
+			ofxOscMessage m;
+			m_pReceiver->getNextMessage( &m );
+
+			// check for mouse moved message
+			if ( m.getAddress() == "/keyboard/left" )
+			{
+				if (m.getArgAsInt32( 0 ) == 1){
+					m_bLeftDown = true;
+				} else m_bLeftDown = false;
+			}
+			// check for mouse button message
+			else if ( m.getAddress() == "/keyboard/right" )
+			{
+				if (m.getArgAsInt32( 0 ) == 1){
+					m_bRightDown = true;
+				} else m_bRightDown = false;
+			}
+			else
+			{
+				// unrecognized message: display on the bottom of the screen
+				string msg_string;
+				msg_string = m.getAddress();
+				msg_string += ": ";
+				for ( int i=0; i<m.getNumArgs(); i++ )
+				{
+					// get the argument type
+					msg_string += m.getArgTypeName( i );
+					msg_string += ":";
+					// display the argument - make sure we get the right type
+					if( m.getArgType( i ) == OFXOSC_TYPE_INT32 )
+						msg_string += m.getArgAsInt32( i ) ;
+					else if( m.getArgType( i ) == OFXOSC_TYPE_FLOAT )
+						msg_string += m.getArgAsFloat( i ) ;
+					else if( m.getArgType( i ) == OFXOSC_TYPE_STRING )
+						msg_string += m.getArgAsString( i );
+					else
+						msg_string += "unknown";
+				}
+				// add to the list of strings to display
+				cout << msg_string << endl;
+			}
+
+		}
+	
+}
 
 void Game::HandleEventsPlayOn()
 {
