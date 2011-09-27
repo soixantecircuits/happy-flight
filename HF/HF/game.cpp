@@ -321,7 +321,7 @@ void Game::UpdateGameState()
 	{
 		m_pPlane->SetState( E_PLANE_TAKE_OFF );
 	}
-	else if( m_pBackground->GetState() == E_FLYING )
+	else if( m_pBackground->GetState() == E_FLYING || m_pBackground->GetState() == E_APPROACH )
 	{
 		m_pPlane->SetState( E_PLANE_FLYING );
 		if( m_bLeftDown )
@@ -329,7 +329,8 @@ void Game::UpdateGameState()
 		else if( m_bRightDown )
 			m_pPlane->GoRight();
 
-		m_pItems->Generate( dT );
+		if( m_pBackground->GetState() != E_APPROACH )
+			m_pItems->Generate( dT );
 	}
 	else if( m_pBackground->GetState() == E_LANDING )
 	{

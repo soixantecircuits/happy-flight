@@ -11,6 +11,7 @@ enum BackgroundState
 	E_START = 0,
 	E_TAKEOFF,
 	E_FLYING,
+	E_APPROACH,
 	E_LANDING,
 	E_STOP
 };

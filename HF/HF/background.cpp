@@ -292,7 +292,9 @@ void Background::Draw( SDL_Surface* screen, int step )
 		m_eBackgroundState = E_TAKEOFF;
 	else if( m_eBackgroundState == E_TAKEOFF && !bAddEndAirport )
 		m_eBackgroundState = E_FLYING;
-	else if( m_eBackgroundState == E_FLYING && bAddEndAirport )
+	else if( m_eBackgroundState == E_FLYING && bAddStartAirport )
+		m_eBackgroundState = E_APPROACH;
+	else if( m_eBackgroundState == E_APPROACH && bAddEndAirport )
 		m_eBackgroundState = E_LANDING;
 	else if( m_eBackgroundState == E_LANDING && bEndingTiles )
 		m_eBackgroundState = E_STOP;
