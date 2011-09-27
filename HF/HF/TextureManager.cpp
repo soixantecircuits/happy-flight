@@ -48,6 +48,7 @@ int TextureManager::LoadSurface( string fn, bool bAlpha )
 	tmp = loadedImage;
 	tmp2 = SDL_CreateRGBSurface(SDL_SWSURFACE, loadedImage->w, loadedImage->h, bpp, 0x000000ff, 0x0000ff00, 0x00ff0000, 0xff000000 );
 
+	SDL_SetAlpha( tmp, 0, 0 );
 	SDL_BlitSurface(tmp, NULL, tmp2, NULL);
 
 	GLuint txid;

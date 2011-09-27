@@ -37,8 +37,8 @@ static __inline__ void gl_do_blend(int on)
 	if(on)
 	{
 		glEnable(GL_BLEND);
-		glEnable(GL_ALPHA_TEST);
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		glEnable( GL_BLEND );
+		glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
 	}
 	else
 		glDisable(GL_BLEND);
@@ -108,8 +108,10 @@ SDL_Surface *Video::Init()
 	int flags = 0;
 	flags |= SDL_DOUBLEBUF;
 	flags |= SDL_OPENGL;
-	gl_doublebuf = flags & SDL_DOUBLEBUF;
+	if( m_bFullScreen )
+		flags |= SDL_FULLSCREEN;
 
+	gl_doublebuf = flags & SDL_DOUBLEBUF;
 
 	SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 8);
 	SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 8);
@@ -187,7 +189,7 @@ void Video::DrawRect( int iTextureId, SDL_Rect* src, SDL_Rect* dst )
 	float y2 = dst->y + dst->h;
 
 	gl_do_texture(1);
-	gl_do_blend(0);
+	gl_do_blend(1);
 	gl_texture(iTextureId);
 
 	glBegin(GL_QUADS);
