@@ -6,8 +6,15 @@ using namespace std;
 #include <fstream>
 #include <iostream>
 
+
+
 #ifdef OPENGL
-#include <GL/glut.h>
+	#if defined(__APPLE__) && defined(__MACH__)
+		//#include <GLUT/glut.h>
+		#include "SDL_opengl.h"
+	#else
+		#include <GL/glut.h>
+	#endif
 #endif
 
 TextureManager::TextureManager()

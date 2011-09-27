@@ -43,7 +43,7 @@ HF_SOURCES =    background.h		    background.cpp \
 					
 
 
-HF_CXXFLAGS=-D__STDC_LIMIT_MACROS -D__STDC_CONSTANT_MACROS -I/Library/Frameworks/SDL.framework/Headers -I/Library/Frameworks/SDL_image.framework/Headers -I/System/Library/Frameworks/OpenGL.framework/Headers -IofxOsc/src -IofxOsc/libs/oscpack/include -IofxOsc/libs/oscpack/include/ip -IofxOsc/libs/oscpack/include/osc
+HF_CXXFLAGS= -DOPENGL -D__STDC_LIMIT_MACROS -D__STDC_CONSTANT_MACROS -I/Library/Frameworks/SDL.framework/Headers -I/Library/Frameworks/SDL_image.framework/Headers -I/System/Library/Frameworks/OpenGL.framework/Headers -IofxOsc/src -IofxOsc/libs/oscpack/include -IofxOsc/libs/oscpack/include/ip -IofxOsc/libs/oscpack/include/osc
 HF_OBJCFLAGS=-I/Library/Frameworks/SDL.framework/Headers -I/Library/Frameworks/SDL_image.framework/Headers -I/System/Library/Frameworks/OpenGL.framework/Headers
 HF_LDADD=
-HF_LDFLAGS= -framework SDL -framework SDL_image -framework Cocoa -framework OpenGL
+HF_LDFLAGS= -framework SDL -framework SDL_image -framework Cocoa -framework OpenGL 

@@ -4,8 +4,15 @@
 #include "TextureManager.h"
 #include "PrefsManager.h"
 
+
+
 #ifdef OPENGL
-#include <GL/glut.h>
+	#if defined(__APPLE__) && defined(__MACH__)
+		//#include <GLUT/glut.h>
+		#include "SDL_opengl.h"
+	#else
+		#include <GL/glut.h>
+	#endif
 #endif
 
 using namespace std;
@@ -91,6 +98,7 @@ void Video::Flip()
 	SDL_GL_SwapBuffers();
 #else
 	SDL_Flip( m_pScreen );
+	#error
 #endif
 }
 
@@ -114,7 +122,9 @@ SDL_Surface *Video::Init()
 		flags |= SDL_FULLSCREEN;
 
 	gl_doublebuf = flags & SDL_DOUBLEBUF;
-
+	
+	m_pScreen = SDL_SetVideoMode( m_iWindowWidth, m_iWindowHeight, m_iDepth, flags );
+	
 	SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 8);
 	SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 8);
 	SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 8);
@@ -123,7 +133,7 @@ SDL_Surface *Video::Init()
 	SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, m_iDepth);
 	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, gl_doublebuf);
 
-	m_pScreen = SDL_SetVideoMode( m_iWindowWidth, m_iWindowHeight, m_iDepth, flags );
+	
 	if (!m_pScreen)
 	{
 		printf("Couldn't set %dx%d, %dbit video mode: %s\n", m_iWindowWidth, m_iWindowHeight, m_iDepth, SDL_GetError());
