@@ -49,12 +49,12 @@ am_HF_OBJECTS = HF-background.$(OBJEXT) HF-item.$(OBJEXT) \
 	HF-items.$(OBJEXT) HF-font.$(OBJEXT) HF-Score.$(OBJEXT) \
 	HF-game.$(OBJEXT) HF-geometry.$(OBJEXT) HF-plane.$(OBJEXT) \
 	HF-PrefsManager.$(OBJEXT) HF-mainOS.$(OBJEXT) \
-	HF-TextureManager.$(OBJEXT) HF-SDLMain.$(OBJEXT) \
-	HF-video.$(OBJEXT) HF-ofxOscBundle.$(OBJEXT) \
-	HF-ofxOscMessage.$(OBJEXT) HF-ofxOscReceiver.$(OBJEXT) \
-	HF-ofxOscSender.$(OBJEXT) HF-IpEndpointName.$(OBJEXT) \
-	HF-NetworkingUtils.$(OBJEXT) HF-UdpSocket.$(OBJEXT) \
-	HF-OscOutboundPacketStream.$(OBJEXT) \
+	HF-TextureManager.$(OBJEXT) HF-SoundManager.$(OBJEXT) \
+	HF-SDLMain.$(OBJEXT) HF-video.$(OBJEXT) \
+	HF-ofxOscBundle.$(OBJEXT) HF-ofxOscMessage.$(OBJEXT) \
+	HF-ofxOscReceiver.$(OBJEXT) HF-ofxOscSender.$(OBJEXT) \
+	HF-IpEndpointName.$(OBJEXT) HF-NetworkingUtils.$(OBJEXT) \
+	HF-UdpSocket.$(OBJEXT) HF-OscOutboundPacketStream.$(OBJEXT) \
 	HF-OscPrintReceivedElements.$(OBJEXT) \
 	HF-OscReceivedElements.$(OBJEXT) HF-OscTypes.$(OBJEXT)
 HF_OBJECTS = $(am_HF_OBJECTS)
@@ -198,6 +198,7 @@ HF_SOURCES = background.h		    background.cpp \
 					PrefsManager.h		    PrefsManager.cpp \
 					Singleton.h				mainOS.cpp \
 					TextureManager.h		TextureManager.cpp \
+					SoundManager.h			SoundManager.cpp \
 					SDLMain.h		    	SDLMain.m \
 					video.h		    		video.cpp \
 					ofxOsc/src/ofxOsc.h		ofxOsc/src/ofxOscArg.h \
@@ -305,6 +306,7 @@ include ./$(DEPDIR)/HF-OscTypes.Po
 include ./$(DEPDIR)/HF-PrefsManager.Po
 include ./$(DEPDIR)/HF-SDLMain.Po
 include ./$(DEPDIR)/HF-Score.Po
+include ./$(DEPDIR)/HF-SoundManager.Po
 include ./$(DEPDIR)/HF-TextureManager.Po
 include ./$(DEPDIR)/HF-UdpSocket.Po
 include ./$(DEPDIR)/HF-background.Po
@@ -488,6 +490,20 @@ HF-TextureManager.obj: TextureManager.cpp
 #	source='TextureManager.cpp' object='HF-TextureManager.obj' libtool=no \
 #	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
 #	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(HF_CXXFLAGS) $(CXXFLAGS) -c -o HF-TextureManager.obj `if test -f 'TextureManager.cpp'; then $(CYGPATH_W) 'TextureManager.cpp'; else $(CYGPATH_W) '$(srcdir)/TextureManager.cpp'; fi`
+
+HF-SoundManager.o: SoundManager.cpp
+	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(HF_CXXFLAGS) $(CXXFLAGS) -MT HF-SoundManager.o -MD -MP -MF $(DEPDIR)/HF-SoundManager.Tpo -c -o HF-SoundManager.o `test -f 'SoundManager.cpp' || echo '$(srcdir)/'`SoundManager.cpp
+	mv -f $(DEPDIR)/HF-SoundManager.Tpo $(DEPDIR)/HF-SoundManager.Po
+#	source='SoundManager.cpp' object='HF-SoundManager.o' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
+#	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(HF_CXXFLAGS) $(CXXFLAGS) -c -o HF-SoundManager.o `test -f 'SoundManager.cpp' || echo '$(srcdir)/'`SoundManager.cpp
+
+HF-SoundManager.obj: SoundManager.cpp
+	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(HF_CXXFLAGS) $(CXXFLAGS) -MT HF-SoundManager.obj -MD -MP -MF $(DEPDIR)/HF-SoundManager.Tpo -c -o HF-SoundManager.obj `if test -f 'SoundManager.cpp'; then $(CYGPATH_W) 'SoundManager.cpp'; else $(CYGPATH_W) '$(srcdir)/SoundManager.cpp'; fi`
+	mv -f $(DEPDIR)/HF-SoundManager.Tpo $(DEPDIR)/HF-SoundManager.Po
+#	source='SoundManager.cpp' object='HF-SoundManager.obj' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
+#	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(HF_CXXFLAGS) $(CXXFLAGS) -c -o HF-SoundManager.obj `if test -f 'SoundManager.cpp'; then $(CYGPATH_W) 'SoundManager.cpp'; else $(CYGPATH_W) '$(srcdir)/SoundManager.cpp'; fi`
 
 HF-video.o: video.cpp
 	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(HF_CXXFLAGS) $(CXXFLAGS) -MT HF-video.o -MD -MP -MF $(DEPDIR)/HF-video.Tpo -c -o HF-video.o `test -f 'video.cpp' || echo '$(srcdir)/'`video.cpp

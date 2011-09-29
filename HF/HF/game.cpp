@@ -230,6 +230,7 @@ void Game::HandleOSCEventsPlayOn()
 			{
 				if (m.getArgAsInt32( 0 ) == 1){
 					m_bOSCLeft = true;
+					m_bOSCRight = false;
 				} else m_bOSCLeft = false;
 			}
 			// check for mouse button message
@@ -237,6 +238,7 @@ void Game::HandleOSCEventsPlayOn()
 			{
 				if (m.getArgAsInt32( 0 ) == 1){
 					m_bOSCRight = true;
+					m_bOSCLeft = false;
 				} else m_bOSCRight = false;
 			}
 			else

@@ -13,6 +13,7 @@ HF_SOURCES =    background.h		    background.cpp \
 					PrefsManager.h		    PrefsManager.cpp \
 					Singleton.h				mainOS.cpp \
 					TextureManager.h		TextureManager.cpp \
+					SoundManager.h			SoundManager.cpp \
 					SDLMain.h		    	SDLMain.m \
 					video.h		    		video.cpp \
 					ofxOsc/src/ofxOsc.h		ofxOsc/src/ofxOscArg.h \
