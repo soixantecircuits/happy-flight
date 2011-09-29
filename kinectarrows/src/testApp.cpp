@@ -3,7 +3,9 @@
 
 //--------------------------------------------------------------
 void testApp::setup() {
-
+    // open an outgoing connection to HOST:PORT
+	sender.setup( HOST, PORT );
+    
 	kinect.init();
 	//kinect.init(true);  // shows infrared instead of RGB video image
 	//kinect.init(false, false);  // disable infrared/rgb video iamge (faster fps)
@@ -15,16 +17,26 @@ void testApp::setup() {
 
 	colorImg.allocate(kinect.width, kinect.height);
 	grayImage.allocate(kinect.width, kinect.height);
+    memoryGrayImage.allocate(kinect.width, kinect.height);
+    grayImageWithoutBackground.allocate(kinect.width, kinect.height);
 	grayThreshNear.allocate(kinect.width, kinect.height);
 	grayThreshFar.allocate(kinect.width, kinect.height);
     colorImgLine.allocate(kinect.width, kinect.height);
     cannyImage.allocate(kinect.width, kinect.height);
+    grayImageWithoutBackgroundAndBlackRects.allocate(kinect.width, kinect.height);
 
-	nearThreshold = 90;
+	nearThreshold = 254;
 	farThreshold  = 30;
-    lineThreshold = 50;
+    lineThreshold = 32;
 	bThreshWithOpenCV = true;
     speedBall = 20;
+    avgAngles = 0;
+    rightAngles = -12;
+    leftAngles = 12;
+    toleranceAngles = 0.6;
+    
+    lines = 0;
+    storage = cvCreateMemStorage(0);
 
 	ofSetFrameRate(60);
 
@@ -40,18 +52,29 @@ void testApp::setup() {
 	bDrawPointCloud = false;
     
     kinect.enableDepthNearValueWhite(!kinect.isDepthNearValueWhite());
+    
+    bLearnBakground = false;  
+    threshold = 10;  
+    
+    blackRectPoints = new CvPoint[20];
+    for (int i = 0; i < 20; i++) blackRectPoints[i] = cvPoint(-1,-1);
+    int a =2;
+    //cout << "kinect width,height" << kinect.width << ", " << kinect.height << endl;
 }
 
 //--------------------------------------------------------------
 void testApp::update() {
-
+    
+    
 	ofBackground(100, 100, 100);
 
 	kinectSource->update();
 
 	// there is a new frame and we are connected
 	if(kinectSource->isFrameNew()) {
+        
 
+        
 		// record ?
 		if(bRecord && kinectRecorder.isOpened()) {
 			kinectRecorder.newFrame(kinect.getRawDepthPixels(), kinect.getPixels());
@@ -60,33 +83,30 @@ void testApp::update() {
 		// load grayscale depth image from the kinect source
 		grayImage.setFromPixels(kinectSource->getDepthPixels(), kinect.width, kinect.height);
         colorImgLine.setFromPixels(kinectSource->getPixels(), kinect.width, kinect.height);
+        //cvCvtColor( colorImgLine.getCvImage(), grayImage.getCvImage(), CV_RGB2GRAY );
+        
+        if (bLearnBakground == true){  
+            memoryGrayImage = grayImage;
+            bLearnBakground = false;  
+        }  
+        
+        // take the abs value of the difference between background and incoming and then threshold:  
+        grayImageWithoutBackground.absDiff(memoryGrayImage, grayImage);  
+        //grayImageWithoutBackground.threshold(nearThreshold);  
+        
         
 		// we do two thresholds - one for the far plane and one for the near plane
 		// we then do a cvAnd to get the pixels which are a union of the two thresholds
-		if(bThreshWithOpenCV) {
-			grayThreshNear = grayImage;
-			grayThreshFar = grayImage;
+			grayThreshNear = grayImageWithoutBackground;
+			grayThreshFar = grayImageWithoutBackground;
 			grayThreshNear.threshold(nearThreshold, true);
 			grayThreshFar.threshold(farThreshold);
-			cvAnd(grayThreshNear.getCvImage(), grayThreshFar.getCvImage(), grayImage.getCvImage(), NULL);
-		} else {
+			cvAnd(grayThreshNear.getCvImage(), grayThreshFar.getCvImage(), grayImageWithoutBackground.getCvImage(), NULL);
 
-			// or we do it ourselves - show people how they can work with the pixels
-			unsigned char * pix = grayImage.getPixels();
-
-			int numPixels = grayImage.getWidth() * grayImage.getHeight();
-			for(int i = 0; i < numPixels; i++) {
-				if(pix[i] < nearThreshold && pix[i] > farThreshold) {
-					pix[i] = 255;
-				} else {
-					pix[i] = 0;
-				}
-			}
-		}
 
 		// update the cv images
 		grayImage.flagImageChanged();
-
+        
 		// find contours which are between the size of 20 pixels and 1/3 the w*h pixels.
     	// also, find holes is set to true so we will get interior contours as well....
     	//contourFinder.findContours(grayImage, 10, (kinect.width*kinect.height)/2, 20, false);
@@ -101,9 +121,16 @@ void testApp::update() {
          double rho, double theta, int threshold,
          double param1=0, double param2=0 );
          */
-        CvSeq* lines = 0;
-        CvMemStorage* storage = cvCreateMemStorage(0);
-        cvCanny( grayImage.getCvImage(), cannyImage.getCvImage(), 70, 200 );
+        
+        //draw black squares
+        grayImageWithoutBackgroundAndBlackRects = grayImageWithoutBackground;
+        for( int i = 0; blackRectPoints[i+1].x != - 1 && i < 19 ; i+=2 )
+        {
+            //cout << "draw rect " << blackRectPoints[i].x << ", " << blackRectPoints[i].y << "to " << blackRectPoints[i+1].x << ", " << blackRectPoints[i+1].y << endl;
+            cvRectangle( grayImageWithoutBackgroundAndBlackRects.getCvImage(), blackRectPoints[i], blackRectPoints[i+1], CV_RGB(0,0,0), CV_FILLED);
+        }
+  
+        cvCanny( grayImageWithoutBackgroundAndBlackRects.getCvImage(), cannyImage.getCvImage(), 70, 200 );
         cvCvtColor( cannyImage.getCvImage(), colorImgLine.getCvImage(), CV_GRAY2BGR );
         lines = cvHoughLines2(  cannyImage.getCvImage(), storage, CV_HOUGH_STANDARD, 1, CV_PI/180, lineThreshold);
         //cvHoughLines( grayImage, 1, CV_PI/180, 100, lines, 100 );
@@ -124,7 +151,7 @@ void testApp::update() {
             cvLine( colorImgLine.getCvImage(), pt1, pt2, CV_RGB(255,0,0), 3, 8 );
             totalAngles += (theta-CV_PI/2.);
         }
-        
+        smoothAngles = 0.7 * smoothAngles   + 0.3* totalAngles;
         
 	}
 }
@@ -143,21 +170,57 @@ void testApp::draw() {
 	} else {
 		if(!bPlayback) {
 			// draw from the live kinect
-			kinect.drawDepth(10, 10, 400, 300);
-			kinect.draw(420, 10, 400, 300);
+			kinect.drawDepth(420, 10, 400, 300);
+			kinect.draw(10, 10, 400, 300);
 		} else {
 			// draw from the player
-			kinectPlayer.drawDepth(10, 10, 400, 300);
-			kinectPlayer.draw(420, 10, 400, 300);
+			kinectPlayer.drawDepth(420, 10, 400, 300);
+			kinectPlayer.draw(10, 10, 400, 300);
 		}
-        grayImage.draw(10, 320, 400, 300);
-		contourFinder.draw(10, 320, 400, 300);
-        colorImgLine.draw(420, 320, 400, 300);
+        grayImage.draw(830, 10, 400, 300);
+		grayImageWithoutBackground.draw(10, 320, 400, 300);
+        grayImageWithoutBackgroundAndBlackRects.draw(420, 320, 400, 300);
+        colorImgLine.draw(830, 320, 400, 300);
 	}
+    //send info
+    if ( (smoothAngles > avgAngles) && abs(smoothAngles - avgAngles) > toleranceAngles * abs(leftAngles - avgAngles)){
+        ofRect(420, 640, 20, 20);
+        ofxOscMessage m;
+        m.setAddress( "/keyboard/right" );
+        m.addIntArg( 1 );
+        sender.sendMessage( m );
+    }
+    else if ( (smoothAngles < avgAngles) && abs(smoothAngles - avgAngles) > toleranceAngles * abs(avgAngles - rightAngles)){
+        ofRect(820, 640, 20, 20);
+        ofxOscMessage m;
+        m.setAddress( "/keyboard/left" );
+        m.addIntArg( 1 );
+        sender.sendMessage( m );
+    }
+    else {
+        ofxOscMessage m;
+        m.setAddress( "/keyboard/left" );
+        m.addIntArg( 0 );
+        sender.sendMessage( m );
+        m.setAddress( "/keyboard/right" );
+        m.addIntArg( 0 );
+        sender.sendMessage( m );
+    }
     
     //draw ball
-    ofCircle(620-(totalAngles-avgAngles)*speedBall, 315, 30);
-    cout << (totalAngles-avgAngles) << endl;
+    if (smoothAngles > avgAngles){
+        float a = 200./(avgAngles - leftAngles);
+        float b = -1 * a * avgAngles;
+        ofCircle(620+(a*smoothAngles+b), 315, 30);
+
+    }
+    else{
+        float a = -1 * 200./(avgAngles - rightAngles);
+        float b = -1 * a * avgAngles;
+        ofCircle(620+(a*smoothAngles+b), 315, 30);
+    }
+    
+    //cout << (smoothAngles-avgAngles) << endl;
 	// draw recording/playback indicators
 	ofPushMatrix();
 	ofTranslate(25, 25);
@@ -176,9 +239,13 @@ void testApp::draw() {
 	// draw instructions
 	ofSetColor(255, 255, 255);
 	stringstream reportStream;
-	reportStream << "accel is: " << ofToString(kinect.getMksAccel().x, 2) << " / "
-								 << ofToString(kinect.getMksAccel().y, 2) << " / "
-								 << ofToString(kinect.getMksAccel().z, 2) << endl
+	reportStream << "calibration is: " << ofToString(leftAngles, 2) << " / "
+								 << ofToString(avgAngles, 2) << " / "
+								 << ofToString(rightAngles, 2) << endl
+    << "value is:                 "<< ofToString(smoothAngles, 2) << endl
+                    << "accel is: " << ofToString(kinect.getMksAccel().x, 2) << " / "
+                    << ofToString(kinect.getMksAccel().y, 2) << " / "
+                    << ofToString(kinect.getMksAccel().z, 2) << endl
 				 << "press p to switch between images and point cloud, rotate the point cloud with the mouse" << endl
 				 << "using opencv threshold = " << bThreshWithOpenCV <<" (press spacebar)" << endl
 				 << "set line threshold " << lineThreshold << " (press: a z)" << endl
@@ -221,15 +288,27 @@ void testApp::exit() {
 //--------------------------------------------------------------
 void testApp::keyPressed (int key) {
 	switch (key) {
+        case 'f':
+            for (int i = 0; i < 20; i++) blackRectPoints[i] = cvPoint(-1,-1);
+            break;
+            
 		case ' ':
-			//bThreshWithOpenCV = !bThreshWithOpenCV;
-            avgAngles = totalAngles;
-		break;
-
+            avgAngles = smoothAngles;
+            break;
+        case 'c':
+            leftAngles = smoothAngles;
+            break;
+        case 'v':
+            rightAngles = smoothAngles;
+            break;    
+        case'@':
+            bLearnBakground = true;  
+			break;
+        /*
 		case'p':
 			bDrawPointCloud = !bDrawPointCloud;
 			break;
-
+         */
 		case '>':
 		case '.':
 			farThreshold ++;
@@ -247,7 +326,16 @@ void testApp::keyPressed (int key) {
 			nearThreshold ++;
 			if (nearThreshold > 255) nearThreshold = 255;
 			break;
-
+        case 'o':
+			toleranceAngles -=0.05;
+			if (lineThreshold < 0) lineThreshold = 0;
+			break;
+            
+		case 'p':
+			lineThreshold += 0.05;
+			if (lineThreshold > 2) lineThreshold = 2;
+			break;
+            
 		case 'a':
 			lineThreshold --;
 			if (lineThreshold < 0) lineThreshold = 0;
@@ -276,17 +364,13 @@ void testApp::keyPressed (int key) {
 		case 'w':
 			kinect.enableDepthNearValueWhite(!kinect.isDepthNearValueWhite());
 			break;
-
+        /*
 		case 'o':
 			kinect.setCameraTiltAngle(angle);	// go back to prev tilt
 			kinect.open();
 			break;
-
-		case 'c':
-			kinect.setCameraTiltAngle(0);		// zero the tilt
-			kinect.close();
-			break;
-
+         */
+/*
 		case 'r':
 			bRecord = !bRecord;
 			if(bRecord) {
@@ -295,7 +379,6 @@ void testApp::keyPressed (int key) {
 				stopRecording();
 			}
 			break;
-/*
 		case 'q':
 			bPlayback = !bPlayback;
 			if(bPlayback) {
@@ -330,11 +413,32 @@ void testApp::mouseDragged(int x, int y, int button)
 
 //--------------------------------------------------------------
 void testApp::mousePressed(int x, int y, int button)
-{}
+{
+    //if ( x > 10 && x < 410 && y > 320 && y <620)
+    if (x < 10) x = 10;
+    if (x > 410) x = 410;
+    if (y < 320) y = 320;
+    if (y > 620) y = 620;
+        int i;
+        for (i = 0; blackRectPoints[i].x != -1; i++);
+        if (i < 19){
+            blackRectPoints[i] = cvPoint((x-10) * 640 / 400 ,(y-320) * 640 / 400 );
+            //cout << "first point " << blackRectPoints[i].x << ", " << blackRectPoints[i].y << endl;
+        }
+}
 
 //--------------------------------------------------------------
 void testApp::mouseReleased(int x, int y, int button)
-{}
+{
+    if ( x > 10 && x < 410 && y > 320 && y <620){
+        int i;
+        for (i = 0; blackRectPoints[i].x != -1; i++);
+        if (i < 20){
+            blackRectPoints[i] = cvPoint((x-10)* 640 / 400 ,(y-320)* 640 / 400 );
+            //cout << "last point " << blackRectPoints[i].x << ", " << blackRectPoints[i].y << endl;
+        }
+    }
+}
 
 //--------------------------------------------------------------
 void testApp::windowResized(int w, int h)
