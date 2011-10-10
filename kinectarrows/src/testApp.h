@@ -15,8 +15,6 @@ class testApp : public ofBaseApp {
 		void update();
 		void draw();
 		void exit();
-	
-		void drawPointCloud();
 
 		void keyPressed  (int key);
 		void mouseMoved(int x, int y );
@@ -25,59 +23,43 @@ class testApp : public ofBaseApp {
 		void mouseReleased(int x, int y, int button);
 		void windowResized(int w, int h);
 		
-		/// start/stop recording and playback,
-		/// make sure you don't record and playback simultaneously 
-		/// using the same file!!!
-		void startRecording();
-		void stopRecording();
-		void startPlayback();
-		void stopPlayback();
+
 
         ofxOscSender        sender;
 		ofxKinect 			kinect;
-		ofxKinectRecorder 	kinectRecorder;
-		ofxKinectPlayer 	kinectPlayer;
 		
-		/// used to switch between the live kinect and the recording player
-		ofxBase3DVideo* 	kinectSource;
 
 		ofxCvColorImage		colorImg;
-
         ofxCvColorImage		colorImgLine;
         ofxCvGrayscaleImage cannyImage;
 		ofxCvGrayscaleImage grayImage;			// grayscale depth image
         ofxCvGrayscaleImage grayImageWithoutBackground;			// grayscale depth image
-    ofxCvGrayscaleImage grayImageWithoutBackgroundAndBlackRects;
+        ofxCvGrayscaleImage grayImageWithoutBackgroundAndBlackRects;
         ofxCvGrayscaleImage memoryGrayImage;			// grayscale depth image
     
         ofxCvGrayscaleImage grayThreshNear;		// the near thresholded image
 		ofxCvGrayscaleImage grayThreshFar;		// the far thresholded image
 
 		ofxCvContourFinder 	contourFinder;
-        int                 threshold;  
         bool                bLearnBakground;  
 		
 		bool				bThreshWithOpenCV;
 		bool				bDrawPointCloud;
+        bool                bDoBgSub;
 
 		int 				nearThreshold;
 		int					farThreshold;
         int                 lineThreshold; 
         float               smoothAngles;
-        float                 toleranceAngles;
-        float                 totalAngles;
-        float                 avgAngles;
-        float                 leftAngles;
-        float                 rightAngles;
-        int                     speedBall;
+        float               toleranceAngles;
+        float               totalAngles;
+        float               avgAngles;
+        float               leftAngles;
+        float               rightAngles;
+    
         CvSeq*              lines;
         CvMemStorage*       storage;
         CvPoint*            blackRectPoints;
 
 		int					angle;
-		
-		int 				pointCloudRotationY;
-		
-		bool 				bRecord;
-		bool 				bPlayback;
 };
