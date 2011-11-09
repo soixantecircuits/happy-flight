@@ -6,19 +6,27 @@ void testApp::setup() {
     // open an outgoing connection to HOST:PORT
 	sender.setup( HOST, PORT );
     
-	kinect.init();
-	kinect.setVerbose(true);
-	kinect.open();
+	//kinect.init();
+        //kinect.setVerbose(true);
+	//kinect.open();
 
-	colorImg.allocate(kinect.width, kinect.height);
-	grayImage.allocate(kinect.width, kinect.height);
-    memoryGrayImage.allocate(kinect.width, kinect.height);
-    grayImageWithoutBackground.allocate(kinect.width, kinect.height);
-	grayThreshNear.allocate(kinect.width, kinect.height);
-	grayThreshFar.allocate(kinect.width, kinect.height);
-    colorImgLine.allocate(kinect.width, kinect.height);
-    cannyImage.allocate(kinect.width, kinect.height);
-    grayImageWithoutBackgroundAndBlackRects.allocate(kinect.width, kinect.height);
+        camWidth    = 640;
+        camHeight   = 480;
+        //camWidth = kinect.width;
+        //camHeight = kinect.height;
+
+        vidGrabber.setVerbose(true);
+        vidGrabber.initGrabber(camWidth, camHeight);
+                
+	colorImg.allocate(camWidth, camHeight);
+	grayImage.allocate(camWidth, camHeight);
+    memoryGrayImage.allocate(camWidth, camHeight);
+    grayImageWithoutBackground.allocate(camWidth, camHeight);
+	grayThreshNear.allocate(camWidth, camHeight);
+	grayThreshFar.allocate(camWidth, camHeight);
+    colorImgLine.allocate(camWidth, camHeight);
+    cannyImage.allocate(camWidth, camHeight);
+    grayImageWithoutBackgroundAndBlackRects.allocate(camWidth, camHeight);
 
 	nearThreshold = 254;
 	farThreshold  = 30;
@@ -55,31 +63,40 @@ void testApp::update() {
     
 	ofBackground(100, 100, 100);
 
-	kinect.update();
+	//kinect.update();
+        vidGrabber.grabFrame();
 
 	// there is a new frame and we are connected
-	if(kinect.isFrameNew()) {
-
-		// LOAD IMAGE: load grayscale depth image from the kinect source
-		grayImage.setFromPixels(kinect.getDepthPixels(), kinect.width, kinect.height);
-        colorImgLine.setFromPixels(kinect.getPixels(), kinect.width, kinect.height);
-        //////////////////////////////
+	//if(kinect.isFrameNew()) {
+        if (vidGrabber.isFrameNew()){
+	    // LOAD IMAGE: load grayscale depth image from the kinect source
+	    //grayImage.setFromPixels(kinect.getDepthPixels(), camWidth, camHeight);
+            //colorImgLine.setFromPixels(kinect.getPixels(), camWidth, camHeight);
+            colorImg.setFromPixels(vidGrabber.getPixels(), camWidth, camHeight);
+	    cvCvtColor( colorImg.getCvImage(), grayImage.getCvImage(), CV_RGB2GRAY );
+            colorImgLine.setFromPixels(vidGrabber.getPixels(), camWidth, camHeight);
+            //grayImage.loadData(vidGrabber.getPixels(),camWidth, camHeight);
+            //////////////////////////////
         
-        //BACKGROUND SUBTRACTION//////
-        if (bLearnBakground == true && bDoBgSub == true){  
-            memoryGrayImage = grayImage;
-            bLearnBakground = false;  
-        }  
-        if (bDoBgSub == true){
-            // take the abs value of the difference between background and incoming and then threshold:  
-            grayImageWithoutBackground.absDiff(memoryGrayImage, grayImage);  
-        } else {
-            grayImageWithoutBackground = grayImage;
-        }
-        //////////////////////////////
+            //BACKGROUND SUBTRACTION//////
+            if (bLearnBakground == true && bDoBgSub == true){  
+                memoryGrayImage = grayImage;
+                bLearnBakground = false;  
+            }  
+            if (bDoBgSub == true){
+                // take the abs value of the difference between background and incoming and then threshold:  
+                grayThreshNear.absDiff(memoryGrayImage, grayImage);
+		cvCmpS(grayThreshNear.getCvImage(), nearThreshold, grayImageWithoutBackground.getCvImage(), CV_CMP_GT);
+		grayThreshNear.threshold(nearThreshold);  
+            	//cvAnd(grayImage.getCvImage(), grayThreshNear.getCvImage(), grayImageWithoutBackground.getCvImage(),NULL);
+		//grayImageWithoutBackground = grayThreshNear;    
+	} else {
+                grayImageWithoutBackground = grayImage;
+            }
+            //////////////////////////////
         
-        
-        //THRESHOLD IMAGE/////////////
+        	/*
+            //THRESHOLD IMAGE/////////////
 		// we do two thresholds - one for the far plane and one for the near plane
 		// we then do a cvAnd to get the pixels which are a union of the two thresholds
 			grayThreshNear = grayImageWithoutBackground;
@@ -89,38 +106,47 @@ void testApp::update() {
 			cvAnd(grayThreshNear.getCvImage(), grayThreshFar.getCvImage(), grayImageWithoutBackground.getCvImage(), NULL);
 		// update the cv images
 		grayImage.flagImageChanged();
-        //////////////////////////////
-        
-		//REMOVE ANNOYING OBJECTS BY HAND/////
-        //draw black squares
-        grayImageWithoutBackgroundAndBlackRects = grayImageWithoutBackground;
-        for( int i = 0; blackRectPoints[i+1].x != - 1 && i < 19 ; i+=2 )
-        {
-            cvRectangle( grayImageWithoutBackgroundAndBlackRects.getCvImage(), blackRectPoints[i], blackRectPoints[i+1], CV_RGB(0,0,0), CV_FILLED);
-        }
-        //////////////////////////////
+            //////////////////////////////
+        */
+
+		
+		//FILTER	
+		grayImage.flagImageChanged();
+            	grayThreshFar = grayImageWithoutBackground;
+		cvSmooth( grayImageWithoutBackground.getCvImage(), grayImageWithoutBackgroundAndBlackRects.getCvImage(), CV_GAUSSIAN, 11, 11 );
+
+
+            //REMOVE ANNOYING OBJECTS BY HAND/////
+            //draw black squares
+            //grayImageWithoutBackgroundAndBlackRects = grayImageWithoutBackground;
+            for( int i = 0; blackRectPoints[i+1].x != - 1 && i < 19 ; i+=2 )
+            {
+                cvRectangle( grayImageWithoutBackgroundAndBlackRects.getCvImage(), blackRectPoints[i], blackRectPoints[i+1], CV_RGB(0,0,0), CV_FILLED);
+            }
+		grayImageWithoutBackgroundAndBlackRects.flagImageChanged();
+            //////////////////////////////
   
-        //DETECT LINES WITH HOUGH TRANSFORM
-        cvCanny( grayImageWithoutBackgroundAndBlackRects.getCvImage(), cannyImage.getCvImage(), 70, 200 );
-        cvCvtColor( cannyImage.getCvImage(), colorImgLine.getCvImage(), CV_GRAY2BGR );
-        lines = cvHoughLines2(  cannyImage.getCvImage(), storage, CV_HOUGH_STANDARD, 1, CV_PI/180, lineThreshold);
-        totalAngles = 0;
-        for( int i = 0; i < MIN(lines->total,100); i++ )
-        {
-            float* line = (float*)cvGetSeqElem(lines,i);
-            float rho = line[0];
-            float theta = line[1];
-            CvPoint pt1, pt2;
-            double a = cos(theta), b = sin(theta);
-            double x0 = a*rho, y0 = b*rho;
-            pt1.x = cvRound(x0 + 1000*(-b));
-            pt1.y = cvRound(y0 + 1000*(a));
-            pt2.x = cvRound(x0 - 1000*(-b));
-            pt2.y = cvRound(y0 - 1000*(a));
-            cvLine( colorImgLine.getCvImage(), pt1, pt2, CV_RGB(255,0,0), 3, 8 );
-            totalAngles += (theta-CV_PI/2.);
-        }
-        //////////////////////////////
+            //DETECT LINES WITH HOUGH TRANSFORM
+            cvCanny( grayImageWithoutBackgroundAndBlackRects.getCvImage(), cannyImage.getCvImage(), 70, 200 );
+            cvCvtColor( cannyImage.getCvImage(), colorImgLine.getCvImage(), CV_GRAY2BGR );
+            lines = cvHoughLines2(  cannyImage.getCvImage(), storage, CV_HOUGH_STANDARD, 1, CV_PI/180, lineThreshold);
+            totalAngles = 0;
+            for( int i = 0; i < MIN(lines->total,100); i++ )
+            {
+                float* line = (float*)cvGetSeqElem(lines,i);
+                float rho = line[0];
+                float theta = line[1];
+                CvPoint pt1, pt2;
+                double a = cos(theta), b = sin(theta);
+                double x0 = a*rho, y0 = b*rho;
+                pt1.x = cvRound(x0 + 1000*(-b));
+                pt1.y = cvRound(y0 + 1000*(a));
+                pt2.x = cvRound(x0 - 1000*(-b));
+                pt2.y = cvRound(y0 - 1000*(a));
+                cvLine( colorImgLine.getCvImage(), pt1, pt2, CV_RGB(255,0,0), 3, 8 );
+                totalAngles += (theta-CV_PI/2.);
+            }
+             //////////////////////////////
         
         //DETECT AVERAGE DIRECTION
         smoothAngles = 0.7 * smoothAngles   + 0.3* totalAngles;
@@ -158,8 +184,10 @@ void testApp::draw() {
 	ofSetColor(255, 255, 255);
 
     // draw from the live kinect
-    kinect.drawDepth(420, 10, 400, 300);
-    kinect.draw(10, 10, 400, 300);
+    //kinect.drawDepth(420, 10, 400, 300);
+    //kinect.draw(10, 10, 400, 300);
+    colorImg.draw(10,10,400,300);
+    grayImage.draw(420,10,400,300);
     //grayImage.draw(830, 10, 400, 300);
     //grayImageWithoutBackground.draw(10, 320, 400, 300);
     grayImageWithoutBackgroundAndBlackRects.draw(10, 320, 400, 300);

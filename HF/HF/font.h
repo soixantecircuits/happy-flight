@@ -37,7 +37,7 @@ const int FONT_ALIGN_CENTERED  = (1<<1);  // text centered around posx/posy
 const int FONT_ALIGN_RIGHT     = (1<<2);  // text aligned right (on the left side of posx)
 const int FONT_MONOSPACE       = (1<<3);
 
-class Font
+class MyFont
 {
 private:
 	SDL_Surface* m_pSprite;
@@ -47,8 +47,8 @@ private:
 	std::string m_sCharset;
 
 public:
-	Font(std::string fn);
-	~Font();
+	MyFont(std::string fn);
+	~MyFont();
 
 	void SetCharW(int width);
 	int GetCharW();

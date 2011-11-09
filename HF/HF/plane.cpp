@@ -6,7 +6,7 @@ using namespace std;
 #include "game.h"
 #include "items.h"
 #include "item.h"
-#include "Video.h"
+#include "video.h"
 
 Plane::Plane( Items* pItems, Game* pGame )
 : m_pItems( pItems )

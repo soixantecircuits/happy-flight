@@ -5,7 +5,7 @@ using namespace std;
 #include "video.h"
 #include <iostream>
 
-Font::Font(string fn) {
+MyFont::MyFont(string fn) {
   m_iSprite = TextureManager::GetInstance()->LoadSurface( fn );
   m_pSprite = TextureManager::GetInstance()->GetTextureById( m_iSprite );
   m_sCharset = " ABCDEFGHIJKLMNOPQRSTUVWXYZÜÄÖabcdefghijklmnopqrstuvwxyzüäöß0123456789!\"§$%&/()=?*+'#,.-;:_@°\\";
@@ -14,23 +14,23 @@ Font::Font(string fn) {
   m_iCharHeight = m_pSprite->h;
 }
 
-Font::~Font() {
+MyFont::~MyFont() {
 
 }
 
-void Font::SetCharW(int width) {
+void MyFont::SetCharW(int width) {
   m_iCharWidth = width;
 }
 
-int Font::GetCharW() {
+int MyFont::GetCharW() {
   return m_iCharWidth;
 }
 
-int Font::GetCharH() {
+int MyFont::GetCharH() {
   return m_pSprite->h;
 }
 
-void Font::DrawInt(SDL_Surface *screen, int posx, int posy, int val, int alignDigitCnt, int flags) {
+void MyFont::DrawInt(SDL_Surface *screen, int posx, int posy, int val, int alignDigitCnt, int flags) {
   int indent = 0;
   int digitCnt = 1;
   int i=1;
@@ -87,7 +87,7 @@ void Font::DrawInt(SDL_Surface *screen, int posx, int posy, int val, int alignDi
 
 
   
-void Font::DrawStr(SDL_Surface *screen, int posx, int posy, const string &text, int flags) {
+void MyFont::DrawStr(SDL_Surface *screen, int posx, int posy, const string &text, int flags) {
 
   int indent = 0;
   if ( flags & (FONT_ALIGN_CENTERED | FONT_ALIGN_RIGHT) ) {

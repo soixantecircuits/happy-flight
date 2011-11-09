@@ -11,10 +11,9 @@ HF_SOURCES =    background.h		    background.cpp \
 					geometry.h		    	geometry.cpp \
 					plane.h		    		plane.cpp \
 					PrefsManager.h		    PrefsManager.cpp \
-					Singleton.h				mainOS.cpp \
+					Singleton.h				mainX.cpp \
 					TextureManager.h		TextureManager.cpp \
 					SoundManager.h			SoundManager.cpp \
-					SDLMain.h		    	SDLMain.m \
 					video.h		    		video.cpp \
 					ofxOsc/src/ofxOsc.h		ofxOsc/src/ofxOscArg.h \
 					ofxOsc/src/ofxOscBundle.h		ofxOsc/src/ofxOscBundle.cpp \
@@ -44,7 +43,7 @@ HF_SOURCES =    background.h		    background.cpp \
 					
 
 
-HF_CXXFLAGS= -DOPENGL -D__STDC_LIMIT_MACROS -D__STDC_CONSTANT_MACROS -I/Library/Frameworks/SDL.framework/Headers -I/Library/Frameworks/SDL_image.framework/Headers -I/System/Library/Frameworks/OpenGL.framework/Headers -IofxOsc/src -IofxOsc/libs/oscpack/include -IofxOsc/libs/oscpack/include/ip -IofxOsc/libs/oscpack/include/osc
-HF_OBJCFLAGS=-I/Library/Frameworks/SDL.framework/Headers -I/Library/Frameworks/SDL_image.framework/Headers -I/System/Library/Frameworks/OpenGL.framework/Headers
-HF_LDADD=
-HF_LDFLAGS= -framework SDL -framework SDL_image -framework Cocoa -framework OpenGL 
+HF_CXXFLAGS= -DOPENGL -D__STDC_LIMIT_MACROS -D__STDC_CONSTANT_MACROS -I/Library/Frameworks/SDL.framework/Headers -I/Library/Frameworks/SDL_image.framework/Headers -I/System/Library/Frameworks/OpenGL.framework/Headers -IofxOsc/src -IofxOsc/libs/oscpack/include -IofxOsc/libs/oscpack/include/ip -IofxOsc/libs/oscpack/include/osc -I/usr/include/SDL
+#HF_OBJCFLAGS=-I/Library/Frameworks/SDL.framework/Headers -I/Library/Frameworks/SDL_image.framework/Headers -I/System/Library/Frameworks/OpenGL.framework/Headers
+HF_LDADD= -lSDL -lSDL_image -lglut -lpthread
+#HF_LDFLAGS= -framework SDL -framework SDL_image -framework Cocoa -framework OpenGL 

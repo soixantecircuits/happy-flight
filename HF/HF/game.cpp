@@ -55,7 +55,7 @@ Game::Game()
 	SoundManager::GetInstance()->Init();
 	m_iPauseSprite = TextureManager::GetInstance()->LoadSurface( "../../resources/imgs/paused.png" );
 	m_pPauseSprite = TextureManager::GetInstance()->GetTextureById( m_iPauseSprite );
-	m_pDebugFont = new Font( "../../resources/imgs/font-20red.png" );
+	m_pDebugFont = new MyFont( "../../resources/imgs/font-20red.png" );
 	m_iDebugFontSize = m_pDebugFont->GetCharW();
 
 	DrawLoading();

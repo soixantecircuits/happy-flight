@@ -1,4 +1,4 @@
-#include "Video.h"
+#include "video.h"
 #include "SDL.h"
 #include <stdlib.h>
 #include "TextureManager.h"

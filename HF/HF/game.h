@@ -8,7 +8,7 @@
 #define PORT 12345
 #define NUM_MSG_STRINGS 20
 
-class Font;
+class MyFont;
 class Background;
 class Plane;
 class Items;
@@ -32,7 +32,7 @@ class Game {
 
 	int iMs;
 
-	Font *m_pDebugFont;
+	MyFont *m_pDebugFont;
 	int m_iDebugFontSize;
 
 	Background *m_pBackground;

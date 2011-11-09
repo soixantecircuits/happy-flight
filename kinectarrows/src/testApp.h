@@ -25,12 +25,15 @@ class testApp : public ofBaseApp {
 		
 
 
-        ofxOscSender        sender;
-		ofxKinect 			kinect;
+                ofxOscSender	sender;
+		ofxKinect	kinect;
+                ofVideoGrabber  vidGrabber;
+                int camWidth;
+                int camHeight;		
 		
-
+		ofTexture videoTexture;
 		ofxCvColorImage		colorImg;
-        ofxCvColorImage		colorImgLine;
+  		 ofxCvColorImage		colorImgLine;
         ofxCvGrayscaleImage cannyImage;
 		ofxCvGrayscaleImage grayImage;			// grayscale depth image
         ofxCvGrayscaleImage grayImageWithoutBackground;			// grayscale depth image
